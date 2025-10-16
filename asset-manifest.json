@@ -1,0 +1,43 @@
+{
+  "files": {
+    "main.css": "/ShoeFit_client/static/css/main.6d02a959.css",
+    "main.js": "/ShoeFit_client/static/js/main.31a29401.js",
+    "static/media/tryon3-grid.png": "/ShoeFit_client/static/media/tryon3-grid.c6eed558d7d6f1a2732b.png",
+    "static/media/jordan4cementwhite.png": "/ShoeFit_client/static/media/jordan4cementwhite.49860d8b70d1dfc97531.png",
+    "static/media/why-choose.jpg": "/ShoeFit_client/static/media/why-choose.ba1439f9a648e57eb5f2.jpg",
+    "static/media/converse.png": "/ShoeFit_client/static/media/converse.0f58d989536d00b64f8e.png",
+    "static/media/af1.png": "/ShoeFit_client/static/media/af1.84b40bfd77af8da1c47f.png",
+    "static/media/samba.png": "/ShoeFit_client/static/media/samba.2d6363f009c5a2a13163.png",
+    "static/media/tryon5-grid.jpg": "/ShoeFit_client/static/media/tryon5-grid.34e29b8af1f214cba565.jpg",
+    "static/media/tryon2-grid.jpg": "/ShoeFit_client/static/media/tryon2-grid.9c082bf5133d0d9d9ed3.jpg",
+    "static/media/tryon4-grid.jpg": "/ShoeFit_client/static/media/tryon4-grid.2c39d72a04ae15362aa5.jpg",
+    "static/media/product-2.png": "/ShoeFit_client/static/media/product-2.2c7c1dfd7461612e3886.png",
+    "static/media/tryon-grid.jpg": "/ShoeFit_client/static/media/tryon-grid.97dbc9dffa3da716e100.jpg",
+    "static/media/blog3.avif": "/ShoeFit_client/static/media/blog3.f64c3cd4694aa8c0096b.avif",
+    "static/media/product-1.png": "/ShoeFit_client/static/media/product-1.b3c19796dccb13fbd0b3.png",
+    "static/media/person_1.jpg": "/ShoeFit_client/static/media/person_1.3b349ed7d06859f8fc58.jpg",
+    "static/media/person_4.jpg": "/ShoeFit_client/static/media/person_4.e140471939f87b3752ba.jpg",
+    "static/media/blog1.avif": "/ShoeFit_client/static/media/blog1.42bd437f780bf1694f43.avif",
+    "static/media/person_3.jpg": "/ShoeFit_client/static/media/person_3.5fc16e3352daa95e18a3.jpg",
+    "static/media/person_2.jpg": "/ShoeFit_client/static/media/person_2.9e118a766a1a194ae477.jpg",
+    "static/media/blog2.avif": "/ShoeFit_client/static/media/blog2.11ce9a8ac5aab25bf458.avif",
+    "static/media/dots-green.svg": "/ShoeFit_client/static/media/dots-green.fc0a29ccdaf1ec80964e.svg",
+    "static/media/dots-yellow.svg": "/ShoeFit_client/static/media/dots-yellow.bfc44818a1b6606dd7c1.svg",
+    "static/media/dots-light.svg": "/ShoeFit_client/static/media/dots-light.e00bbd6fd2e7780c28c9.svg",
+    "static/media/support.svg": "/ShoeFit_client/static/media/support.9d26dea71aab9142a5629d38f2287c2e.svg",
+    "static/media/truck.svg": "/ShoeFit_client/static/media/truck.66e1c9ecc38ff585449d328dc23700fc.svg",
+    "static/media/envelope-outline.svg": "/ShoeFit_client/static/media/envelope-outline.a75c498de4e44335919e66cd96296e67.svg",
+    "static/media/return.svg": "/ShoeFit_client/static/media/return.d5d64cfebfacde8f05fd6c4bb3b51521.svg",
+    "static/media/bag.svg": "/ShoeFit_client/static/media/bag.32d7cc1dfb3dabdcef4ccc1966a6b994.svg",
+    "index.html": "/ShoeFit_client/index.html",
+    "static/media/user.svg": "/ShoeFit_client/static/media/user.7621a47e29a2c99048c21b2cf412c7c7.svg",
+    "static/media/wishlist.svg": "/ShoeFit_client/static/media/wishlist.fb6a50091182ef53c89b607caff0350d.svg",
+    "static/media/cross.svg": "/ShoeFit_client/static/media/cross.f55a0e29baa16101e78afdaa658f3afb.svg",
+    "main.6d02a959.css.map": "/ShoeFit_client/static/css/main.6d02a959.css.map",
+    "main.31a29401.js.map": "/ShoeFit_client/static/js/main.31a29401.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6d02a959.css",
+    "static/js/main.31a29401.js"
+  ]
+}
