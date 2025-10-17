@@ -9,7 +9,9 @@ import Collection from "../src/pages/Collection";
 import Service from "../src/pages/Service";
 import Wishlist from "../src/pages/Wishlist";
 import Profile from "../src/pages/Profile";
-import Login from "../src/components/auths/Login"
+import Login from "../src/components/auths/Login";
+import ProductDetail from "../src/components/products/Detail";
+import TryonAR from "../src/pages/TryonAR";
 import Footer from "../src/components/partials/Footer";
 
 function App() {
@@ -21,9 +23,11 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/collection" element={<Collection />} />
+        <Route path="/collection/:id" element={<ProductDetail />} />
         <Route path="/services" element={<Service />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/tryonAR" element={<TryonAR />} />
          <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />

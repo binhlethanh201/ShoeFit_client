@@ -1,15 +1,13 @@
 import React from "react";
-
-// Import ảnh từ thư mục src/assets/images
-import sofaImg from "../../assets/images/converse.png";
+import converseImg from "../../assets/images/converse.png";
 import envelopeIcon from "../../assets/images/envelope-outline.svg";
+import "../../assets/css/style.css"; // đảm bảo đã import css chứa fontawesome
 
 const Footer = () => {
+  // Các liên kết hiển thị trong footer (2 cột)
   const linkGroups = [
     ["About us", "Services", "Blog", "Contact us"],
-    ["Support", "Knowledge base", "Live chat"],
-    ["Jobs", "Our team", "Leadership", "Privacy Policy"],
-    ["Nike", "Adidas", "Puma", "Vans"],
+    ["Support", "Our team", "Leadership", "Privacy Policy"],
   ];
 
   // Hàm tạo slug URL an toàn
@@ -19,13 +17,13 @@ const Footer = () => {
   return (
     <footer className="footer-section">
       <div className="container relative">
-        {/* Hình sofa */}
+        {/* Ảnh minh họa */}
         <div className="sofa-img">
-          <img src={sofaImg} alt="Sofa" className="img-fluid" />
+          <img src={converseImg} alt="Sofa" className="img-fluid" />
         </div>
 
         {/* Form đăng ký */}
-        <div className="row mb-5">
+        <div className="row">
           <div className="col-lg-8">
             <div className="subscription-form">
               <h3 className="d-flex align-items-center">
@@ -56,7 +54,7 @@ const Footer = () => {
                 </div>
                 <div className="col-auto">
                   <button className="btn btn-primary" type="submit">
-                    <span className="fa fa-paper-plane">Send</span>
+                    <span className="fa fa-paper-plane"></span> Send
                   </button>
                 </div>
               </form>
@@ -64,35 +62,33 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Liên kết và logo */}
-        <div className="row g-5 mb-5">
-          {/* Logo & mạng xã hội */}
+        {/* Logo & Mạng xã hội + Link Groups */}
+        <div className="row g-5 align-items-start justify-content-between">
+          {/* Logo & Mạng xã hội */}
           <div className="col-lg-4">
             <div className="mb-4 footer-logo-wrap">
               <a href="/" className="footer-logo">
                 ShoeFit<span>.</span>
               </a>
             </div>
-            <p className="mb-4">
-              Slogan 
-            </p>
-            <ul className="list-unstyled custom-social">
+            <p className="mb-4">Slogan.</p>
+            <ul className="list-unstyled custom-social d-flex gap-3 mb-4">
               <li>
                 <a
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="fa fa-brands fa-facebook-f"></span>
+                  <i className="fa-brands fa-facebook-f"></i>
                 </a>
               </li>
               <li>
                 <a
-                  href="https://twitter.com"
+                  href="https://x.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="fa fa-brands fa-twitter"></span>
+                  <i className="fa-brands fa-x"></i>
                 </a>
               </li>
               <li>
@@ -101,7 +97,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="fa fa-brands fa-instagram"></span>
+                  <i className="fa-brands fa-instagram"></i>
                 </a>
               </li>
               <li>
@@ -110,20 +106,46 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="fa fa-brands fa-linkedin"></span>
+                  <i className="fa-brands fa-linkedin-in"></i>
                 </a>
               </li>
             </ul>
+
+            {/* Download App Section (ngay bên dưới logo & mạng xã hội) */}
+            <div className="d-flex justify-content-start gap-3 mt-2">
+              <a
+                href="/tryonAR"
+                target="_self"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                  alt="Download on the App Store"
+                  height="45"
+                />
+              </a>
+              <a
+                href="/tryonAR"
+                target="_self"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                  alt="Get it on Google Play"
+                  height="45"
+                />
+              </a>
+            </div>
           </div>
 
-          {/* Các nhóm link */}
-          <div className="col-lg-8">
+          {/* Link Groups (2 cột đều nhau, canh phải) */}
+          <div className="col-lg-7 ms-auto">
             <div className="row links-wrap">
               {linkGroups.map((group, i) => (
-                <div key={i} className="col-6 col-sm-6 col-md-3">
+                <div key={i} className="col-6 col-md-6">
                   <ul className="list-unstyled">
                     {group.map((link, j) => (
-                      <li key={j}>
+                      <li key={j} className="mb-2">
                         <a href={`/${slugify(link)}`}>{link}</a>
                       </li>
                     ))}
@@ -134,18 +156,17 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bản quyền */}
-        <div className="border-top copyright">
-          <div className="row pt-4 align-items-center">
+        {/* Copyright */}
+        <div className="copyright border-top pt-4 mt-4">
+          <div className="row align-items-center">
             <div className="col-lg-6 text-center text-lg-start">
-              <p className="mb-2">
-                Copyright &copy; {new Date().getFullYear()}. All Rights
-                Reserved. 
+              <p className="mb-0">
+                &copy; {new Date().getFullYear()} ShoeFit. All Rights Reserved.
               </p>
             </div>
             <div className="col-lg-6 text-center text-lg-end">
-              <ul className="list-unstyled d-inline-flex ms-auto mb-0">
-                <li className="me-4">
+              <ul className="list-unstyled d-inline-flex mb-0 gap-4">
+                <li>
                   <a href="/terms-conditions">Terms &amp; Conditions</a>
                 </li>
                 <li>

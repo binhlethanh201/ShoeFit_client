@@ -6,21 +6,20 @@ import cartIcon from "../../assets/images/wishlist.svg";
 const Header = () => {
   const location = useLocation();
   const path = location.pathname;
-
-  // Trạng thái mở/đóng dropdown user
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // Toggle dropdown khi rê chuột
   const handleMouseEnter = () => setShowDropdown(true);
   const handleMouseLeave = () => setShowDropdown(false);
 
   return (
-    <nav className="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
-      <div className="container">
-        <Link className="navbar-brand" to="/">
-          ShoeFit<span>.</span>
+    <nav className="custom-navbar navbar navbar-expand-md navbar-dark bg-dark py-3">
+      <div className="container d-flex align-items-center justify-content-between">
+        {/* Logo */}
+        <Link className="navbar-brand fw-bold fs-3" to="/">
+          ShoeFit<span className="text-primary">.</span>
         </Link>
 
+        {/* Toggle button (mobile) */}
         <button
           className="navbar-toggler"
           type="button"
@@ -33,43 +32,42 @@ const Header = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
+        {/* Menu */}
         <div className="collapse navbar-collapse" id="navbarsFurni">
-          <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+          <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0 me-4">
             <li className={`nav-item ${path === "/" ? "active" : ""}`}>
               <Link className="nav-link" to="/">Home</Link>
-            </li>
-            <li className={`nav-item ${path === "/collection" ? "active" : ""}`}>
-              <Link className="nav-link" to="/collection">Collection</Link>
-            </li>
-            <li className={`nav-item ${path === "/about" ? "active" : ""}`}>
-              <Link className="nav-link" to="/about">About us</Link>
             </li>
             <li className={`nav-item ${path === "/services" ? "active" : ""}`}>
               <Link className="nav-link" to="/services">Services</Link>
             </li>
+            <li className={`nav-item ${path === "/collection" ? "active" : ""}`}>
+              <Link className="nav-link" to="/collection">Collection</Link>
+            </li>
             <li className={`nav-item ${path === "/blog" ? "active" : ""}`}>
               <Link className="nav-link" to="/blog">Blog</Link>
+            </li>
+            <li className={`nav-item ${path === "/about" ? "active" : ""}`}>
+              <Link className="nav-link" to="/about">About us</Link>
             </li>
             <li className={`nav-item ${path === "/contact" ? "active" : ""}`}>
               <Link className="nav-link" to="/contact">Contact us</Link>
             </li>
           </ul>
 
-          <ul className="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-            {/* Dropdown User */}
-            <li
-              className="nav-item dropdown"
+          {/* CTA + Icons */}
+          <div className="d-flex align-items-center gap-3">
+            {/* User Dropdown */}
+            <div
+              className="nav-item dropdown position-relative"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
               <button
-                href="#"
-                className="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                aria-expanded={showDropdown ? "true" : "false"}
+                className="nav-link bg-transparent border-0 p-0"
                 onClick={(e) => e.preventDefault()}
               >
-                <img src={userIcon} alt="User" />
+                <img src={userIcon} alt="User" width="22" />
               </button>
 
               {showDropdown && (
@@ -83,26 +81,35 @@ const Header = () => {
                   }}
                 >
                   <li>
-                    <Link className="dropdown-item" to="/profile">
-                      Profile
-                    </Link>
+                    <Link className="dropdown-item" to="/profile">Profile</Link>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/logout">
-                      Logout
-                    </Link>
+                    <Link className="dropdown-item" to="/logout">Logout</Link>
                   </li>
                 </ul>
               )}
-            </li>
+            </div>
 
-            {/* Wishlist icon */}
-            <li>
-              <Link className="nav-link" to="/wishlist">
-                <img src={cartIcon} alt="Wishlist" />
-              </Link>
-            </li>
-          </ul>
+            {/* Wishlist */}
+            <Link className="nav-link p-0" to="/wishlist">
+              <img src={cartIcon} alt="Wishlist" width="22" />
+            </Link>
+
+            {/* Join App Button */}
+            <Link
+              to="/tryonAR"
+              className="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm"
+              style={{
+                background: "#00C39A",
+                border: "none",
+                transition: "0.3s",
+              }}
+              onMouseEnter={(e) => (e.target.style.background = "#00a982")}
+              onMouseLeave={(e) => (e.target.style.background = "#00C39A")}
+            >
+              Join App
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

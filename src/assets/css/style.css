@@ -709,3 +709,61 @@ textarea {
     height: 50px;
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
+  
+    .footer-section .app-download img {
+      transition: transform 0.2s ease;
+    }
+    .footer-section .app-download img:hover {
+      transform: scale(1.05);
+    }
+    .footer-section .custom-social a {
+      color: #333;
+      font-size: 18px;
+      transition: color 0.2s ease;
+    }
+    .footer-section .custom-social a:hover {
+      color: #000;
+    }
+    .footer-section a {
+      text-decoration: none;
+      color: #666;
+    }
+    .footer-section a:hover {
+      color: #000;
+    }
+    .footer-section .footer-logo {
+      font-size: 2rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: #000;
+    }
+    
+    .footer-section .footer-logo span {
+      color: #007bff;
+    }
+    
+    .footer-section .custom-social a {
+      color: #333;
+      font-size: 1.2rem;
+      transition: color 0.3s;
+    }
+    
+    .footer-section .custom-social a:hover {
+      color: #007bff;
+    }
+    
+    .footer-section .links-wrap ul li a {
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .footer-section .links-wrap ul li a:hover {
+      color: #000;
+    }
+    
+    .footer-section .copyright {
+      border-color: #e5e5e5 !important;
+      font-size: 0.9rem;
+    }
+            
