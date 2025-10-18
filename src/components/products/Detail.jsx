@@ -15,7 +15,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`https://shoefit-backend.onrender.com/api/products/${id}`);
+        const res = await fetch(`https://shoefit-backend.onrender.com/api/products/${id}`); //ở trong laptop cá nhân sẽ thay đổi thành 'http://localhost:9999/api/products/${id}'
         if (!res.ok) throw new Error("Failed to fetch product details");
         const data = await res.json();
         setProduct(data);

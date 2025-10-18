@@ -11,7 +11,7 @@ const Collection = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://shoefit-backend.onrender.com/api/products")
+    fetch("https://shoefit-backend.onrender.com/api/products") //ở trong laptop cá nhân sẽ thay đổi thành 'http://localhost:9999/api/products'
       .then((res) => res.json())
       .then((data) => setProducts(Array.isArray(data) ? data : data.products || []))
       .catch((err) => console.error("Error fetching products:", err))
