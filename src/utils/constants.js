@@ -1,0 +1,1 @@
+// Get the base URL from environment variables or use default

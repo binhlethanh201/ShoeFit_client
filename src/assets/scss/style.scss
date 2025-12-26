@@ -1,14 +1,5 @@
-/*
-* Template Name: UntreeStore
-* Template Author: Untree.co
-* Author URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/
+@import url('https:fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-
-// Create SCSS variables
 $white: #ffffff;
 $black: #000000;
 $primary: #3b5d50;
@@ -131,7 +122,7 @@ a {
 	}
 }
 
-// Hero 
+ Hero 
 .hero {
 	background: $primary;
 	padding: calc(4rem - 30px) 0 0rem 0;
@@ -208,7 +199,7 @@ a {
 	}
 }
 
-// Button 
+ Button 
 .btn {
 	font-weight: 600;
 	padding: 12px 30px;
@@ -253,7 +244,7 @@ a {
 	}
 }
 
-// Product Section
+ Product Section
 .section-title {
 	color: $dark;
 }
@@ -336,7 +327,7 @@ a {
 }
 
 
-// Why Choose us section
+ Why Choose us section
 .why-choose-section {
 	padding: 7rem 0;
 
@@ -494,7 +485,7 @@ a {
 	}
 }
 
-// Testimonial Section
+ Testimonial Section
 .testimonial-section {
 	padding: 3rem 0 7rem 0;
 }
@@ -603,7 +594,7 @@ a {
 	}
 }
 
-// Blog Section
+ Blog Section
 .before-footer-section {
 	padding: 7rem 0 12rem 0!important;
 }
@@ -647,7 +638,7 @@ a {
 	}
 }
 
-// Footer Section
+ Footer Section
 .footer-section {
 	padding: 80px 0;
 	background: $white;
