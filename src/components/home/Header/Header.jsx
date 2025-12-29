@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom'; 
+import { Link, useLocation, useNavigate } from 'react-router-dom'; 
+import authService from '../../../services/authService';
+import { toast } from 'react-toastify';
 
 // Import Icons từ thư mục assets
 import searchIcon from '../../../assets/images/Effects/search.svg';
@@ -9,8 +11,28 @@ import globeIcon from '../../../assets/images/Effects/globe.svg';
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Kiểm tra trạng thái đăng nhập (token tồn tại)
+  const isLoggedIn = !!localStorage.getItem('token');
+
   const isActive = (path) => {
     return location.pathname === path ? "nav-item active" : "nav-item";
+  };
+
+  // Hàm xử lý đăng xuất
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await authService.logout();
+      toast.success("Đăng xuất thành công!");
+      navigate('/');
+    } catch (error) {
+      console.error("Lỗi đăng xuất:", error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      navigate('/');
+    }
   };
 
   return (
@@ -74,22 +96,42 @@ const Header = () => {
                 <img src={userIcon} alt="User" width="24" />
               </button>
               <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="userDropdown">
-                <li>
-                  <Link className="dropdown-item" to="/profile">
-                    <i className="fa-regular fa-user me-2"></i> Hồ Sơ
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/settings">
-                    <i className="fa-solid fa-gear me-2"></i> Cài Đặt
-                  </Link>
-                </li>
-                <li><hr className="dropdown-divider" /></li>
-                <li>
-                  <Link className="dropdown-item text-danger" to="/logout">
-                    <i className="fa-solid fa-right-from-bracket me-2"></i> Đăng Xuất
-                  </Link>
-                </li>
+                {isLoggedIn ? (
+                  <>
+                    <li>
+                      <Link className="dropdown-item" to="/profile">
+                        <i className="fa-regular fa-user me-2"></i> Hồ Sơ
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/settings">
+                        <i className="fa-solid fa-gear me-2"></i> Cài Đặt
+                      </Link>
+                    </li>
+                    <li><hr className="dropdown-divider" /></li>
+                    <li>
+                      <button 
+                        className="dropdown-item text-danger w-100 text-start bg-transparent border-0" 
+                        onClick={handleLogout}
+                      >
+                        <i className="fa-solid fa-right-from-bracket me-2"></i> Đăng Xuất
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link className="dropdown-item" to="/login">
+                        <i className="fa-solid fa-right-to-bracket me-2"></i> Đăng Nhập
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/register">
+                        <i className="fa-solid fa-user-plus me-2"></i> Đăng Ký
+                      </Link>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
 

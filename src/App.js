@@ -15,8 +15,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from "./components/home/Footer/Footer";
 import Header from "./components/home/Header/Header";
 import ScrollToTopBtn from "./components/common/ScrollToTopBtn.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 
-// --- Pages: Auth & Common ---
+// --- Pages ---
 import Home from './pages/Home.jsx';
 import About from "./pages/About/About.jsx";
 import Blog from "./pages/Blog/Blog.jsx";
@@ -33,6 +34,14 @@ import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
 import StyleDetail from "./pages/StyleAdvisor/StyleDetail.jsx";
 import ErrorPage from './pages/ErrorPage.jsx';
 
+// --- Auth ----
+import Login from "./pages/Auth/Login.jsx";
+import Register from "./pages/Auth/Register.jsx";
+import ChangePassword from "./pages/Auth/ChangePassword.jsx";
+
+// --- Store & Admin ---
+import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
+import StoreDashboard from "./pages/Store/StoreDashboard.jsx";
 
 const Layout = () => {
   return (
@@ -76,6 +85,23 @@ const router = createBrowserRouter(
         <Route path="/tryon2d" element={<TryOn2D />}></Route>
         <Route path="/styleadvisor" element={<StyleAdvisor />}></Route>
         <Route path="/styledetail/:styleId" element={<StyleDetail />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register/>}></Route>
+
+        {/* Protected Auth Route */}
+        <Route element={<ProtectedRoute allowedRoles={['user', 'store', 'admin']} />}>
+          <Route path="/change-password" element={<ChangePassword/>}></Route>
+        </Route>
+
+        {/* Store Route */}
+        <Route element={<ProtectedRoute allowedRoles={['store']} />}>
+            <Route path="/store/dashboard" element={<StoreDashboard />} />
+        </Route>
+
+        {/* Admin Route */}
+        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Route>
       </Route>
 
     </Route>
