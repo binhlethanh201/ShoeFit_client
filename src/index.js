@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { store } from './redux/store'; // Đảm bảo bạn đã tạo store
 import App from './App';
+import { ThemeProvider } from './context/ThemeContext';
+import './i18n';
 
 // --- IMPORT GLOBAL ASSETS ---
 import "./assets/css/bootstrap.min.css";
@@ -15,6 +17,8 @@ import "./assets/js/bootstrap.bundle.min.js";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <App />
+    <ThemeProvider>
+        <App />
+    </ThemeProvider>
   </Provider>
 );

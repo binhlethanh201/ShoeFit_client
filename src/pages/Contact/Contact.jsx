@@ -1,169 +1,179 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+
+// Import Social Icons (PNG)
+import emailIcon from "../../assets/images/Effects/email.png";
+import hotlineIcon from "../../assets/images/Effects/hotline.png";
+import locationIcon from "../../assets/images/Effects/location.png";
 
 const Contact = () => {
+  const { t } = useTranslation();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.");
+    alert(t('contact.alert_success'));
+  };
+
+  const inputStyle = {
+    backgroundColor: 'var(--input-bg)',
+    color: 'var(--text-main)',
+    borderColor: 'var(--border-color)'
+  };
+
+  const headingStyle = {
+    color: 'var(--text-heading)'
+  };
+
+  const textStyle = {
+    color: 'var(--text-main)',
+    marginBottom: 0
+  };
+
+  const iconBgStyle = {
+    backgroundColor: 'var(--bg-section)',
+    width: '60px',
+    height: '60px'
   };
 
   return (
     <>
-      {/* Start Contact Form */}
-      <div className="untree_co-section mt-5">
+      <div className="untree_co-section " style={{ marginBottom: '100px' }}>
         <div className="container">
           <div className="block">
-            <div className="row justify-content-center">
-              <div className="col-md-8 col-lg-8 pb-4">
-                {/* Thông tin liên hệ */}
-                <div className="row mb-5">
-                  <div className="col-lg-4">
-                    <div
-                      className="service no-shadow align-items-center link horizontal d-flex active"
-                      data-aos="fade-left"
-                      data-aos-delay="0"
-                    >
-                      <div className="service-icon color-1 mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-geo-alt-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
-                        </svg>
-                      </div>
-                      <div className="service-contents">
-                        <p>
-                          Hoa Lac Hi-tech Park, km 29 Đại lộ Thăng Long, Hà Nội
-                        </p>
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="col-lg-4">
-                    <div
-                      className="service no-shadow align-items-center link horizontal d-flex active"
-                      data-aos="fade-left"
-                      data-aos-delay="0"
-                    >
-                      <div className="service-icon color-1 mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-envelope-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
-                        </svg>
-                      </div>
-                      <div className="service-contents">
-                        <p>shoefitcontact@gmail.com</p>
-                      </div>
-                    </div>
-                  </div>
+            {/* --- ROW 1: Form & Social Banner --- */}
+            <div className="row justify-content-between mb-5">
 
-                  <div className="col-lg-4">
-                    <div
-                      className="service no-shadow align-items-center link horizontal d-flex active"
-                      data-aos="fade-left"
-                      data-aos-delay="0"
-                    >
-                      <div className="service-icon color-1 mb-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-telephone-fill"
-                          viewBox="0 0 16 16"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"
-                          />
-                        </svg>
-                      </div>
-                      <div className="service-contents">
-                        <p>+1 294 3925 3939</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Form nhập liệu */}
+              <div className="col-lg-7 mb-5 mb-lg-0">
+                <h3 className="mb-4 fw-bold " style={headingStyle}>{t('contact.title')}</h3>
                 <form onSubmit={handleSubmit}>
-                  <div className="row">
-                    <div className="col-6">
+
+                  {/* Họ và tên */}
+                  <div className="form-group mb-3">
+                    <label className="fw-bold mb-1" htmlFor="fullname" style={headingStyle}>
+                      {t('contact.label_fullname')}
+                    </label>
+                    <input type="text" className="form-control" id="fullname" required style={inputStyle} />
+                  </div>
+
+                  {/* Email & Số điện thoại */}
+                  <div className="row mb-3">
+                    <div className="col-md-6">
                       <div className="form-group">
-                        <label className="text-black" htmlFor="fname">
-                          Tên
+                        <label className="fw-bold mb-1" htmlFor="email" style={headingStyle}>
+                          {t('contact.label_email')}
                         </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="fname"
-                          required
-                        />
+                        <input type="email" className="form-control" id="email" required style={inputStyle} />
                       </div>
                     </div>
-                    <div className="col-6">
+
+                    <div className="col-md-6">
                       <div className="form-group">
-                        <label className="text-black" htmlFor="lname">
-                          Họ
+                        <label className="fw-bold mb-1" htmlFor="phone" style={headingStyle}>
+                          {t('contact.label_phone')}
                         </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="lname"
-                          required
-                        />
+                        <input type="tel" className="form-control" id="phone" required style={inputStyle} />
                       </div>
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="text-black" htmlFor="email">
-                      Địa Chỉ Email
+                  {/* Nội dung */}
+                  <div className="form-group mb-4">
+                    <label className="fw-bold mb-1" htmlFor="message" style={headingStyle}>
+                      {t('contact.label_message')}
                     </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      required
-                    />
+                    <textarea name="message" className="form-control" id="message" cols="30" rows="5" required style={inputStyle}></textarea>
                   </div>
 
-                  <div className="form-group mb-5">
-                    <label className="text-black" htmlFor="message">
-                      Lời Nhắn
-                    </label>
-                    <textarea
-                      name="message"
-                      className="form-control"
-                      id="message"
-                      cols="30"
-                      rows="5"
-                      required
-                    ></textarea>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-primary-hover-outline"
-                  >
-                    Gửi Tin Nhắn
+                  <button type="submit" className="btn rounded-pill py-3 px-5 fw-bold" style={{ backgroundColor: 'var(--brand-blue)', color: '#fff', border: 'none' }}>
+                    {t('contact.btn_send')}
                   </button>
                 </form>
               </div>
+
+              {/* COL 2: Banner Theo Dõi (Socials) */}
+              <div className="col-lg-4 m-5">
+                <div
+                  className="p-4"
+                  style={{
+                    border: '1px solid #17238b',
+                    backgroundColor: 'var(--bg-card)',
+                    borderRadius: '20px',
+                    width: 'fit-content',
+                    minWidth: '280px'
+                  }}
+                >
+                  <h3 className="h3 mb-4 fw-bold" style={headingStyle}>{t('contact.follow_us')}</h3>
+
+                  <ul className="list-unstyled social-icons m-0">
+                    {/* Instagram */}
+                    <li className="mb-4">
+                      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="d-flex align-items-center text-decoration-none">
+                        <span className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style={iconBgStyle}>
+                          <i className="fa-brands fa-instagram fs-2" style={{ color: '#C13584' }}></i>
+                        </span>
+                        <span className="h5 mb-0 fw-semibold" style={headingStyle}>Instagram</span>
+                      </a>
+                    </li>
+
+                    {/* Facebook */}
+                    <li className="mb-4">
+                      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="d-flex align-items-center text-decoration-none">
+                        <span className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style={iconBgStyle}>
+                          <i className="fa-brands fa-facebook-f fs-2" style={{ color: '#1877F2' }}></i>
+                        </span>
+                        <span className="h5 mb-0 fw-semibold" style={headingStyle}>Facebook</span>
+                      </a>
+                    </li>
+
+                    {/* TikTok */}
+                    <li className="mb-4">
+                      <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="d-flex align-items-center text-decoration-none">
+                        <span className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style={iconBgStyle}>
+                          <i className="fa-brands fa-tiktok fs-2" style={{ color: 'var(--text-heading)' }}></i>
+                        </span>
+                        <span className="h5 mb-0 fw-semibold" style={headingStyle}>TikTok</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* --- ROW 2: Thông tin liên hệ (Email, Hotline, Location) --- */}
+            <div className="row mt-5 pt-5 border-top" style={{ borderColor: 'var(--border-color)' }}>
+
+              {/* Email */}
+              <div className="col-md-4 mb-4 mb-md-0 d-flex align-items-center justify-content-center justify-content-md-start">
+                <img src={emailIcon} alt="Email" className="me-2" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+                <div>
+                  <h6 className="fw-bold mb-1" style={headingStyle}>Email</h6>
+                  <p style={textStyle}>contact.shoefit@gmail.com</p>
+                </div>
+              </div>
+
+              {/* Hotline */}
+              <div className="col-md-4 mb-4 mb-md-0 d-flex align-items-center justify-content-center justify-content-md-start">
+                <img src={hotlineIcon} alt="Hotline" className="me-2" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+                <div>
+                  <h6 className="fw-bold mb-1" style={headingStyle}>Hotline</h6>
+                  <p style={textStyle}>+1 294 3925 3939</p>
+                </div>
+              </div>
+
+              {/* Location */}
+              <div className="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start">
+                <img src={locationIcon} alt="Location" className="me-2" style={{ width: '80px', height: '80px', objectFit: 'contain' }} />
+                <div>
+                  <h6 className="fw-bold mb-1" style={headingStyle}>Location</h6>
+                  <p style={textStyle}>{t('contact.address')}</p>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
       </div>
-      {/* End Contact Form */}
     </>
   );
 };

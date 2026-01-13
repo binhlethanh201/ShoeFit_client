@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '../../services/authService';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next'; 
 
 const Register = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation(); 
+  
   const [formData, setFormData] = useState({
     username: '',
     fullname: '',
@@ -21,27 +24,25 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     
-    // Validate cơ bản ở frontend
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Mật khẩu xác nhận không khớp!");
+      toast.error(t('auth.msg_pass_mismatch'));
       return;
     }
 
     setLoading(true);
     try {
-      // Chuẩn bị data gửi lên server (loại bỏ confirmPassword)
       const dataToSend = {
         username: formData.username,
         fullname: formData.fullname,
         email: formData.email,
         password: formData.password,
-        role: "user" // Mặc định là user
+        role: "user" 
       };
 
       const response = await authService.register(dataToSend);
 
       if (response.success) {
-        toast.success("Đăng ký thành công! Vui lòng đăng nhập.");
+        toast.success(t('auth.msg_register_success'));
         navigate('/login');
       }
     } catch (error) {
@@ -58,11 +59,11 @@ const Register = () => {
         <div className="row justify-content-center">
           <div className="col-md-8 col-lg-6">
             <div className="p-4 border rounded bg-light shadow-sm">
-              <h3 className="text-black mb-4 text-center">Đăng Ký Tài Khoản</h3>
+              <h3 className="text-black mb-4 text-center">{t('auth.register_title')}</h3>
               
               <form onSubmit={handleRegister}>
                 <div className="form-group mb-3">
-                  <label className="text-black">Tên đăng nhập (Username)</label>
+                  <label className="text-black">{t('auth.label_username')}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -74,7 +75,7 @@ const Register = () => {
                 </div>
 
                 <div className="form-group mb-3">
-                  <label className="text-black">Họ và tên (Fullname)</label>
+                  <label className="text-black">{t('auth.label_fullname')}</label>
                   <input
                     type="text"
                     className="form-control"
@@ -86,7 +87,7 @@ const Register = () => {
                 </div>
 
                 <div className="form-group mb-3">
-                  <label className="text-black">Email</label>
+                  <label className="text-black">{t('auth.label_email')}</label>
                   <input
                     type="email"
                     className="form-control"
@@ -99,7 +100,7 @@ const Register = () => {
 
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="text-black">Mật khẩu</label>
+                    <label className="text-black">{t('auth.label_password')}</label>
                     <input
                       type="password"
                       className="form-control"
@@ -111,7 +112,7 @@ const Register = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-4">
-                    <label className="text-black">Xác nhận mật khẩu</label>
+                    <label className="text-black">{t('auth.label_confirm_pass')}</label>
                     <input
                       type="password"
                       className="form-control"
@@ -129,11 +130,11 @@ const Register = () => {
                   style={{ backgroundColor: "#000", color: "#fff" }}
                   disabled={loading}
                 >
-                  {loading ? "Đang xử lý..." : "Đăng Ký"}
+                  {loading ? t('auth.processing') : t('auth.btn_register')}
                 </button>
 
                 <div className="text-center mt-3">
-                  <p>Đã có tài khoản? <Link to="/login" className="text-primary">Đăng nhập</Link></p>
+                  <p>{t('auth.text_have_account')} <Link to="/login" className="text-primary">{t('auth.link_login_now')}</Link></p>
                 </div>
               </form>
             </div>

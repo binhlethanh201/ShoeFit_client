@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // Import Icons
 import scanIcon from "../../assets/images/Effects/scan.svg";
@@ -19,6 +20,7 @@ import result4 from "../../assets/images/AIGenerate/result4.png";
 
 const TryOn2D = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // State quản lý
   const [userImage, setUserImage] = useState(null);
@@ -36,7 +38,7 @@ const TryOn2D = () => {
       id: 1,
       name: "Nike Air Force 1 ’07 ‘Triple White’",
       path: af1Img,
-      result: result1 || af1Img, // Fallback nếu chưa có ảnh result
+      result: result1 || af1Img,
     },
     {
       id: 2,
@@ -76,13 +78,14 @@ const TryOn2D = () => {
   // Xử lý chọn giày
   const handleSelectShoe = (shoe) => {
     setSelectedShoe(shoe);
-    setIsDrawerOpen(false); // Đóng drawer sau khi chọn
+    setIsDrawerOpen(false);
   };
 
   // Xử lý tạo ảnh AI (Giả lập)
   const handleGenerate = () => {
     if (!userImage || !selectedShoe) {
-      alert("Vui lòng tải lên ảnh của bạn và chọn một mẫu giày.");
+      // Dịch thông báo alert
+      alert(t('tryon2d.alert_missing_input'));
       return;
     }
 
@@ -109,48 +112,59 @@ const TryOn2D = () => {
   return (
     <>
       <div className="tryon-main">
+      <div className="text-center m-5">
+            <h2 className="fw-bold mb-3">{t('tryon2d.title')}</h2>
+            <p className="text-muted">
+              {t('tryon2d.subtitle')}
+            </p>
+          </div>
         <div className="tryon-content">
+
           <div className="col">
             {/* Step 1: Upload */}
             <div className="row">
               <section className="tryon-section">
-                <h2>1. Tải ảnh bản thân</h2>
-                <div className="input-group">
-                  <label htmlFor="user-image">Ảnh của bạn:</label>
+                <h2>{t('tryon2d.step1_title')}</h2>
+                <div className="upload-container">
                   <input
                     type="file"
                     id="user-image"
                     accept="image/*"
                     onChange={handleImageUpload}
+                    style={{ display: "none" }}
                   />
-                  <div
-                    className="preview"
-                    id="user-preview"
-                    style={{
-                      backgroundImage: userImage ? `url(${userImage})` : "none",
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                    }}
-                  >
-                    {!userImage && "Ảnh của bạn"}
-                  </div>
+                  <label htmlFor="user-image" className="upload-box">
+
+                    {userImage && (
+                      <div
+                        className="user-image-preview-mini"
+                        style={{ backgroundImage: `url(${userImage})` }}
+                      ></div>
+                    )}
+
+                    <span className="btn-choose-file-fake">
+                      {t('tryon2d.btn_choose_image') || "Choose Image"}
+                    </span>
+
+                    <p className="upload-instruction">
+                      {t('tryon2d.upload_instruction')} <br />
+                      <span>{t('tryon2d.upload_note')}</span>
+                    </p>
+                  </label>
                 </div>
               </section>
             </div>
-
             {/* Step 2: Choose Shoe */}
             <div className="row mt-4">
               <section className="tryon-section">
-                <h2>2. Chọn đôi giày bạn yêu thích</h2>
+                <h2>{t('tryon2d.step2_title')}</h2>
                 <div className="input-group">
-                  <label>Ảnh giày:</label>
                   <button
                     className="generate-btn btn btn-primary"
                     id="open-drawer"
                     onClick={() => setIsDrawerOpen(true)}
                   >
-                    Chọn mẫu giày
+                    {t('tryon2d.btn_select_shoe')}
                   </button>
                   <div
                     className="preview"
@@ -164,7 +178,7 @@ const TryOn2D = () => {
                       backgroundPosition: "center",
                     }}
                   >
-                    {!selectedShoe && "Chưa chọn giày"}
+                    {!selectedShoe && t('tryon2d.placeholder_no_shoe')}
                   </div>
                 </div>
 
@@ -174,7 +188,7 @@ const TryOn2D = () => {
                   onClick={handleGenerate}
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Đang xử lý..." : "Tạo ảnh AI 2D"}
+                  {isProcessing ? t('tryon2d.btn_processing') : t('tryon2d.btn_generate')}
                 </button>
 
                 <button
@@ -182,7 +196,7 @@ const TryOn2D = () => {
                   id="go-style-advisor"
                   onClick={() => navigate("/styleadvisor")}
                 >
-                  <i className="fa-solid fa-shirt me-2"></i> Tư vấn Phong cách
+                  <i className="fa-solid fa-shirt me-2"></i> {t('tryon2d.btn_style_advisor')}
                 </button>
               </section>
             </div>
@@ -191,10 +205,10 @@ const TryOn2D = () => {
           {/* Step 3: Result */}
           <div className="col">
             <section className="tryon-section">
-              <h2>3. Kết quả</h2>
+              <h2>{t('tryon2d.step3_title')}</h2>
               <div className="result-display" id="result-mock">
                 {isProcessing ? (
-                  <p style={{ color: "blue" }}>Đang xử lý...</p>
+                  <p style={{ color: "blue" }}>{t('tryon2d.result_processing')}</p>
                 ) : result ? (
                   <>
                     <div className="image-container">
@@ -211,7 +225,7 @@ const TryOn2D = () => {
                           setIsModalOpen(true);
                         }}
                       >
-                        <img src={scanIcon} alt="Phóng to" />
+                        <img src={scanIcon} alt="Zoom" />
                       </button>
                     </div>
                     <a
@@ -220,11 +234,11 @@ const TryOn2D = () => {
                       className="btn-download"
                       style={{ marginTop: "10px" }}
                     >
-                      <i className="fa fa-download me-2"></i> Tải ảnh xuống
+                      <i className="fa fa-download me-2"></i> {t('tryon2d.btn_download')}
                     </a>
                   </>
                 ) : (
-                  <p>Kết quả mô phỏng AI sẽ xuất hiện ở đây.</p>
+                  <p>{t('tryon2d.result_placeholder')}</p>
                 )}
               </div>
             </section>
@@ -233,7 +247,7 @@ const TryOn2D = () => {
           {/* Shoe Drawer (Side Panel) */}
           <div id="shoe-drawer" className={isDrawerOpen ? "active" : ""}>
             <div className="drawer-content">
-              <h4>Chọn một mẫu giày</h4>
+              <h4>{t('tryon2d.drawer_title')}</h4>
               <span id="close-drawer" onClick={() => setIsDrawerOpen(false)}>
                 &times;
               </span>

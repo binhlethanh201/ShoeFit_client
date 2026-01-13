@@ -1,86 +1,109 @@
 import React from 'react';
-// Import hình ảnh từ thư mục assets
+import { Link } from 'react-router-dom';
 import aboutImage from '../../assets/images/Effects/why-choose.jpg';
 
 const About = () => {
+  // Style định nghĩa nội bộ để dễ quản lý theo Theme
+  const headingStyle = {
+    color: 'var(--text-heading)',
+    fontWeight: '800',
+    marginBottom: '1.5rem'
+  };
+
+  const textStyle = {
+    color: 'var(--text-main)',
+    lineHeight: '1.8',
+    fontSize: '1rem',
+    marginBottom: '1.5rem'
+  };
+
+  const highlightStyle = {
+    color: 'var(--brand-blue)',
+    fontWeight: '600'
+  };
+
+  const quoteStyle = {
+    borderLeft: '4px solid var(--brand-blue)',
+    paddingLeft: '20px',
+    fontStyle: 'italic',
+    color: 'var(--text-heading)',
+    backgroundColor: 'var(--bg-section)',
+    padding: '15px 20px',
+    borderRadius: '0 10px 10px 0',
+    marginBottom: '1.5rem'
+  };
+
   return (
     <>
-      {/* Start Why Choose Us Section */}
-      <div className="why-choose-section mt-5">
+      <div className="untree_co-section" style={{ marginTop: '80px', marginBottom: '100px' }}>
         <div className="container">
           <div className="row justify-content-between align-items-center">
-            <div className="col-lg-5">
-              <div className="img-wrap">
+            
+            {/* CỘT HÌNH ẢNH */}
+            <div className="col-lg-5 mb-5 mb-lg-0">
+              <div className="img-wrap position-relative">
+                {/* Lớp nền trang trí phía sau ảnh */}
+                <div style={{
+                    position: 'absolute',
+                    top: '-20px',
+                    left: '-20px',
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'var(--brand-blue)',
+                    opacity: 0.1,
+                    zIndex: -1,
+                    borderRadius: '20px'
+                }}></div>
+                
                 <img 
                   src={aboutImage} 
-                  alt="ShoeFit AR and AI Technology Showcase" 
-                  className="img-fluid" 
+                  alt="About ShoeFit" 
+                  className="img-fluid shadow-lg" 
+                  style={{ borderRadius: '20px', width: '100%', objectFit: 'cover' }} 
                 />
               </div>
             </div>
 
+            {/* CỘT NỘI DUNG */}
             <div className="col-lg-6">
-              <h2 className="section-title">Thử Giày Ảo AI & AR</h2>
-              <p>
-                ShoeFit là ứng dụng đầu tiên tại Việt Nam kết hợp công nghệ AI và
-                3D. Thử giày ảo, tìm kích cỡ hoàn hảo và nhận tư vấn phong cách cá
-                nhân hóa — mang đến trải nghiệm mua sắm giày trực tuyến tự tin và
-                tiện lợi.
-              </p>
+              <h2 className="section-title" style={headingStyle}>About ShoeFit</h2>
+              
+              <div style={textStyle}>
+                <p>
+                  <span style={highlightStyle}>ShoeFit</span> là nền tảng thử giày bằng AI, giúp người dùng nhìn thấy hình ảnh mình mang đôi giày yêu thích trước khi mua sắm online. Chúng tôi mang đến trải nghiệm thử giày trực quan thông qua hình ảnh và video AI, giúp việc lựa chọn trở nên dễ dàng và tự tin hơn.
+                </p>
 
-              <div className="row my-5">
-                <div className="col-6 col-md-6">
-                  <div className="feature">
-                    <div className="icon">
-                      {/* Có thể thêm icon img ở đây nếu cần */}
-                    </div>
-                    <h3>Thử giày AR</h3>
-                    <p>
-                      Thử giày 3D ngay lập tức bằng camera điện thoại của bạn.
-                      Mang đến trải nghiệm thực tế như tại cửa hàng ngay tại nhà.
-                    </p>
-                  </div>
+                <p>
+                  Một trong những thách thức lớn nhất khi mua giày online là người dùng khó hình dung độ phù hợp khi mang lên chân. Hình ảnh sản phẩm truyền thống chưa đủ trực quan, dẫn đến tâm lý do dự và tỷ lệ đổi trả cao.
+                </p>
+
+                <p>
+                  ShoeFit giải quyết vấn đề đó bằng công nghệ AI thử giày, cho phép người dùng chọn mẫu giày, tải ảnh cá nhân và xem ngay kết quả một cách trực quan. Nền tảng được phát triển dành riêng cho thị trường Việt Nam, với các mẫu giày phổ biến, phù hợp form chân và hành vi mua sắm trong nước.
+                </p>
+
+                {/* Đoạn Quote nổi bật */}
+                <div style={quoteStyle}>
+                  Thông qua trải nghiệm <strong>“Try on, Fit right, Shop smart”</strong>, ShoeFit giúp người dùng tự tin hơn trong quyết định mua sắm, đồng thời hỗ trợ các cửa hàng giảm tỷ lệ đổi trả và nâng cao hiệu quả bán hàng online.
                 </div>
 
-                <div className="col-6 col-md-6">
-                  <div className="feature">
-                    <div className="icon"></div>
-                    <h3>Tư vấn Phong cách</h3>
-                    <p>
-                      Nhận gợi ý trang phục cá nhân hóa từ AI của chúng tôi. Chúng
-                      tôi sẽ giúp bạn tìm ra vẻ ngoài hoàn hảo để phối với đôi
-                      giày.
-                    </p>
-                  </div>
-                </div>
+                <p>
+                  ShoeFit được xây dựng bởi đội ngũ đam mê công nghệ và thương mại điện tử, xuất phát từ chính những trải nghiệm mua sắm thực tế. Chúng tôi không ngừng hoàn thiện giải pháp để mang lại những giá trị thiết thực cho người dùng và đối tác.
+                </p>
 
-                <div className="col-6 col-md-6">
-                  <div className="feature">
-                    <div className="icon"></div>
-                    <h3>Thử Giày AI 2D</h3>
-                    <p>
-                      Tải ảnh của bạn lên và xem ngay hình ảnh thực tế của bạn khi mang đôi giày bạn chọn — được hỗ trợ bởi
-                      công nghệ AI tiên tiến.
-                    </p>
-                  </div>
-                </div>
+                <p className="mb-4">
+                  Khám phá ShoeFit ngay bây giờ để trải nghiệm thử giày bằng AI và tự tin chọn đôi giày phù hợp với bạn nhé!
+                </p>
 
-                <div className="col-6 col-md-6">
-                  <div className="feature">
-                    <div className="icon"></div>
-                    <h3>Hình ảnh AI Siêu thực</h3>
-                    <p>
-                      Xem hình ảnh 2D siêu thực của mọi sản phẩm. AI của chúng tôi
-                      đảm bảo bạn thấy rõ mọi chi tiết.
-                    </p>
-                  </div>
-                </div>
+                {/* Nút Action */}
+                <Link to="/" className="btn rounded-pill px-5 py-3 fw-bold shadow-sm" style={{ backgroundColor: "var(--brand-blue)", color: "#fff", border: 'none' }}>
+                  Khám Phá Ngay
+                </Link>
               </div>
+
             </div>
           </div>
         </div>
       </div>
-      {/* End Why Choose Us Section */}
     </>
   );
 };

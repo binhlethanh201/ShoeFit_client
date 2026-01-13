@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+
 
   const handleSearch = () => {
     if (searchTerm.trim()) {
       alert(`Đang tìm kiếm: ${searchTerm}`);
+      // Tại đây bạn có thể gọi API tìm kiếm hoặc chuyển hướng
     } else {
       alert("Vui lòng nhập từ khóa tìm kiếm!");
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearch();
     }
   };
@@ -23,7 +25,7 @@ const Search = () => {
       <div className="hero m-5">
         <div className="container text-center">
           <h1 className="fw-bold mb-3 text-dark">Tìm Kiếm Sản Phẩm</h1>
-          <div className="search-bar mx-auto" style={{ maxWidth: "600px" }}>
+          <div className="search-bar mx-auto" style={{ maxWidth: '600px' }}>
             <div className="input-group shadow-sm">
               <input
                 type="text"
@@ -36,7 +38,7 @@ const Search = () => {
               />
               <button
                 className="btn btn-primary px-4"
-                style={{ background: "#15228b", border: "none" }}
+                style={{ background: '#15228b', border: 'none' }}
                 id="searchBtn"
                 onClick={handleSearch}
               >
@@ -49,7 +51,7 @@ const Search = () => {
       {/* End Hero Section */}
 
       {/* Bạn có thể thêm phần hiển thị kết quả tìm kiếm ở đây sau này */}
-      <div className="container mb-5" style={{ minHeight: "30vh" }}>
+      <div className="container mb-5" style={{ minHeight: '30vh' }}>
         {/* Placeholder cho kết quả */}
       </div>
     </>

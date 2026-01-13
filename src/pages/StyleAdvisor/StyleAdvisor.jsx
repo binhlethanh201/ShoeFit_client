@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; 
 import { styleData } from "../../data/mockData";
 
 const StyleAdvisor = () => {
+  const { t } = useTranslation(); 
   const [currentGender, setCurrentGender] = useState("MEN");
   const [currentOccasion, setCurrentOccasion] = useState("everyday");
   const [styles, setStyles] = useState([]);
 
-  // Cập nhật danh sách styles mỗi khi gender hoặc occasion thay đổi
   useEffect(() => {
     const filteredStyles = styleData[currentGender]?.[currentOccasion] || [];
     setStyles(filteredStyles);
   }, [currentGender, currentOccasion]);
 
-  // Các tùy chọn Occasion
+  // Các tùy chọn Occasion (Dùng key dịch)
   const occasions = [
-    { key: "everyday", label: "Hàng ngày - Đơn giản" },
-    { key: "party", label: "Tiệc tùng - Lễ hội" },
-    { key: "travel", label: "Du lịch" },
-    { key: "formal", label: "Trang trọng - Lịch sự" },
-    { key: "sport", label: "Năng động - Thể thao" },
+    { key: "everyday", label: t('style_advisor.occasion_everyday') },
+    { key: "party", label: t('style_advisor.occasion_party') },
+    { key: "travel", label: t('style_advisor.occasion_travel') },
+    { key: "formal", label: t('style_advisor.occasion_formal') },
+    { key: "sport", label: t('style_advisor.occasion_sport') },
   ];
 
   return (
@@ -29,10 +30,9 @@ const StyleAdvisor = () => {
         <div className="container">
           {/* Title */}
           <div className="text-center mb-5">
-            <h2 className="fw-bold mb-3">Khám Phá Phong Cách Của Bạn</h2>
+            <h2 className="fw-bold mb-3">{t('style_advisor.title')}</h2>
             <p className="text-muted">
-              Chọn giới tính và bối cảnh để khám phá các trang phục phù hợp với
-              đôi giày yêu thích của bạn.
+              {t('style_advisor.subtitle')}
             </p>
           </div>
 
@@ -48,7 +48,7 @@ const StyleAdvisor = () => {
                 }`}
                 onClick={() => setCurrentGender("MEN")}
               >
-                Nam
+                {t('style_advisor.gender_men')}
               </button>
             </li>
             <li className="nav-item">
@@ -58,7 +58,7 @@ const StyleAdvisor = () => {
                 }`}
                 onClick={() => setCurrentGender("WOMEN")}
               >
-                Nữ
+                {t('style_advisor.gender_women')}
               </button>
             </li>
           </ul>
@@ -86,7 +86,6 @@ const StyleAdvisor = () => {
           <div className="pinterest-grid" id="styleGrid">
             {styles.length > 0 ? (
               styles.map((style, index) => {
-                // Tạo ID unique cho style detail (nếu cần)
                 const styleId = `${currentGender}_${currentOccasion}_${
                   index + 1
                 }`;
@@ -110,9 +109,7 @@ const StyleAdvisor = () => {
               })
             ) : (
               <p className="text-center text-muted w-100">
-                Không tìm thấy phong cách nào cho{" "}
-                {currentGender === "MEN" ? "Nam" : "Nữ"} -{" "}
-                {occasions.find((o) => o.key === currentOccasion)?.label}.
+                {t('style_advisor.no_style_found')}
               </p>
             )}
           </div>
