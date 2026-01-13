@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { servicesData, productsData, blogsData } from "../data/mockData";
+import { useTranslation } from "react-i18next";
 
 // Import Images
 import heroImg from "../assets/images/Effects/des_hero.png";
 import crossIcon from "../assets/images/Effects/cross.svg";
 
 const Home = () => {
+  const { t } = useTranslation();
   return (
     <>
       {/* Hero Section */}
@@ -28,7 +30,7 @@ const Home = () => {
                     className="img-fluid product-thumbnail mb-4"
                   />
                   <Link to={item.link} className="btn btn-blue">
-                    THỬ NGAY
+                    {t('home.try_now')}
                   </Link>
                 </div>
               </div>
@@ -42,11 +44,11 @@ const Home = () => {
         <div className="container">
           <div className="row mb-2 align-items-center">
             <div className="col-md-6">
-              <h2 className="section-title">Thịnh Hành</h2>
+              <h2 className="section-title">{t('home.trending')}</h2>
             </div>
             <div className="col-md-6 text-start text-md-end">
               <Link to="/collection" className="more">
-                Xem Tất Cả Sản Phẩm
+                {t('home.view_all_products')}
               </Link>
             </div>
           </div>
@@ -80,11 +82,11 @@ const Home = () => {
         <div className="container">
           <div className="row mb-2 align-items-center">
             <div className="col-md-6">
-              <h2 className="section-title">Từ Tạp Chí</h2>
+              <h2 className="section-title">{t('home.from_journal')}</h2>
             </div>
             <div className="col-md-6 text-start text-md-end">
               <Link to="/blog" className="more">
-                Xem Tất Cả Bài Viết
+               {t('home.view_all_posts')}
               </Link>
             </div>
           </div>
@@ -108,10 +110,10 @@ const Home = () => {
                     </h3>
                     <div className="meta">
                       <span>
-                        Viết bởi <Link to="#">{blog.author}</Link>
+                        {t('home.written_by')} <Link to="#">{blog.author}</Link>
                       </span>
                       <span>
-                        - Ngày <Link to="#">{blog.date}</Link>
+                        - {t('home.on_date')} <Link to="#">{blog.date}</Link>
                       </span>
                     </div>
                   </div>

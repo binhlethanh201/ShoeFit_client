@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 // Import Images
 import footerImg from '../../../assets/images/Effects/footer_img.png';
 import envelopeIcon from '../../../assets/images/Effects/envelope-outline.svg';
 
 const Footer = () => {
+  const { t } = useTranslation(); 
+
   return (
     <footer className="footer-section">
       <div className="container relative">
@@ -21,18 +24,26 @@ const Footer = () => {
                 <span className="me-2">
                   <img src={envelopeIcon} alt="Envelope" className="img-fluid" width="24" />
                 </span>
-                <span>Đăng Ký Nhận Bản Tin</span>
+                <span>{t('footer.subscribe_title')}</span>
               </h3>
               <form className="row g-3" onSubmit={(e) => e.preventDefault()}>
                 <div className="col-auto">
-                  <input type="text" className="form-control" placeholder="Nhập tên của bạn" />
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder={t('footer.placeholder_name')} 
+                  />
                 </div>
                 <div className="col-auto">
-                  <input type="email" className="form-control" placeholder="Nhập email của bạn" />
+                  <input 
+                    type="email" 
+                    className="form-control" 
+                    placeholder={t('footer.placeholder_email')} 
+                  />
                 </div>
                 <div className="col-auto">
                   <button className="btn btn-blue" type="submit">
-                    <span className="fa fa-paper-plane"></span> Gửi
+                    <span className="fa fa-paper-plane"></span> {t('footer.send')}
                   </button>
                 </div>
               </form>
@@ -46,49 +57,21 @@ const Footer = () => {
             <div className="mb-4 footer-logo-wrap">
               <Link to="/" className="footer-logo"> ShoeFit<span>.</span> </Link>
             </div>
-            <p className="mb-4">Try On. Fit Right. Shop Smart</p>
+            <p className="mb-4">{t('footer.slogan')}</p>
             
             {/* Social Icons */}
             <ul className="list-unstyled custom-social d-flex gap-3 mb-4">
-              <li>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                  <i className="fa-brands fa-facebook-f"></i>
-                </a>
-              </li>
-              <li>
-                <a href="https://x.com" target="_blank" rel="noopener noreferrer">
-                  <i className="fa-brands fa-x"></i>
-                </a>
-              </li>
               <li>
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
                   <i className="fa-brands fa-instagram"></i>
                 </a>
               </li>
               <li>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-                  <i className="fa-brands fa-linkedin-in"></i>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer">
+                  <i className="fa-brands fa-tiktok"></i>
                 </a>
               </li>
             </ul>
-
-            {/* App Store / Google Play Badges */}
-            <div className="d-flex justify-content-start gap-3 mt-2">
-              <Link to="/tryonar">
-                <img
-                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                  alt="Download on the App Store"
-                  height="45"
-                />
-              </Link>
-              <Link to="/tryonar">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                  alt="Get it on Google Play"
-                  height="45"
-                />
-              </Link>
-            </div>
           </div>
 
           {/* Footer Links */}
@@ -96,18 +79,18 @@ const Footer = () => {
             <div className="row links-wrap">
               <div className="col-6 col-md-6">
                 <ul className="list-unstyled">
-                  <li className="mb-2"><Link to="/about">Về Chúng Tôi</Link></li>
-                  <li className="mb-2"><Link to="/services">Dịch Vụ</Link></li>
-                  <li className="mb-2"><Link to="/blog">Blog</Link></li>
-                  <li className="mb-2"><Link to="/contact">Liên Hệ</Link></li>
+                  <li className="mb-2"><Link to="/about">{t('footer.about_us')}</Link></li>
+                  <li className="mb-2"><Link to="/services">{t('footer.services')}</Link></li>
+                  <li className="mb-2"><Link to="/blog">{t('footer.blog')}</Link></li>
+                  <li className="mb-2"><Link to="/contact">{t('footer.contact')}</Link></li>
                 </ul>
               </div>
               <div className="col-6 col-md-6">
                 <ul className="list-unstyled">
-                  <li className="mb-2"><Link to="#">Hỗ Trợ</Link></li>
-                  <li className="mb-2"><Link to="#">Đội Ngũ</Link></li>
-                  <li className="mb-2"><Link to="#">Lãnh Đạo</Link></li>
-                  <li className="mb-2"><Link to="#">Chính Sách Bảo Mật</Link></li>
+                  <li className="mb-2"><Link to="#">{t('footer.support')}</Link></li>
+                  <li className="mb-2"><Link to="#">{t('footer.team')}</Link></li>
+                  <li className="mb-2"><Link to="#">{t('footer.leadership')}</Link></li>
+                  <li className="mb-2"><Link to="#">{t('footer.privacy_policy')}</Link></li>
                 </ul>
               </div>
             </div>
@@ -118,12 +101,12 @@ const Footer = () => {
         <div className="copyright border-top pt-4 mt-4">
           <div className="row align-items-center">
             <div className="col-lg-6 text-center text-lg-start">
-              <p className="mb-0">&copy; 2025 ShoeFit. Đã đăng ký Bản quyền.</p>
+              <p className="mb-0">&copy; 2025 ShoeFit. {t('footer.copyright')}</p>
             </div>
             <div className="col-lg-6 text-center text-lg-end">
               <ul className="list-unstyled d-inline-flex mb-0 gap-4">
-                <li><Link to="#">Điều khoản & Điều kiện</Link></li>
-                <li><Link to="#">Chính sách Bảo mật</Link></li>
+                <li><Link to="#">{t('footer.terms')}</Link></li>
+                <li><Link to="#">{t('footer.privacy')}</Link></li>
               </ul>
             </div>
           </div>

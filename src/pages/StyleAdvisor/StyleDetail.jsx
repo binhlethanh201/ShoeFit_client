@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next"; 
 import { styleData, productsData } from "../../data/mockData";
-
-// Import ảnh mặc định
 import defaultShoe from "../../assets/images/Shoes/default.png";
 
 const StyleDetail = () => {
-  // Lấy styleId từ URL path
+  const { t } = useTranslation(); 
   const { styleId } = useParams();
-
-  // Lấy các tham số từ Query String
   const [searchParams] = useSearchParams();
   const gender = searchParams.get("gender");
   const occasion = searchParams.get("occasion");
@@ -40,7 +37,6 @@ const StyleDetail = () => {
       }
     }
 
-    // Tìm thông tin giày gợi ý
     if (shoeId) {
       const shoe = productsData.find((p) => p.id === shoeId);
       setRecommendedShoe(shoe);
@@ -67,11 +63,10 @@ const StyleDetail = () => {
 
   return (
     <>
-      {/* Style Detail Section */}
       <section className="style-detail-section py-5">
         <div className="container">
           <div className="row align-items-center g-5">
-            {/* Style Image Preview */}
+            {/* Style Image */}
             <div className="col-md-6">
               <div className="style-preview shadow-sm rounded overflow-hidden">
                 <img
@@ -83,13 +78,26 @@ const StyleDetail = () => {
               </div>
             </div>
 
-            {/* Recommended Shoe Info */}
+            {/* Recommended Shoe */}
             <div className="col-md-6 text-center">
-              <h3 className="fw-semibold mb-3">Gợi Ý Mẫu Giày</h3>
-              <div className="shoe-preview text-center p-4 border rounded shadow-sm bg-white d-inline-block">
+              <h3 className="fw-semibold mb-3">{t('style_advisor.suggested_shoe')}</h3>
+              
+              {/* FIX: 
+                  1. Xóa class 'bg-white' -> Để style.css (var(--bg-card)) xử lý nền.
+                  2. Thêm style backgroundColor và color động theo biến CSS.
+              */}
+              <div 
+                className="shoe-preview text-center p-4 border rounded shadow-sm d-inline-block"
+                style={{ 
+                    backgroundColor: 'var(--bg-card)', 
+                    borderColor: 'var(--border-color)' 
+                }}
+              >
                 <Link
                   to={recommendedShoe ? `/product/${recommendedShoe.id}` : "#"}
-                  className="text-decoration-none text-dark"
+                  className="text-decoration-none"
+                  // FIX: Xóa class 'text-dark' -> Thay bằng biến màu heading
+                  style={{ color: 'var(--text-heading)' }}
                 >
                   <img
                     src={recommendedShoe ? recommendedShoe.image : defaultShoe}
@@ -100,21 +108,20 @@ const StyleDetail = () => {
                   <p className="mt-3 fw-bold fs-5">
                     {recommendedShoe
                       ? recommendedShoe.title
-                      : "Đang cập nhật..."}
+                      : t('style_advisor.updating')}
                   </p>
                 </Link>
               </div>
             </div>
           </div>
 
-          {/* More Styles Section - Layout giống hệt HTML gốc */}
+          {/* More Styles */}
           <div className="more-section mt-5">
             <h4 className="fw-semibold mb-4 text-center">
-              Những Phong Cách Khác Mà Bạn Có Thể Thích
+              {t('style_advisor.more_styles')}
             </h4>
             <div className="row g-4 justify-content-center">
               {relatedStyles.map((style, i) => {
-                // Tính toán lại ID cho link
                 const originalStyles = styleData[gender][occasion];
                 const originalIndex = originalStyles.indexOf(style);
                 const nextStyleId = `${gender}_${occasion}_${
@@ -122,18 +129,15 @@ const StyleDetail = () => {
                 }`;
 
                 return (
-                  // Class layout chuẩn từ HTML: col-6 col-md-3 more-item
                   <div className="col-6 col-md-3 more-item" key={i}>
                     <Link
                       to={`/styledetail/${nextStyleId}?gender=${gender}&occasion=${occasion}&shoeId=${style.shoeId}`}
                     >
-                      {/* Class ảnh chuẩn từ HTML: img-fluid shadow-sm rounded */}
                       <img
                         src={style.src}
                         className="img-fluid shadow-sm rounded"
                         alt={`Related Style ${i + 1}`}
                         loading="lazy"
-                        // Thêm hiệu ứng fade-in nhẹ bằng CSS inline để mượt mà (tùy chọn)
                         style={{ transition: "opacity 0.5s ease", opacity: 1 }}
                       />
                     </Link>

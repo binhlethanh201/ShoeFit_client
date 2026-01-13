@@ -29,6 +29,7 @@ import Search from "./pages/Search/Search.jsx";
 import Service from "./pages/Service/Service.jsx";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 import TryOnAR from "./pages/TryonAR/TryOnAR.jsx";
+import TryOnVideo from "./pages/TryOnVideo/TryOnVideo.jsx";
 import TryOn2D from "./pages/Tryon2D/TryOn2D.jsx";
 import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
 import StyleDetail from "./pages/StyleAdvisor/StyleDetail.jsx";
@@ -38,6 +39,7 @@ import ErrorPage from './pages/ErrorPage.jsx';
 import Login from "./pages/Auth/Login.jsx";
 import Register from "./pages/Auth/Register.jsx";
 import ChangePassword from "./pages/Auth/ChangePassword.jsx";
+import Settings from "./pages/Setting/Settings.jsx";
 
 // --- Store & Admin ---
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
@@ -82,6 +84,7 @@ const router = createBrowserRouter(
         <Route path="/services" element={<Service />}></Route>
         <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/tryonar" element={<TryOnAR />}></Route>
+        <Route path="/tryonvideo" element={<TryOnVideo />}></Route>
         <Route path="/tryon2d" element={<TryOn2D />}></Route>
         <Route path="/styleadvisor" element={<StyleAdvisor />}></Route>
         <Route path="/styledetail/:styleId" element={<StyleDetail />}></Route>
@@ -91,6 +94,7 @@ const router = createBrowserRouter(
         {/* Protected Auth Route */}
         <Route element={<ProtectedRoute allowedRoles={['user', 'store', 'admin']} />}>
           <Route path="/change-password" element={<ChangePassword/>}></Route>
+          <Route path="/settings" element={<Settings/>}></Route>
         </Route>
 
         {/* Store Route */}

@@ -1,6 +1,6 @@
 // --- Imports: Service Images ---
 import tryon2d from "../assets/images/TryOnGrids/tryon2d.png";
-import tryonar from "../assets/images/TryOnGrids/tryonar.png";
+import tryonvideo from "../assets/images/TryOnGrids/tryonvideo.png";
 import styleadvisor from "../assets/images/TryOnGrids/styleadvisor.png";
 
 // --- Imports: Blog Images ---
@@ -118,8 +118,8 @@ import w_sport6 from "../assets/images/Styles/Active-Sporty/WOMEN/sport6.jpg";
 
 // --- EXPORT: Services ---
 export const servicesData = [
-  { id: 1, image: tryon2d, title: "Thử Giày AI 2D", link: "/tryon2d" },
-  { id: 2, image: tryonar, title: "Thử Giày Ảo AR", link: "/tryonar" },
+  { id: 1, image: tryon2d, title: "Ảnh Thử Giày AI", link: "/tryon2d" },
+  { id: 2, image: tryonvideo, title: "Video Thử Giày AI", link: "/tryonvideo" },
   { id: 3, image: styleadvisor, title: "Tư Vấn Phong Cách", link: "/styleadvisor" }
 ];
 
