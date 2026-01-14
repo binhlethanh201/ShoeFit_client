@@ -1,9 +1,8 @@
-// ShoeFit_client/src/components/home/Header/Header.jsx
 import React, { useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import authService from '../../../services/authService';
 import { toast } from 'react-toastify';
-import { ThemeContext } from '../../../context/ThemeContext'; // Import ThemeContext
+import { ThemeContext } from '../../../context/ThemeContext'; 
 import { useTranslation } from 'react-i18next';
 
 // Import Icons

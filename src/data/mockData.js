@@ -4,9 +4,9 @@ import tryonvideo from "../assets/images/TryOnGrids/tryonvideo.png";
 import styleadvisor from "../assets/images/TryOnGrids/styleadvisor.png";
 
 // --- Imports: Blog Images ---
-import blog1 from "../assets/images/Blogs/blog1.avif";
-import blog2 from "../assets/images/Blogs/blog2.avif";
-import blog3 from "../assets/images/Blogs/blog3.avif";
+import blog1 from "../assets/images/Blogs/blog4.png";
+import blog2 from "../assets/images/Blogs/blog5.png";
+import blog3 from "../assets/images/Blogs/blog6.png";
 
 // --- Imports: Product Images (Shoes) ---
 import adidasgazelle from "../assets/images/Shoes/adidasgazelle.png";

@@ -31,8 +31,8 @@ const Contact = () => {
 
   const iconBgStyle = {
     backgroundColor: 'var(--bg-section)',
-    width: '60px',
-    height: '60px'
+    width: '45px',
+    height: '45px'
   };
 
   return (
@@ -44,13 +44,14 @@ const Contact = () => {
             {/* --- ROW 1: Form & Social Banner --- */}
             <div className="row justify-content-between mb-5">
 
+              {/* COL 1: Form Liên Hệ */}
               <div className="col-lg-7 mb-5 mb-lg-0">
-                <h3 className="mb-4 fw-bold " style={headingStyle}>{t('contact.title')}</h3>
+                {/* THÊM mt-4: Đẩy tiêu đề xuống để thẳng hàng với tiêu đề bên phải (do bên phải có padding p-4) */}
+                <h3 className=" h2 mb-4 fw-bold mt-4" style={headingStyle}>{t('contact.title')}</h3>
                 <form onSubmit={handleSubmit}>
-
                   {/* Họ và tên */}
                   <div className="form-group mb-3">
-                    <label className="fw-bold mb-1" htmlFor="fullname" style={headingStyle}>
+                    <label className="h7 fw-bold mb-1" htmlFor="fullname" style={headingStyle}>
                       {t('contact.label_fullname')}
                     </label>
                     <input type="text" className="form-control" id="fullname" required style={inputStyle} />
@@ -60,7 +61,7 @@ const Contact = () => {
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label className="fw-bold mb-1" htmlFor="email" style={headingStyle}>
+                        <label className="h7 fw-bold mb-1" htmlFor="email" style={headingStyle}>
                           {t('contact.label_email')}
                         </label>
                         <input type="email" className="form-control" id="email" required style={inputStyle} />
@@ -69,7 +70,7 @@ const Contact = () => {
 
                     <div className="col-md-6">
                       <div className="form-group">
-                        <label className="fw-bold mb-1" htmlFor="phone" style={headingStyle}>
+                        <label className="h7 fw-bold mb-1" htmlFor="phone" style={headingStyle}>
                           {t('contact.label_phone')}
                         </label>
                         <input type="tel" className="form-control" id="phone" required style={inputStyle} />
@@ -79,7 +80,7 @@ const Contact = () => {
 
                   {/* Nội dung */}
                   <div className="form-group mb-4">
-                    <label className="fw-bold mb-1" htmlFor="message" style={headingStyle}>
+                    <label className="h7 fw-bold mb-1" htmlFor="message" style={headingStyle}>
                       {t('contact.label_message')}
                     </label>
                     <textarea name="message" className="form-control" id="message" cols="30" rows="5" required style={inputStyle}></textarea>
@@ -92,17 +93,8 @@ const Contact = () => {
               </div>
 
               {/* COL 2: Banner Theo Dõi (Socials) */}
-              <div className="col-lg-4 m-5">
-                <div
-                  className="p-4"
-                  style={{
-                    border: '1px solid #17238b',
-                    backgroundColor: 'var(--bg-card)',
-                    borderRadius: '20px',
-                    width: 'fit-content',
-                    minWidth: '280px'
-                  }}
-                >
+              <div className="col-lg-4 d-flex justify-content-lg-end justify-content-center">
+                <div className="p-4">
                   <h3 className="h3 mb-4 fw-bold" style={headingStyle}>{t('contact.follow_us')}</h3>
 
                   <ul className="list-unstyled social-icons m-0">
@@ -110,9 +102,9 @@ const Contact = () => {
                     <li className="mb-4">
                       <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="d-flex align-items-center text-decoration-none">
                         <span className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style={iconBgStyle}>
-                          <i className="fa-brands fa-instagram fs-2" style={{ color: '#C13584' }}></i>
+                          <i className="fa-brands fa-instagram fs-4" style={{ color: '#C13584' }}></i>
                         </span>
-                        <span className="h5 mb-0 fw-semibold" style={headingStyle}>Instagram</span>
+                        <span className="fs-6 mb-0 fw-semibold" style={headingStyle}>Instagram</span>
                       </a>
                     </li>
 
@@ -120,9 +112,9 @@ const Contact = () => {
                     <li className="mb-4">
                       <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="d-flex align-items-center text-decoration-none">
                         <span className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style={iconBgStyle}>
-                          <i className="fa-brands fa-facebook-f fs-2" style={{ color: '#1877F2' }}></i>
+                          <i className="fa-brands fa-facebook-f fs-4" style={{ color: '#1877F2' }}></i>
                         </span>
-                        <span className="h5 mb-0 fw-semibold" style={headingStyle}>Facebook</span>
+                        <span className="fs-6 mb-0 fw-semibold" style={headingStyle}>Facebook</span>
                       </a>
                     </li>
 
@@ -130,9 +122,9 @@ const Contact = () => {
                     <li className="mb-4">
                       <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="d-flex align-items-center text-decoration-none">
                         <span className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style={iconBgStyle}>
-                          <i className="fa-brands fa-tiktok fs-2" style={{ color: 'var(--text-heading)' }}></i>
+                          <i className="fa-brands fa-tiktok fs-4" style={{ color: 'var(--text-heading)' }}></i>
                         </span>
-                        <span className="h5 mb-0 fw-semibold" style={headingStyle}>TikTok</span>
+                        <span className="fs-6 mb-0 fw-semibold" style={headingStyle}>TikTok</span>
                       </a>
                     </li>
                   </ul>
