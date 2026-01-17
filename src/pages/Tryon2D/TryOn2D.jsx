@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "../../assets/css/tryon2d/tryon2d.css";
 
 // Import Icons
 import scanIcon from "../../assets/images/Effects/scan.svg";
@@ -85,7 +86,7 @@ const TryOn2D = () => {
   const handleGenerate = () => {
     if (!userImage || !selectedShoe) {
       // Dịch thông báo alert
-      alert(t('tryon2d.alert_missing_input'));
+      alert(t("tryon2d.alert_missing_input"));
       return;
     }
 
@@ -112,19 +113,16 @@ const TryOn2D = () => {
   return (
     <>
       <div className="tryon-main">
-      <div className="text-center m-5">
-            <h2 className="fw-bold mb-3">{t('tryon2d.title')}</h2>
-            <p className="text-muted">
-              {t('tryon2d.subtitle')}
-            </p>
-          </div>
+        <div className="text-center m-5">
+          <h2 className="fw-bold mb-3">{t("tryon2d.title")}</h2>
+          <p className="text-muted">{t("tryon2d.subtitle")}</p>
+        </div>
         <div className="tryon-content">
-
           <div className="col">
             {/* Step 1: Upload */}
             <div className="row">
               <section className="tryon-section">
-                <h2>{t('tryon2d.step1_title')}</h2>
+                <h2>{t("tryon2d.step1_title")}</h2>
                 <div className="upload-container">
                   <input
                     type="file"
@@ -134,7 +132,6 @@ const TryOn2D = () => {
                     style={{ display: "none" }}
                   />
                   <label htmlFor="user-image" className="upload-box">
-
                     {userImage && (
                       <div
                         className="user-image-preview-mini"
@@ -143,12 +140,12 @@ const TryOn2D = () => {
                     )}
 
                     <span className="btn-choose-file-fake">
-                      {t('tryon2d.btn_choose_image') || "Choose Image"}
+                      {t("tryon2d.btn_choose_image") || "Choose Image"}
                     </span>
 
                     <p className="upload-instruction">
-                      {t('tryon2d.upload_instruction')} <br />
-                      <span>{t('tryon2d.upload_note')}</span>
+                      {t("tryon2d.upload_instruction")} <br />
+                      <span>{t("tryon2d.upload_note")}</span>
                     </p>
                   </label>
                 </div>
@@ -157,14 +154,14 @@ const TryOn2D = () => {
             {/* Step 2: Choose Shoe */}
             <div className="row mt-4">
               <section className="tryon-section">
-                <h2>{t('tryon2d.step2_title')}</h2>
+                <h2>{t("tryon2d.step2_title")}</h2>
                 <div className="input-group">
                   <button
                     className="generate-btn btn btn-primary"
                     id="open-drawer"
                     onClick={() => setIsDrawerOpen(true)}
                   >
-                    {t('tryon2d.btn_select_shoe')}
+                    {t("tryon2d.btn_select_shoe")}
                   </button>
                   <div
                     className="preview"
@@ -178,7 +175,7 @@ const TryOn2D = () => {
                       backgroundPosition: "center",
                     }}
                   >
-                    {!selectedShoe && t('tryon2d.placeholder_no_shoe')}
+                    {!selectedShoe && t("tryon2d.placeholder_no_shoe")}
                   </div>
                 </div>
 
@@ -188,7 +185,9 @@ const TryOn2D = () => {
                   onClick={handleGenerate}
                   disabled={isProcessing}
                 >
-                  {isProcessing ? t('tryon2d.btn_processing') : t('tryon2d.btn_generate')}
+                  {isProcessing
+                    ? t("tryon2d.btn_processing")
+                    : t("tryon2d.btn_generate")}
                 </button>
 
                 <button
@@ -196,7 +195,8 @@ const TryOn2D = () => {
                   id="go-style-advisor"
                   onClick={() => navigate("/styleadvisor")}
                 >
-                  <i className="fa-solid fa-shirt me-2"></i> {t('tryon2d.btn_style_advisor')}
+                  <i className="fa-solid fa-shirt me-2"></i>{" "}
+                  {t("tryon2d.btn_style_advisor")}
                 </button>
               </section>
             </div>
@@ -205,10 +205,12 @@ const TryOn2D = () => {
           {/* Step 3: Result */}
           <div className="col">
             <section className="tryon-section">
-              <h2>{t('tryon2d.step3_title')}</h2>
+              <h2>{t("tryon2d.step3_title")}</h2>
               <div className="result-display" id="result-mock">
                 {isProcessing ? (
-                  <p style={{ color: "blue" }}>{t('tryon2d.result_processing')}</p>
+                  <p style={{ color: "blue" }}>
+                    {t("tryon2d.result_processing")}
+                  </p>
                 ) : result ? (
                   <>
                     <div className="image-container">
@@ -234,11 +236,12 @@ const TryOn2D = () => {
                       className="btn-download"
                       style={{ marginTop: "10px" }}
                     >
-                      <i className="fa fa-download me-2"></i> {t('tryon2d.btn_download')}
+                      <i className="fa fa-download me-2"></i>{" "}
+                      {t("tryon2d.btn_download")}
                     </a>
                   </>
                 ) : (
-                  <p>{t('tryon2d.result_placeholder')}</p>
+                  <p>{t("tryon2d.result_placeholder")}</p>
                 )}
               </div>
             </section>
@@ -247,7 +250,7 @@ const TryOn2D = () => {
           {/* Shoe Drawer (Side Panel) */}
           <div id="shoe-drawer" className={isDrawerOpen ? "active" : ""}>
             <div className="drawer-content">
-              <h4>{t('tryon2d.drawer_title')}</h4>
+              <h4>{t("tryon2d.drawer_title")}</h4>
               <span id="close-drawer" onClick={() => setIsDrawerOpen(false)}>
                 &times;
               </span>

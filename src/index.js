@@ -1,24 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './redux/store'; // Đảm bảo bạn đã tạo store
-import App from './App';
-import { ThemeProvider } from './context/ThemeContext';
-import './i18n';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import App from "./App";
+import { ThemeProvider } from "./context/ThemeContext";
+import "./i18n";
 
-// --- IMPORT GLOBAL ASSETS ---
+// CSS
 import "./assets/css/bootstrap.min.css";
-import "./assets/css/tiny-slider.css";
 import "./assets/css/style.css";
 
-// JS Libraries 
+// JS Libraries
 import "./assets/js/bootstrap.bundle.min.js";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <ThemeProvider>
-        <App />
+      <App />
     </ThemeProvider>
   </Provider>
 );

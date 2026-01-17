@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 // Import Images
 import footerImg from "../../../assets/images/Effects/footer_img.png";
 import envelopeIcon from "../../../assets/images/Effects/envelope-outline.svg";
+import "../../../assets/css/home/footer/footer.css";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -103,7 +104,7 @@ const Footer = () => {
           {/* Footer Links */}
           <div className="col-lg-7 ms-auto">
             <div className="row links-wrap">
-              {/* Cột 1: Thông tin chung */}
+              {/* Col 1 */}
               <div className="col-6 col-md-4 mb-4 mb-md-0">
                 <ul className="list-unstyled">
                   <li className="mb-3">
@@ -131,7 +132,7 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Cột 2: Hỗ trợ / Kết nối */}
+              {/* Col 2*/}
               <div className="col-6 col-md-4 mb-4 mb-md-0">
                 <ul className="list-unstyled">
                   <li className="mb-3">

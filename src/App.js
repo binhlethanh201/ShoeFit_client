@@ -18,22 +18,20 @@ import ScrollToTopBtn from "./components/common/ScrollToTopBtn.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 
 // --- Pages ---
-import Home from './pages/Home.jsx';
+import Home from "./pages/Home.jsx";
 import About from "./pages/About/About.jsx";
 import Blog from "./pages/Blog/Blog.jsx";
-import Collection from "./pages/Collection/Collection.jsx";
+import ProductList from "./pages/Product/ProductList.jsx";
 import ProductDetail from "./pages/Product/ProductDetail.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
-import Search from "./pages/Search/Search.jsx";
 import Service from "./pages/Service/Service.jsx";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
-import TryOnAR from "./pages/TryonAR/TryOnAR.jsx";
 import TryOnVideo from "./pages/TryOnVideo/TryOnVideo.jsx";
 import TryOn2D from "./pages/Tryon2D/TryOn2D.jsx";
 import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
 import StyleDetail from "./pages/StyleAdvisor/StyleDetail.jsx";
-import ErrorPage from './pages/ErrorPage.jsx';
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 // --- Auth ----
 import Login from "./pages/Auth/Login.jsx";
@@ -41,13 +39,12 @@ import Register from "./pages/Auth/Register.jsx";
 import ChangePassword from "./pages/Auth/ChangePassword.jsx";
 import Settings from "./pages/Setting/Settings.jsx";
 
-// --- Store & Admin ---
+// --- Admin Dashboard ---
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
-import StoreDashboard from "./pages/Store/StoreDashboard.jsx";
 
-const Layout = () => {
+const RootLayout = () => {
   return (
-    <div>
+    <>
       <ToastContainer
         position="top-right"
         autoClose={1000}
@@ -60,9 +57,19 @@ const Layout = () => {
         pauseOnHover
         theme="colored"
       />
-      <Header />
       <ScrollRestoration />
       <Outlet />
+    </>
+  );
+};
+
+const PublicLayout = () => {
+  return (
+    <div>
+      <Header />
+      <div style={{ minHeight: "80vh" }}>
+        <Outlet />
+      </div>
       <Footer />
       <ScrollToTopBtn />
     </div>
@@ -71,54 +78,43 @@ const Layout = () => {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route errorElement={<ErrorPage />}>
-      <Route path="/" element={<Layout />}>
+    <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
+      <Route element={<PublicLayout />}>
         <Route index element={<Home />}></Route>
         <Route path="/about" element={<About />}></Route>
         <Route path="/blog" element={<Blog />}></Route>
-        <Route path="/collection" element={<Collection />}></Route>
+        <Route path="/collection" element={<ProductList />}></Route>
         <Route path="/product/:productId" element={<ProductDetail />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/search" element={<Search />}></Route>
         <Route path="/services" element={<Service />}></Route>
         <Route path="/wishlist" element={<Wishlist />}></Route>
-        <Route path="/tryonar" element={<TryOnAR />}></Route>
         <Route path="/tryonvideo" element={<TryOnVideo />}></Route>
         <Route path="/tryon2d" element={<TryOn2D />}></Route>
         <Route path="/styleadvisor" element={<StyleAdvisor />}></Route>
         <Route path="/styledetail/:styleId" element={<StyleDetail />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/register" element={<Register/>}></Route>
+        <Route path="/register" element={<Register />}></Route>
 
         {/* Protected Auth Route */}
-        <Route element={<ProtectedRoute allowedRoles={['user', 'store', 'admin']} />}>
-          <Route path="/change-password" element={<ChangePassword/>}></Route>
-          <Route path="/settings" element={<Settings/>}></Route>
-        </Route>
-
-        {/* Store Route */}
-        <Route element={<ProtectedRoute allowedRoles={['store']} />}>
-            <Route path="/store/dashboard" element={<StoreDashboard />} />
-        </Route>
-
-        {/* Admin Route */}
-        <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+          <Route path="/change-password" element={<ChangePassword />}></Route>
+          <Route path="/settings" element={<Settings />}></Route>
         </Route>
       </Route>
 
+      {/* Admin Route */}
+      <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      </Route>
     </Route>
   )
 );
 
 function App() {
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-    // Chỉ fetchCart khi cần thiết (ví dụ check token)
-    // dispatch(fetchCart()); 
-  }, [dispatch]);
+
+  useEffect(() => {}, [dispatch]);
 
   return (
     <div className="font-bodyFont">

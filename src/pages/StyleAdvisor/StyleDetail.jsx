@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useParams, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 import { styleData, productsData } from "../../data/mockData";
 import defaultShoe from "../../assets/images/Shoes/default.png";
+import "../../assets/css/styleAdvisor/styleAdvisor.css";
 
 const StyleDetail = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const { styleId } = useParams();
   const [searchParams] = useSearchParams();
   const gender = searchParams.get("gender");
@@ -80,24 +81,20 @@ const StyleDetail = () => {
 
             {/* Recommended Shoe */}
             <div className="col-md-6 text-center">
-              <h3 className="fw-semibold mb-3">{t('style_advisor.suggested_shoe')}</h3>
-              
-              {/* FIX: 
-                  1. Xóa class 'bg-white' -> Để style.css (var(--bg-card)) xử lý nền.
-                  2. Thêm style backgroundColor và color động theo biến CSS.
-              */}
-              <div 
+              <h3 className="fw-semibold mb-3">
+                {t("style_advisor.suggested_shoe")}
+              </h3>
+              <div
                 className="shoe-preview text-center p-4 border rounded shadow-sm d-inline-block"
-                style={{ 
-                    backgroundColor: 'var(--bg-card)', 
-                    borderColor: 'var(--border-color)' 
+                style={{
+                  backgroundColor: "var(--bg-card)",
+                  borderColor: "var(--border-color)",
                 }}
               >
                 <Link
                   to={recommendedShoe ? `/product/${recommendedShoe.id}` : "#"}
                   className="text-decoration-none"
-                  // FIX: Xóa class 'text-dark' -> Thay bằng biến màu heading
-                  style={{ color: 'var(--text-heading)' }}
+                  style={{ color: "var(--text-heading)" }}
                 >
                   <img
                     src={recommendedShoe ? recommendedShoe.image : defaultShoe}
@@ -108,7 +105,7 @@ const StyleDetail = () => {
                   <p className="mt-3 fw-bold fs-5">
                     {recommendedShoe
                       ? recommendedShoe.title
-                      : t('style_advisor.updating')}
+                      : t("style_advisor.updating")}
                   </p>
                 </Link>
               </div>
@@ -118,7 +115,7 @@ const StyleDetail = () => {
           {/* More Styles */}
           <div className="more-section mt-5">
             <h4 className="fw-semibold mb-4 text-center">
-              {t('style_advisor.more_styles')}
+              {t("style_advisor.more_styles")}
             </h4>
             <div className="row g-4 justify-content-center">
               {relatedStyles.map((style, i) => {

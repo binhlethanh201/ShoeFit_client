@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next"; 
 import { styleData } from "../../data/mockData";
+import "../../assets/css/styleAdvisor/styleAdvisor.css";
 
 const StyleAdvisor = () => {
   const { t } = useTranslation(); 

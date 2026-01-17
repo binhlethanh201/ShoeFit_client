@@ -1,6 +1,7 @@
 {
   "header": {
     "home": "Khám Phá",
+    "collection": "Sản Phẩm",
     "tryonvideo": "Video Thử Giày AI",
     "tryon2d": "Ảnh Thử Giày AI",
     "styleadvisor": "Tư Vấn Phong Cách",
@@ -170,7 +171,7 @@
     "more_styles": "Những Phong Cách Khác Mà Bạn Có Thể Thích",
     "updating": "Đang cập nhật..."
   },
-"tryon2d": {
+  "tryon2d": {
     "title": "Trải Nghiệm Thử Giày Ảnh AI",
     "subtitle": "Khám phá cảm giác mang giày ngay trên chân với AI",
     "step1_title": "1. Bắt đầu với ảnh của bạn",

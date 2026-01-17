@@ -1,6 +1,7 @@
 {
   "header": {
     "home": "Discover",
+    "collection": "Collection",
     "tryonvideo": "AI Video Try-on",
     "tryon2d": "AI Photo Try-on",
     "styleadvisor": "Style Advisor",
@@ -170,7 +171,7 @@
     "more_styles": "Other Styles You Might Like",
     "updating": "Updating..."
   },
-"tryon2d": {
+  "tryon2d": {
     "title": "AI Photo Try-On Experience",
     "subtitle": "Discover the feeling of wearing shoes instantly with AI",
     "step1_title": "1. Upload Your Photo",

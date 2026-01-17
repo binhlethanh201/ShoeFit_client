@@ -130,123 +130,140 @@ export const blogsData = [
   { id: 3, title: "Jordan 1 Guide", author: "Thomas Banner", date: "08/04/2024", image: blog3, link: "/blog/3" }
 ];
 
-// --- EXPORT: Products (No Price) ---
+// --- EXPORT: Products ---
 export const productsData = [
   {
     id: "adidasgazelle",
     title: "Adidas Gazelle",
+    price: 2800000, // Thêm giá
     image: adidasgazelle,
-    description: "Một mẫu giày cổ điển vượt thời gian từ kho lưu trữ của Adidas. Biểu tượng thời trang đường phố với thân giày da lộn.",
+    description: "Một mẫu giày cổ điển vượt thời gian từ kho lưu trữ của Adidas...",
     ai_description: "Sneaker cổ thấp, da lộn, logo ba sọc, lớp phủ chữ T mũi giày."
   },
   {
     id: "birkenstock",
     title: "Birkenstock Arizona",
+    price: 3500000,
     image: birkenstock,
-    description: "Mẫu sandal hai quai mang tính biểu tượng của Birkenstock với lót giày cork-latex.",
+    description: "Mẫu sandal hai quai mang tính biểu tượng của Birkenstock...",
     ai_description: "Sandal hở mũi, hai quai rộng, khóa kim loại, lót gỗ bần."
   },
   {
     id: "nikeairjordan1lowog",
     title: "Nike Air Jordan 1 Low OG",
+    price: 4200000,
     image: nikeairjordan1,
-    description: "Phiên bản cổ thấp của đôi sneaker huyền thoại năm 1985 với logo Nike Air và Wings.",
+    description: "Phiên bản cổ thấp của đôi sneaker huyền thoại năm 1985...",
     ai_description: "Sneaker bóng rổ cổ thấp, thân da, lỗ thông hơi mũi giày, logo Swoosh."
   },
   {
     id: "adizeroevosl",
     title: "Adidas Adizero Evo SL",
+    price: 3800000,
     image: adizeroevosl,
-    description: "Giày chạy hiệu suất siêu nhẹ thiết kế cho các cuộc đua và kỷ lục cá nhân.",
+    description: "Giày chạy hiệu suất siêu nhẹ thiết kế cho các cuộc đua...",
     ai_description: "Giày chạy tối giản, thân lưới mỏng, đế giữa xốp nhẹ hình rocker."
   },
   {
     id: "jordan4cementwhite",
-    title: "Air Jordan 4 Retro OG ‘White Cement’ 2016",
+    title: "Air Jordan 4 Retro OG 'White Cement'",
+    price: 5500000,
     image: jordan4cement,
-    description: "Mẫu Jordan 4 Retro mang tính biểu tượng, kết hợp thiết kế di sản và sự thoải mái hiện đại.",
+    description: "Mẫu Jordan 4 Retro mang tính biểu tượng...",
     ai_description: "Cổ điển nhưng vượt thời gian. Hoàn hảo cho sưu tập và mang hàng ngày."
   },
   {
     id: "sambaog",
-    title: "Adidas Samba OG ‘White Black Gum’",
+    title: "Adidas Samba OG 'White Black Gum'",
+    price: 2500000,
     image: sambaog,
-    description: "Mẫu giày cổ điển vượt thời gian của thời trang đường phố — Samba OG mang đến chất liệu da cao cấp.",
+    description: "Mẫu giày cổ điển vượt thời gian của thời trang đường phố...",
     ai_description: "Thiết kế tối giản với nét quyến rũ cổ điển."
   },
   {
     id: "airforce1",
-    title: "Nike Air Force 1 ’07 ‘Triple White’",
+    title: "Nike Air Force 1 ’07 'Triple White'",
+    price: 2900000,
     image: airforce1,
-    description: "Đôi Air Force 1 Low được yêu thích mọi thời đại với chất liệu da trắng cổ điển.",
+    description: "Đôi Air Force 1 Low được yêu thích mọi thời đại...",
     ai_description: "Linh hoạt và mang tính biểu tượng. Một đôi sneaker phải có."
   },
   {
     id: "conversehightop",
-    title: "Converse Chuck Taylor All-Stars High-top",
+    title: "Converse Chuck Taylor All-Stars",
+    price: 1800000,
     image: converse,
-    description: "Đôi Converse cổ cao huyền thoại — linh hoạt, bền bỉ và phong cách.",
+    description: "Đôi Converse cổ cao huyền thoại — linh hoạt, bền bỉ...",
     ai_description: "Thường ngày nhưng đầy biểu cảm. Hoàn hảo cho cá tính sáng tạo."
   },
   {
     id: "vansoldskool",
     title: "Vans Old Skool OG Black White",
+    price: 1950000,
     image: vansoldskool,
-    description: "Đôi giày trượt ván cổ thấp cổ điển có sọc sidestripe mang tính biểu tượng.",
+    description: "Đôi giày trượt ván cổ thấp cổ điển có sọc sidestripe...",
     ai_description: "Giày cổ thấp da lộn/canvas đen, sọc trắng, đế waffle."
   },
   {
     id: "adizerosl2",
     title: "Adidas Adizero Sl2",
+    price: 3200000,
     image: adizerosl2,
     description: "Giày chạy nhẹ thiết kế cho tốc độ và luyện tập hàng ngày.",
     ai_description: "Thân lưới nhẹ, ba sọc đặc trưng, đế xốp có đệm."
   },
   {
     id: "poloralphlaurencourt",
-    title: "Polo Ralph Lauren Court VLC Shoes",
+    title: "Polo Ralph Lauren Court VLC",
+    price: 2400000,
     image: polocourt,
-    description: "Sneaker lấy cảm hứng từ sân tennis cổ điển với lớp hoàn thiện lưu hóa.",
+    description: "Sneaker lấy cảm hứng từ sân tennis cổ điển...",
     ai_description: "Sneaker cổ thấp canvas, logo Polo thêu, đế cao su trắng."
   },
   {
     id: "adidassupernovarise",
     title: "Adidas Supernova Rise",
+    price: 3100000,
     image: supernovarise,
-    description: "Giày luyện tập hàng ngày thoải mái với lớp đệm Dreamstrike+ mới.",
+    description: "Giày luyện tập hàng ngày thoải mái với lớp đệm Dreamstrike+.",
     ai_description: "Thân lưới kỹ thuật, cổ giày đệm, đế giữa dày Dreamstrike+."
   },
   {
     id: "oncloudnova2",
-    title: "On Cloudnova 2 New Generation All White",
+    title: "On Cloudnova 2 All White",
+    price: 4500000,
     image: oncloudnova2,
     description: "Sneaker mang cả ngày với lớp đệm CloudTec thế hệ mới.",
     ai_description: "Sneaker cổ thấp toàn trắng, cấu trúc tất, đế 'đám mây'."
   },
   {
     id: "rigorerarskate",
-    title: "Rigorer AR Skate Shoes 'Full White'",
+    title: "Rigorer AR Skate Shoes",
+    price: 2100000,
     image: rigorerarskate,
-    description: "Kiểu dáng gọn gàng, lấy cảm hứng từ giày trượt ván từ Rigorer.",
+    description: "Kiểu dáng gọn gàng, lấy cảm hứng từ giày trượt ván...",
     ai_description: "Thân giày da/tổng hợp toàn trắng, cổ thấp, đế lưu hóa phẳng."
   },
   {
     id: "drmartens1461smoothleather",
-    title: "Dr. Martens 1461 Smooth Leather Oxford",
+    title: "Dr. Martens 1461 Smooth Leather",
+    price: 4800000,
     image: drmartens,
-    description: "Đôi giày 3 lỗ xỏ dây unisex mang tính biểu tượng từ da mịn bền bỉ.",
+    description: "Đôi giày 3 lỗ xỏ dây unisex mang tính biểu tượng...",
     ai_description: "Giày cổ thấp da đen, 3 lỗ xỏ, chỉ vàng, đế đệm khí."
   },
   {
     id: "chucktaylorallstarclean",
-    title: "Converse Chuck Taylor All Star Clean 'n Preme",
+    title: "Converse Chuck Taylor All Star Clean",
+    price: 1900000,
     image: chucktaylorclean,
-    description: "Phiên bản cao cấp, tối giản của đôi Chuck Taylor vượt thời gian.",
+    description: "Phiên bản cao cấp, tối giản của đôi Chuck Taylor...",
     ai_description: "Kiểu dáng Chuck Taylor, thân canvas/da cao cấp, mũi cao su trắng."
   },
   {
     id: "newbalanceaimeleondore",
-    title: "NB X AIMÉ LEON DORE 860V2 Blue Mesh",
+    title: "NB X AIMÉ LEON DORE 860V2",
+    price: 6500000,
     image: nbaimeleon,
     description: "Giày chạy retro-tech được định nghĩa lại bởi Aimé Leon Dore.",
     ai_description: "Giày chạy cổ điển, lưới xanh dương, lớp phủ bạc/vàng, đế N-ergy."
@@ -254,13 +271,15 @@ export const productsData = [
   {
     id: "jordan3retropuremoney",
     title: "Air Jordan 3 Retro 'Pure Money'",
+    price: 5800000,
     image: jordan3pure,
-    description: "Air Jordan 3 trong phối màu 'Pure Money' tinh khôi toàn màu trắng.",
+    description: "Air Jordan 3 trong phối màu 'Pure Money' tinh khôi...",
     ai_description: "Bóng rổ cổ trung, da sần trắng, họa tiết da voi xám nhạt."
   },
   {
     id: "timberland3eyelughandsewnboat",
-    title: "Timberland 3-Eye Lug Handsewn Boat",
+    title: "Timberland 3-Eye Lug Handsewn",
+    price: 3900000,
     image: timberland,
     description: "Thân giày boat shoe may thủ công kết hợp đế lug chắc chắn.",
     ai_description: "Da full-grain nâu, moc-toe, dây da 360 độ, đế lug dày."
@@ -268,13 +287,15 @@ export const productsData = [
   {
     id: "vansclassicauthentic",
     title: "Vans Classic Authentic Red",
+    price: 1600000,
     image: vansauthentic,
     description: "Đôi giày di sản nguyên bản của Vans với thân vải canvas đỏ.",
     ai_description: "Cổ thấp canvas đỏ, lỗ xỏ kim loại, đế waffle nâu."
   },
   {
     id: "vanssk8hihightop",
-    title: "Vans Classic SK8-HI Black/White",
+    title: "Vans Classic SK8-HI",
+    price: 2100000,
     image: vanssk8hi,
     description: "Giày trượt ván cổ cao huyền thoại với thân da lộn/canvas.",
     ai_description: "Cổ cao da lộn/canvas đen, sọc trắng, cổ đệm, đế waffle."
@@ -282,41 +303,47 @@ export const productsData = [
   {
     id: "dunkhighretrocargokhaki",
     title: "Nike Dunk High Retro 'Cargo Khaki'",
+    price: 3400000,
     image: dunkhigh,
-    description: "Biểu tượng bóng rổ thập niên 80 với giao diện hai tông màu cổ điển.",
+    description: "Biểu tượng bóng rổ thập niên 80 với giao diện hai tông màu...",
     ai_description: "Cổ cao da trắng, lớp phủ xanh ô liu, logo Swoosh khaki."
   },
   {
     id: "carrybarrettecowhide",
-    title: "Carry Barrette Cowhide Classic Loafer",
+    title: "Carry Barrette Cowhide Loafer",
+    price: 2800000,
     image: carrybarrette,
-    description: "Loafer vượt thời gian chế tác từ da bò thật với quai ngang cổ điển.",
+    description: "Loafer vượt thời gian chế tác từ da bò thật...",
     ai_description: "Loafer da bò mịn, quai ngang barrette, gót thấp."
   },
   {
-    id: "poloralphlaurencourt",
+    id: "polovelvet",
     title: "Polo Ralph Lauren Velvet Loafer",
+    price: 3200000,
     image: polovelvet,
-    description: "Giày lười thanh lịch từ vải nhung sang trọng với logo Polo thêu.",
+    description: "Giày lười thanh lịch từ vải nhung sang trọng...",
     ai_description: "Thân nhung, logo Polo thêu, lót satin, gót thấp."
   },
   {
     id: "horsebitloafersdarkbrowncalf",
-    title: "Horsebit Loafers Dark Brown Calf",
+    title: "Horsebit Loafers Dark Brown",
+    price: 4100000,
     image: horsebit,
     description: "Loafer da bê màu nâu sẫm với chi tiết kim loại horsebit.",
     ai_description: "Da bê nâu sẫm, horsebit kim loại, moc-toe, gót thấp."
   },
   {
     id: "leisurehandsewn",
-    title: "Leisure Handsewn Color 8 Shell Cordovan",
+    title: "Leisure Handsewn Color 8",
+    price: 5200000,
     image: leisurehandsewn,
-    description: "Penny loafer may thủ công từ da Shell Cordovan 'Màu 8'.",
+    description: "Penny loafer may thủ công từ da Shell Cordovan...",
     ai_description: "Da shell cordovan đỏ đậm, moc-toe, quai penny, đế da."
   },
   {
     id: "seanladywolfpenny",
     title: "The Sean Lady Wolf Penny Loafer",
+    price: 3600000,
     image: seanlady,
     description: "Penny loafer hai tông màu hiện đại (nâu và trắng ngà).",
     ai_description: "Da hai tông màu, quai penny, đế lug hầm hố."
@@ -324,13 +351,15 @@ export const productsData = [
   {
     id: "sambawalesbonnersilver",
     title: "Adidas Samba Wales Bonner Silver",
+    price: 6800000,
     image: sambawales,
-    description: "Samba hợp tác với Wales Bonner, màu bạc kim loại ấn tượng.",
+    description: "Samba hợp tác với Wales Bonner, màu bạc kim loại...",
     ai_description: "Da bạc kim loại, ba sọc móc, lưỡi gà gập dài, đế gôm."
   },
   {
     id: "guccibrixtoncollapsibleheel",
-    title: "Gucci Brixton Collapsible-Heel Loafer",
+    title: "Gucci Brixton Loafer",
+    price: 18500000,
     image: guccibrixton,
     description: "Loafer horsebit của Gucci với gót có thể gập lại.",
     ai_description: "Da mịn, horsebit vàng, gót mềm có thể đạp gót."
@@ -338,20 +367,23 @@ export const productsData = [
   {
     id: "saintlaurentwyattchelseaboots",
     title: "Saint Laurent Wyatt Chelsea Boots",
+    price: 22000000,
     image: saintlaurent,
     description: "Chelsea boot mang tính biểu tượng của YSL bằng da lộn nâu.",
     ai_description: "Chelsea boot da lộn, thun hông, mũi hạnh nhân, gót Cuban."
   },
   {
     id: "wrangleryuma",
-    title: "Wrangler Yuma Leather Combat Boots",
+    title: "Wrangler Yuma Combat Boots",
+    price: 2700000,
     image: wrangleryuma,
     description: "Combat boot nam chắc chắn của Wrangler bằng da bền bỉ.",
     ai_description: "Combat boot da, buộc dây, cổ đệm, đế lug cao su."
   },
   {
     id: "eccoulttrn",
-    title: "ECCO Ult-Trn (m)",
+    title: "ECCO Ult-Trn",
+    price: 4900000,
     image: eccoulttrn,
     description: "Giày leo núi nhẹ hiện đại với công nghệ thoải mái của ECCO.",
     ai_description: "Giày leo núi tổng hợp/dệt, đế PHORENE, đế ngoài Michelin."
@@ -359,13 +391,15 @@ export const productsData = [
   {
     id: "newbalance993madeinusa",
     title: "New Balance 993 Made in USA",
+    price: 5900000,
     image: nb993,
     description: "Giày chạy 'Made in USA' pha trộn da lộn và lưới cao cấp.",
     ai_description: "Da lộn xám, lưới xám, logo N phản quang, đế ABZORB."
   },
   {
     id: "acgairmowabbrattanbirch",
-    title: "Nike ACG Air Mowabb 'Rattan Birch'",
+    title: "Nike ACG Air Mowabb",
+    price: 4200000,
     image: acgmowabb,
     description: "Giày leo núi ACG với lót neoprene và thân nubuck.",
     ai_description: "Nubuck rám nắng, lót neoprene xanh/cam, hỗ trợ gót Huarache."
@@ -373,20 +407,23 @@ export const productsData = [
   {
     id: "andwanderxsalomonodyssey1",
     title: "And Wander x Salomon Odyssey 1",
+    price: 7200000,
     image: salomonodyssey,
     description: "Giày leo núi đường dài Salomon tái hiện bởi And Wander.",
     ai_description: "Tổng hợp kỹ thuật, lớp phủ hàn nhiệt, Quicklace, đế đệm cao."
   },
   {
     id: "asicsgelkayano14",
-    title: "Asics Gel-Kayano 14 'Black Glacier Grey'",
+    title: "Asics Gel-Kayano 14",
+    price: 3800000,
     image: asicskayano14,
     description: "Giày chạy retro-tech thập niên 2000 với nền lưới đen.",
     ai_description: "Lưới đen, lớp phủ bạc/xám, đế GEL có thể nhìn thấy."
   },
   {
-    id: "salomonxt6goretex",
-    title: "Salomon XT-6 Gore-Tex 'Black/Silver'",
+    id: "salomonxt6gtx",
+    title: "Salomon XT-6 Gore-Tex",
+    price: 5600000,
     image: salomonxt6gtx,
     description: "Giày chạy đường mòn XT-6 cập nhật màng chống nước Gore-Tex.",
     ai_description: "Thân chống nước đen, GORE-TEX, Quicklace, đế ACS."
@@ -394,13 +431,15 @@ export const productsData = [
   {
     id: "salomonxendxt6",
     title: "Salomon x END. XT-6 'Porcini'",
+    price: 6200000,
     image: salomonend,
     description: "Hợp tác END. trên mẫu XT-6, lấy cảm hứng từ nấm Porcini.",
     ai_description: "Lưới tông màu đất (be/nâu), Quicklace, đế ACS."
   },
   {
     id: "nb530",
-    title: "New Balance 530 'White Natural Indigo'",
+    title: "New Balance 530",
+    price: 2500000,
     image: nb530,
     description: "Giày chạy cổ điển thập niên 2000 với lưới trắng và xanh navy.",
     ai_description: "Lưới trắng, lớp phủ bạc/xanh, đế ABZORB."
@@ -408,6 +447,7 @@ export const productsData = [
   {
     id: "bitishunterx",
     title: "Biti's Hunter X White",
+    price: 1200000,
     image: bitis,
     description: "Sneaker phong cách sống từ Biti's, phiên bản toàn trắng.",
     ai_description: "Vải dệt kim/lưới trắng, cấu trúc tất, đế xốp nhẹ."
@@ -415,6 +455,7 @@ export const productsData = [
   {
     id: "aj4retro",
     title: "Air Jordan 4 Retro 'Oxidized Green'",
+    price: 5900000,
     image: aj4oxidized,
     description: "AJ4 da trắng cao cấp với điểm nhấn 'Oxidized Green'.",
     ai_description: "Da trắng, lưới trắng, lỗ xỏ/đế xanh lá kim loại, đệm Air."
@@ -422,6 +463,7 @@ export const productsData = [
   {
     id: "asicsgel",
     title: "ASICS GEL-KAYANO 14",
+    price: 3800000,
     image: asicsgel,
     description: "Giày chạy retro-tech thập niên 2000, thẩm mỹ nhiều lớp.",
     ai_description: "Lưới nhiều lớp trắng/bạc, lớp phủ kim loại, đệm GEL."
@@ -429,6 +471,7 @@ export const productsData = [
   {
     id: "adidashandballspezial",
     title: "Adidas Handball Spezial",
+    price: 2900000,
     image: handballspezial,
     description: "Giày bóng ném cổ điển thập niên 70, thân da lộn cao cấp.",
     ai_description: "Da lộn, ba sọc tương phản, đế cao su gôm tối màu."
@@ -436,6 +479,7 @@ export const productsData = [
   {
     id: "adidasforumlow",
     title: "Adidas Forum Low",
+    price: 2600000,
     image: forumlow,
     description: "Giày bóng rổ thập niên 80 cổ thấp với quai dán đặc trưng.",
     ai_description: "Thân da, mũi đục lỗ, quai velcro, đế cupsole."

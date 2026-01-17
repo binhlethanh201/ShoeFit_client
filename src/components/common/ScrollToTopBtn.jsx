@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import "../../assets/css/common/scrollButton.css";
 
 const ScrollToTopBtn = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Logic hiển thị nút khi cuộn xuống
     const toggleVisibility = () => {
-      if (window.scrollY > 200) {
+      if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -14,8 +14,6 @@ const ScrollToTopBtn = () => {
     };
 
     window.addEventListener("scroll", toggleVisibility);
-
-    // Cleanup function để xóa sự kiện khi component unmount
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
@@ -29,11 +27,22 @@ const ScrollToTopBtn = () => {
   return (
     <button
       id="scrollToTopBtn"
-      title="Go to top"
+      title="Lên đầu trang"
       className={isVisible ? "show" : ""}
       onClick={scrollToTop}
     >
-      <i className="fas fa-arrow-up"></i>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M18 15l-6-6-6 6" />
+      </svg>
     </button>
   );
 };

@@ -1,26 +1,27 @@
-import React, { useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom'; 
-import authService from '../../../services/authService';
-import { toast } from 'react-toastify';
-import { ThemeContext } from '../../../context/ThemeContext'; 
-import { useTranslation } from 'react-i18next';
+import React, { useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import authService from "../../../services/authService";
+import { toast } from "react-toastify";
+import { ThemeContext } from "../../../context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 // Import Icons
-import searchIcon from '../../../assets/images/Effects/search.svg';
-import heartIcon from '../../../assets/images/Effects/heart.svg';
-import userIcon from '../../../assets/images/Effects/user.svg';
-import sunIcon from '../../../assets/images/Effects/sun.svg';   
-import moonIcon from '../../../assets/images/Effects/moon.svg'; 
-import coffeeIcon from '../../../assets/images/Effects/coffee.svg';
+import storeIcon from "../../../assets/images/Effects/store.svg";
+import heartIcon from "../../../assets/images/Effects/heart.svg";
+import userIcon from "../../../assets/images/Effects/user.svg";
+import sunIcon from "../../../assets/images/Effects/sun.svg";
+import moonIcon from "../../../assets/images/Effects/moon.svg";
+import coffeeIcon from "../../../assets/images/Effects/coffee.svg";
+import "../../../assets/css/home/header/header.css";
 
 const Header = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { t } = useTranslation();
-  
+
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isLoggedIn = !!localStorage.getItem('token');
+  const isLoggedIn = !!localStorage.getItem("token");
 
   const isActive = (path) => {
     return location.pathname === path ? "nav-item active" : "nav-item";
@@ -31,35 +32,35 @@ const Header = () => {
     try {
       await authService.logout();
       toast.success("Đăng xuất thành công!");
-      navigate('/');
+      navigate("/");
     } catch (error) {
       console.error("Lỗi đăng xuất:", error);
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      navigate('/');
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/");
     }
   };
 
   // Xác định icon hiển thị cho nút chuyển theme
   const getCurrentThemeIcon = () => {
-    if (theme === 'dark') return moonIcon;
-    if (theme === 'coffee') return coffeeIcon;
-    return sunIcon; 
+    if (theme === "dark") return moonIcon;
+    if (theme === "coffee") return coffeeIcon;
+    return sunIcon;
   };
 
   return (
-    <nav 
-      className="custom-navbar navbar navbar-expand-md navbar-dark py-3" 
+    <nav
+      className="custom-navbar navbar navbar-expand-md navbar-dark"
       aria-label="ShoeFit navigation bar"
     >
       <div className="container d-flex align-items-center justify-content-between">
-        <button 
-          className="navbar-toggler" 
-          type="button" 
-          data-bs-toggle="collapse" 
-          data-bs-target="#navbarsFurni" 
-          aria-controls="navbarsFurni" 
-          aria-expanded="false" 
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarsFurni"
+          aria-controls="navbarsFurni"
+          aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
@@ -69,46 +70,60 @@ const Header = () => {
           <Link className="navbar-brand fw-bold fs-3" to="/">
             ShoeFit<span>.</span>
           </Link>
-          
+
           <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0 me-4">
-            <li className={isActive('/')}>
-              <Link className="nav-link" to="/">{t('header.home')}</Link>
+            <li className={isActive("/")}>
+              <Link className="nav-link" to="/">
+                {t("header.home")}
+              </Link>
             </li>
-            
-            <li className={isActive('/tryonvideo')}>
-              <Link className="nav-link" to="/tryonvideo">{t('header.tryonvideo')}</Link>
+
+            <li className={isActive("/tryonvideo")}>
+              <Link className="nav-link" to="/tryonvideo">
+                {t("header.tryonvideo")}
+              </Link>
             </li>
-            
-            <li className={isActive('/tryon2d')}>
-              <Link className="nav-link" to="/tryon2d">{t('header.tryon2d')}</Link>
+
+            <li className={isActive("/tryon2d")}>
+              <Link className="nav-link" to="/tryon2d">
+                {t("header.tryon2d")}
+              </Link>
             </li>
-            
-            <li className={isActive('/styleadvisor')}>
-              <Link className="nav-link" to="/styleadvisor">{t('header.styleadvisor')}</Link>
+
+            <li className={isActive("/styleadvisor")}>
+              <Link className="nav-link" to="/styleadvisor">
+                {t("header.styleadvisor")}
+              </Link>
             </li>
           </ul>
 
           <div className="d-flex align-items-center gap-3">
-            {/* Search Icon */}
-            <Link className="nav-link p-0" to="/search">
-              <img 
-                src={searchIcon} 
-                alt="Search" 
-                width="22" 
-                style={{ filter: 'var(--icon-filter)', transition: 'filter 0.3s ease' }}
+            {/* Collection Icon */}
+            <Link className="nav-link p-0" to="/collection">
+              <img
+                src={storeIcon}
+                alt="Store"
+                width="22"
+                style={{
+                  filter: "var(--icon-filter)",
+                  transition: "filter 0.3s ease",
+                }}
               />
             </Link>
 
             {/* Wishlist Icon */}
             <Link className="nav-link p-0" to="/wishlist">
-              <img 
-                src={heartIcon} 
-                alt="Wishlist" 
-                width="22" 
-                style={{ filter: 'var(--icon-filter)', transition: 'filter 0.3s ease' }}
+              <img
+                src={heartIcon}
+                alt="Wishlist"
+                width="22"
+                style={{
+                  filter: "var(--icon-filter)",
+                  transition: "filter 0.3s ease",
+                }}
               />
             </Link>
-            
+
             {/* User Dropdown */}
             <div className="dropdown custom-dropdown">
               <button
@@ -118,33 +133,44 @@ const Header = () => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img 
-                  src={userIcon} 
-                  alt="User" 
-                  width="24" 
-                  style={{ filter: 'var(--icon-filter)', transition: 'filter 0.3s ease' }}
+                <img
+                  src={userIcon}
+                  alt="User"
+                  width="24"
+                  style={{
+                    filter: "var(--icon-filter)",
+                    transition: "filter 0.3s ease",
+                  }}
                 />
               </button>
-              <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="userDropdown">
+              <ul
+                className="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                aria-labelledby="userDropdown"
+              >
                 {isLoggedIn ? (
                   <>
                     <li>
                       <Link className="dropdown-item" to="/profile">
-                        <i className="fa-regular fa-user me-2"></i> {t('header.profile')}
+                        <i className="fa-regular fa-user me-2"></i>{" "}
+                        {t("header.profile")}
                       </Link>
                     </li>
                     <li>
                       <Link className="dropdown-item" to="/settings">
-                        <i className="fa-solid fa-gear me-2"></i> {t('header.settings')}
+                        <i className="fa-solid fa-gear me-2"></i>{" "}
+                        {t("header.settings")}
                       </Link>
                     </li>
-                    <li><hr className="dropdown-divider" /></li>
                     <li>
-                      <button 
-                        className="dropdown-item text-danger w-100 text-start bg-transparent border-0" 
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item text-danger w-100 text-start bg-transparent border-0"
                         onClick={handleLogout}
                       >
-                        <i className="fa-solid fa-right-from-bracket me-2"></i> {t('header.logout')}
+                        <i className="fa-solid fa-right-from-bracket me-2"></i>{" "}
+                        {t("header.logout")}
                       </button>
                     </li>
                   </>
@@ -152,12 +178,14 @@ const Header = () => {
                   <>
                     <li>
                       <Link className="dropdown-item" to="/login">
-                        <i className="fa-solid fa-right-to-bracket me-2"></i> {t('header.login')}
+                        <i className="fa-solid fa-right-to-bracket me-2"></i>{" "}
+                        {t("header.login")}
                       </Link>
                     </li>
                     <li>
                       <Link className="dropdown-item" to="/register">
-                        <i className="fa-solid fa-user-plus me-2"></i> {t('header.register')}
+                        <i className="fa-solid fa-user-plus me-2"></i>{" "}
+                        {t("header.register")}
                       </Link>
                     </li>
                   </>
@@ -165,7 +193,7 @@ const Header = () => {
               </ul>
             </div>
 
-            {/* --- Theme Switcher--- */}
+            {/* Theme Switcher */}
             <div className="dropdown custom-dropdown">
               <button
                 className="btn dropdown-toggle p-0 bg-transparent border-0"
@@ -175,53 +203,56 @@ const Header = () => {
                 aria-expanded="false"
                 title="Đổi giao diện"
               >
-                <img 
-                    src={getCurrentThemeIcon()} 
-                    alt="Change Theme" 
-                    width="24"
-                    style={{ filter: 'var(--icon-filter)', transition: 'filter 0.3s ease' }}
+                <img
+                  src={getCurrentThemeIcon()}
+                  alt="Change Theme"
+                  width="24"
+                  style={{
+                    filter: "var(--icon-filter)",
+                    transition: "filter 0.3s ease",
+                  }}
                 />
               </button>
-              <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="themeDropdown" style={{ minWidth: '150px' }}>
+              <ul
+                className="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                aria-labelledby="themeDropdown"
+                style={{ minWidth: "150px" }}
+              >
                 <li>
-                    <button 
-                        className={`dropdown-item ${theme === 'light' ? 'active' : ''}`} 
-                        onClick={() => toggleTheme('light')}
-                        type="button"
-                    >
-                        ☀️ {t('common.light')}
-                    </button>
+                  <button
+                    className={`dropdown-item ${
+                      theme === "light" ? "active" : ""
+                    }`}
+                    onClick={() => toggleTheme("light")}
+                    type="button"
+                  >
+                    ☀️ {t("common.light")}
+                  </button>
                 </li>
                 <li>
-                    <button 
-                        className={`dropdown-item ${theme === 'dark' ? 'active' : ''}`} 
-                        onClick={() => toggleTheme('dark')}
-                        type="button"
-                    >
-                        🌙 {t('common.dark')}
-                    </button>
+                  <button
+                    className={`dropdown-item ${
+                      theme === "dark" ? "active" : ""
+                    }`}
+                    onClick={() => toggleTheme("dark")}
+                    type="button"
+                  >
+                    🌙 {t("common.dark")}
+                  </button>
                 </li>
                 <li>
-                    <button 
-                        className={`dropdown-item ${theme === 'coffee' ? 'active' : ''}`} 
-                        onClick={() => toggleTheme('coffee')}
-                        type="button"
-                    >
-                        ☕ {t('common.coffee')}
-                    </button>
+                  <button
+                    className={`dropdown-item ${
+                      theme === "coffee" ? "active" : ""
+                    }`}
+                    onClick={() => toggleTheme("coffee")}
+                    type="button"
+                  >
+                    ☕ {t("common.coffee")}
+                  </button>
                 </li>
               </ul>
             </div>
-            
-            {/* <Link
-              to="/tryonar"
-              className="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm"
-              style={{ background: '#30a5e3', border: 'none', transition: '0.3s' }}
-              onMouseOver={(e) => e.target.style.background = '#0797e4'}
-              onMouseOut={(e) => e.target.style.background = '#30a5e3'}
-            >
-              Tải Ngay
-            </Link> */}
           </div>
         </div>
       </div>

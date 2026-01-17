@@ -1,94 +1,111 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { productsData } from '../../data/mockData';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import productService from "../../services/product/productService";
+
+// Import CSS
+import "../../assets/css/product/ProductDetail.css";
+
+// Import Components
+import ProductGallery from "../../components/product/productDetail/ProductGallery";
+import ProductDescription from "../../components/product/productDetail/ProductDescription";
+import ProductReviews from "../../components/product/productDetail/ProductReviews";
+import ProductInfo from "../../components/product/productDetail/ProductInfo";
+import ProductRelated from "../../components/product/productDetail/ProductRelated";
 
 const ProductDetail = () => {
-  const { productId } = useParams(); // Lấy ID từ URL (định nghĩa trong Route là :productId)
+  const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Giả lập việc fetch dữ liệu
-    setLoading(true);
-    setTimeout(() => {
-      const foundProduct = productsData.find(p => p.id === productId);
-      setProduct(foundProduct);
-      setLoading(false);
-    }, 500); // Delay nhẹ để thấy hiệu ứng loading
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Lấy thông tin sản phẩm (bao gồm cả styleHints đã enrich trong service)
+        const productData = await productService.getById(productId);
+
+        // Lấy sản phẩm tương tự (loại trừ sản phẩm hiện tại)
+        const relatedData = await productService.getRelated(productId);
+
+        setProduct(productData);
+        setRelatedProducts(relatedData);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    window.scrollTo(0, 0);
   }, [productId]);
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          minHeight: "80vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div className="spinner-border text-dark" role="status"></div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div className="container text-center my-5" style={{ minHeight: "60vh" }}>
+        <h2 className="mb-4">Sản phẩm không tồn tại</h2>
+        <Link
+          to="/collection"
+          className="btn-pd btn-pd-black"
+          style={{
+            maxWidth: "200px",
+            margin: "0 auto",
+            textDecoration: "none",
+          }}
+        >
+          Quay lại cửa hàng
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {/* Product Detail Section */}
-      <div className="product-section m-5" style={{ minHeight: '60vh' }}>
-        <div className="container">
-          
-          {/* Loading State */}
-          {loading && (
-            <div id="loading" className="text-center my-5">
-              <div className="spinner-border text-success" role="status"></div>
-              <p className="mt-3 text-muted">Loading product details...</p>
-            </div>
-          )}
+    <div className="pd-container">
+      <div className="product-layout">
+        {/*  Left Content */}
+        <div className="main-content">
+          <ProductGallery images={product.images} />
 
-          {/* Not Found State */}
-          {!loading && !product && (
-            <div className="text-center my-5">
-              <p className="text-danger mt-4 fs-4">Product not found 😢</p>
-              <Link to="/collection" className="btn btn-outline-dark mt-3">Back to Collection</Link>
-            </div>
-          )}
+          <ProductDescription
+            description={product.description}
+            specs={product.specs}
+            aiDescription={product.ai_description}
+          />
 
-          {/* Product Detail Content */}
-          {!loading && product && (
-            <div id="productDetail" className="row align-items-center">
-              <div className="col-md-6 mb-4 mb-md-0 text-center">
-                <img 
-                  id="productImage" 
-                  src={product.image} 
-                  alt={product.title} 
-                  className="img-fluid rounded shadow"
-                  style={{ maxHeight: '450px', objectFit: 'contain' }} 
-                />
-              </div>
-              <div className="col-md-6">
-                <h2 id="productName" className="mb-3">{product.title}</h2>
-                <p id="productDesc" className="text-muted">
-                  {product.description || "Mô tả đang được cập nhật..."}
-                </p>
-                
-                {product.ai_description && (
-                  <div className="alert alert-light border mt-3">
-                    <strong><i className="fas fa-robot me-2"></i>AI Analysis:</strong>
-                    <p id="productAIDesc" className="fst-italic mb-0 mt-1">
-                      "{product.ai_description}"
-                    </p>
-                  </div>
-                )}
+          <ProductReviews
+            rating={product.rating}
+            count={product.reviews_count}
+          />
+        </div>
 
-                <div className="mb-3">
-                  {/* Placeholder cho thông tin ánh sáng/góc độ nếu cần */}
-                  {/* <p id="lighting"></p> */}
-                  {/* <p id="angle"></p> */}
-                </div>
-
-                <div className="mb-3" id="model3d"></div>
-                <div className="mb-3" id="shopLink"></div>
-
-                <div className="mt-4 d-flex gap-2">
-                  <Link to="/wishlist" className="btn btn-outline-dark">
-                    <i className="far fa-heart me-2"></i> Thêm vào Yêu Thích
-                  </Link>
-                  <Link to="/tryon2d" className="btn btn-success text-white">
-                    <i className="fas fa-camera me-2"></i> Thử Ngay
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
+        {/*  Right Content */}
+        <div className="sticky-col">
+          <ProductInfo product={product} />
         </div>
       </div>
-    </>
+
+      {/* Bottom Content */}
+      <ProductRelated
+        styleHints={product.styleHints}
+        relatedProducts={relatedProducts}
+      />
+    </div>
   );
 };
 
