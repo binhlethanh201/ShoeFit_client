@@ -1,3 +1,4 @@
+/* --- HEADER MAIN STYLES --- */
 .custom-navbar {
   background: var(--nav-bg) !important;
   height: 75px;
@@ -12,14 +13,17 @@
   z-index: 1000;
   box-shadow: 0 4px 15px var(--shadow-color);
 }
+
 .custom-navbar .navbar-brand {
   font-size: 50px;
   font-weight: 600;
   color: var(--brand-blue) !important;
 }
+
 .custom-navbar .navbar-brand > span {
   opacity: 0.4;
 }
+
 .custom-navbar .navbar-toggler {
   border-color: transparent;
 }
@@ -27,6 +31,7 @@
 .custom-navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(136, 136, 136, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
+
 [data-theme="dark"] .custom-navbar .navbar-toggler-icon {
   filter: invert(1);
 }
@@ -37,8 +42,16 @@
   box-shadow: none;
   outline: none;
 }
-.custom-navbar .custom-navbar-nav li a {
-  font-weight: 500;
+
+/* Khoảng cách giữa các nút menu */
+.custom-navbar .custom-navbar-nav > li {
+  margin: 0 5px;
+}
+
+/* Link chính trên thanh menu */
+.custom-navbar .custom-navbar-nav li a.nav-link {
+  font-weight: 600;
+  font-size: 1rem;
   color: var(--nav-text) !important;
   opacity: 0.6;
   text-decoration: none !important;
@@ -46,7 +59,9 @@
   position: relative;
   padding-bottom: 5px;
 }
-.custom-navbar .custom-navbar-nav li a:before {
+
+/* Hiệu ứng gạch chân (Underline) cho Link chính */
+.custom-navbar .custom-navbar-nav > li > a.nav-link:before {
   content: "";
   position: absolute;
   bottom: 0;
@@ -59,82 +74,163 @@
   width: 0;
   transition: 0.2s all ease-out;
 }
-.custom-navbar .custom-navbar-nav li a:hover {
+
+/* Hover & Active cho Link chính */
+.custom-navbar .custom-navbar-nav li a.nav-link:hover,
+.custom-navbar .custom-navbar-nav li.active > a.nav-link {
   opacity: 1;
   color: var(--brand-blue) !important;
 }
-.custom-navbar .custom-navbar-nav li a:hover:before {
+
+.custom-navbar .custom-navbar-nav li a.nav-link:hover:before,
+.custom-navbar .custom-navbar-nav li.active > a.nav-link:before {
   width: calc(100% - 16px);
 }
-.custom-navbar .custom-navbar-nav li.active a {
+
+/* Mũi tên nhỏ bên cạnh chữ "Tính năng" */
+.custom-navbar-nav .dropdown-toggle::after {
+  margin-left: 0.5em;
+  vertical-align: 0.15em;
+  border-top-color: var(--nav-text);
+  opacity: 0.6;
+  transition: 0.3s;
+}
+
+.custom-navbar-nav .dropdown-toggle:hover::after,
+.custom-navbar-nav li.active .dropdown-toggle::after {
+  border-top-color: var(--brand-blue);
   opacity: 1;
-  color: var(--brand-blue) !important;
 }
-.custom-navbar .custom-navbar-nav li.active a:before {
-  width: calc(100% - 16px);
+
+/* ==========================================================================
+   --- UNIFIED DROPDOWN STYLES (Gộp chung cho Tính năng, User, Theme) ---
+   ========================================================================== */
+
+/* 1. Dropdown Menu Container (Khung chứa) */
+/* Áp dụng cho cả dropdown trong nav-item và custom-dropdown bên phải */
+.custom-navbar-nav .dropdown-menu,
+.custom-dropdown .dropdown-menu {
+  border-radius: 10px;
+  padding: 0.75rem 0;
+  animation: fadeIn 0.25s ease-in-out;
+  background-color: var(--bg-card); /* Màu nền theo Theme */
+  box-shadow: 0 0.5rem 1rem var(--shadow-color) !important;
+  border: 1px solid var(--border-color);
+  margin-top: 15px; /* Cách xa thanh menu một chút */
 }
+
+/* Reset origin cho dropdown bên phải để nó mở từ phải sang trái đẹp hơn */
+.custom-dropdown .dropdown-menu {
+  transform-origin: top right;
+}
+
+/* 2. Dropdown Items (Các mục con) */
+.custom-navbar-nav .dropdown-item,
+.custom-dropdown .dropdown-item {
+  padding: 0.7rem 1.5rem;
+  font-weight: 500;
+  color: var(--text-heading); /* Màu chữ theo theme */
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  font-size: 0.9rem; /* Đảm bảo kích thước chữ đồng nhất */
+}
+
+/* 3. Hover & Focus Effect cho Item con */
+.custom-navbar-nav .dropdown-item:hover,
+.custom-navbar-nav .dropdown-item:focus,
+.custom-dropdown .dropdown-item:hover,
+.custom-dropdown .dropdown-item:focus {
+  background-color: var(--bg-section); /* Màu nền khi hover */
+  color: var(--brand-blue); /* Màu chữ khi hover */
+  padding-left: 1.8rem; /* Hiệu ứng đẩy chữ sang phải */
+}
+
+/* 4. Style cho Item con đang Active (Đang ở trang đó - chỉ áp dụng cho menu Tính năng) */
+.custom-navbar-nav .dropdown-item.active-child {
+  color: var(--brand-blue);
+  background-color: var(--bg-section);
+  font-weight: 600;
+}
+
+/* 5. Icons bên trong Dropdown Item */
+.custom-navbar-nav .dropdown-item i,
+.custom-dropdown .dropdown-item i {
+  color: var(--brand-blue);
+  width: 25px; /* Cố định chiều rộng để thẳng hàng text */
+  text-align: center;
+  margin-right: 0.5rem; /* Khoảng cách giữa icon và text */
+}
+
+/* 6. Tắt hiệu ứng gạch chân cho các Link CON bên trong Dropdown "Tính năng" */
+.custom-navbar .custom-navbar-nav .dropdown-menu a:before {
+  content: none !important;
+  display: none !important;
+  width: 0 !important;
+}
+
+/* ==========================================================================
+   --- RIGHT SIDE ICONS & DROPDOWN TOGGLES ---
+   ========================================================================== */
 .custom-navbar .custom-navbar-cta {
   margin-left: 0 !important;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
 }
+
 .custom-navbar .custom-navbar-cta li {
   margin-left: 0px;
   margin-right: 0px;
 }
+
 .custom-navbar .custom-navbar-cta li:first-child {
   margin-right: 20px;
 }
+
+/* Ảnh đại diện User (Toggle) */
 .custom-dropdown .dropdown-toggle img {
   border-radius: 50%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
-.custom-dropdown .dropdown-menu {
-  border-radius: 10px;
-  padding: 0.5rem 0;
-  animation: fadeIn 0.25s ease-in-out;
-  transform-origin: top right;
-  background-color: var(--bg-card);
-  box-shadow: 0 0.5rem 1rem var(--shadow-color) !important;
-}
-.custom-dropdown .dropdown-item {
-  padding: 0.6rem 1.25rem;
-  font-weight: 500;
-  color: var(--text-heading);
-  display: flex;
-  align-items: center;
-  transition: all 0.2s ease;
-}
-.custom-dropdown .dropdown-item:hover,
-.custom-dropdown .dropdown-item:focus {
-  background-color: var(--bg-section);
-  color: var(--brand-blue);
-  padding-left: 1.5rem;
-}
-.custom-dropdown .dropdown-item i {
-  color: var(--brand-blue);
-  width: 20px;
-}
+
+/* Các item đặc biệt (Logout, Delete) */
 .custom-dropdown .dropdown-item.text-danger {
   color: #dc3545;
 }
+
 .custom-dropdown .dropdown-item.text-danger i {
   color: #dc3545;
 }
+
 .custom-dropdown .dropdown-item.text-danger:hover {
   color: #dc3545;
   background-color: rgba(220, 53, 69, 0.1);
 }
+
 .custom-dropdown .dropdown-divider {
   margin: 0.5rem 0;
   border-color: var(--border-color);
 }
+
+/* Mũi tên của User/Theme Dropdown (nếu có dùng) */
 .custom-dropdown .dropdown-toggle::after {
   border-top-color: var(--brand-blue);
   vertical-align: 0.15em;
 }
+
 .custom-dropdown .dropdown-toggle:hover::after {
   border-top-color: var(--brand-blue-hover);
+}
+
+/* Animation chung */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

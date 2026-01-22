@@ -4,46 +4,19 @@ import authService from "../../services/authService";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
+// Import CSS
+import "../../assets/css/profile/profile.css";
+
 const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
 
-  // --- Styles (Đồng bộ với các trang khác) ---
-  const cardStyle = {
-    backgroundColor: "var(--bg-card)",
-    boxShadow: "0 5px 15px var(--shadow-color)",
-    borderRadius: "15px",
-    border: "none",
-    height: "100%",
-    padding: "2rem",
-  };
-
-  const inputStyle = {
-    backgroundColor: "var(--input-bg)",
-    color: "var(--text-main)",
-    borderColor: "var(--border-color)",
-    padding: "10px 15px",
-  };
-
-  const labelStyle = {
-    color: "var(--text-heading)",
-    fontWeight: "600",
-    fontSize: "0.9rem",
-    marginBottom: "5px",
-  };
-
-  const headingStyle = {
-    color: "var(--text-heading)",
-    fontWeight: "bold",
-    margin: 0,
-  };
-
-  // --- User Info State ---
+  // --- State ---
   const [userInfo, setUserInfo] = useState({
-    fullname: "",
+    fullName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     address: "",
     foot_profile: {
       shoe_size: "",
@@ -54,32 +27,43 @@ const Profile = () => {
     },
   });
 
-  // ---  Fetch Data ---
+  // --- Fetch Data ---
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await authService.getProfile();
-        if (response.success) {
-          const data = response.data;
+        // console.log("Fetch Profile Response:", response);
+
+        if (response && response.status === 200 && response.data) {
+          const apiData = response.data;
+
+          // Xử lý dữ liệu foot_profile (nếu chưa có thì dùng object rỗng)
+          const fpData = apiData.footProfile || apiData.foot_profile || {};
+
           setUserInfo({
-            fullname: data.fullname || "",
-            email: data.email || "",
-            phone: data.phone || "",
-            address: data.address || "",
+            fullName: apiData.fullName || "",
+            email: apiData.email || "",
+            phoneNumber: apiData.phoneNumber || "",
+            address: apiData.address || "",
+
             foot_profile: {
-              shoe_size: data.foot_profile?.shoe_size || "",
-              foot_shape: data.foot_profile?.foot_shape || "standard",
-              skin_tone: data.foot_profile?.skin_tone || "medium",
-              gender: data.foot_profile?.gender || "unisex",
-              preferred_style: data.foot_profile?.preferred_style || [],
+              shoe_size: fpData.shoeSize || fpData.shoe_size || "",
+              foot_shape: fpData.footShape || fpData.foot_shape || "standard",
+              skin_tone: fpData.skinTone || fpData.skin_tone || "medium",
+              gender: fpData.gender || "unisex",
+              preferred_style:
+                fpData.preferredStyle || fpData.preferred_style || [],
             },
           });
+        } else {
+          toast.error(response?.message || "Không thể tải thông tin.");
         }
       } catch (error) {
         console.error("Failed to fetch profile:", error);
-        toast.error(t("auth.msg_session_expired"));
         if (error.response && error.response.status === 401) {
+          toast.error(t("auth.msg_session_expired"));
           localStorage.removeItem("token");
+          localStorage.removeItem("user");
           navigate("/login");
         }
       } finally {
@@ -90,7 +74,7 @@ const Profile = () => {
     fetchProfile();
   }, [navigate, t]);
 
-  // ---  Handlers ---
+  // --- Handlers ---
   const handleChangeInfo = (e) => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
@@ -119,27 +103,34 @@ const Profile = () => {
     }));
   };
 
-  // ---  Update Action ---
+  // --- Update Action ---
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      const response = await authService.updateProfile({
-        fullname: userInfo.fullname,
-        phone: userInfo.phone,
-        address: userInfo.address,
-        foot_profile: {
-          ...userInfo.foot_profile,
-          shoe_size: Number(userInfo.foot_profile.shoe_size),
-        },
-      });
+      const formData = new FormData();
+      formData.append("FullName", userInfo.fullName);
+      formData.append("Address", userInfo.address);
+      formData.append("PhoneNumber", userInfo.phoneNumber);
 
-      if (response.success) {
-        toast.success(t("profile.msg_update_success"));
+      // formData.append("FootProfile", JSON.stringify(userInfo.foot_profile));
+
+      const response = await authService.updateProfile(formData);
+
+      if (response && response.status === 200) {
+        toast.success(
+          t("profile.msg_update_success") || "Cập nhật thành công!",
+        );
+
+        const savedUser = JSON.parse(localStorage.getItem("user")) || {};
+        savedUser.fullName = userInfo.fullName;
+        localStorage.setItem("user", JSON.stringify(savedUser));
+      } else {
+        toast.error(response?.message || t("profile.msg_update_fail"));
       }
     } catch (error) {
       console.error("Update failed:", error);
       toast.error(
-        error.response?.data?.message || t("profile.msg_update_fail")
+        error.response?.data?.message || t("profile.msg_update_fail"),
       );
     }
   };
@@ -159,149 +150,126 @@ const Profile = () => {
       <div className="container">
         {/* Title Page */}
         <div className="text-center mb-3">
-          <h2 className="fw-bold" style={{ color: "var(--text-heading)" }}>
-            {t("header.profile")}
-          </h2>
+          <h2 className="profile-heading fs-2">{t("header.profile")}</h2>
         </div>
 
         <div className="row justify-content-center">
           <div className="col-lg-10 col-md-12">
             <form onSubmit={handleUpdateProfile}>
               <div className="row g-4">
-                {/* Personal Information */}
+                {/* --- Personal Information Column --- */}
                 <div className="col-md-6">
-                  <div style={cardStyle}>
-                    <div
-                      className="d-flex align-items-center mb-4 border-bottom pb-3"
-                      style={{ borderColor: "var(--border-color)" }}
-                    >
-                      <i
-                        className="fa-solid fa-user me-3 fs-4"
-                        style={{ color: "var(--brand-blue)" }}
-                      ></i>
-                      <h4 style={headingStyle}>
+                  <div className="profile-card">
+                    <div className="profile-section-header">
+                      <i className="fa-solid fa-user profile-icon-user"></i>
+                      <h4 className="profile-heading">
                         {t("profile.title_personal")}
                       </h4>
                     </div>
 
                     <div className="form-group mb-3">
-                      <label style={labelStyle}>
+                      <label className="profile-label">
                         {t("profile.label_fullname")}
                       </label>
                       <input
                         type="text"
-                        className="form-control"
-                        name="fullname"
-                        value={userInfo.fullname}
+                        className="form-control profile-input"
+                        name="fullName"
+                        value={userInfo.fullName}
                         onChange={handleChangeInfo}
-                        style={inputStyle}
                       />
                     </div>
 
                     <div className="form-group mb-3">
-                      <label style={labelStyle}>
+                      <label className="profile-label">
                         {t("profile.label_email")}
                       </label>
                       <input
                         type="email"
-                        className="form-control"
+                        className="form-control profile-input disabled-input"
                         value={userInfo.email}
                         disabled
-                        style={{
-                          ...inputStyle,
-                          opacity: 0.7,
-                          cursor: "not-allowed",
-                        }}
                       />
                     </div>
 
                     <div className="form-group mb-3">
-                      <label style={labelStyle}>
+                      <label className="profile-label">
                         {t("profile.label_phone")}
                       </label>
                       <input
                         type="text"
-                        className="form-control"
-                        name="phone"
-                        value={userInfo.phone}
+                        className="form-control profile-input"
+                        name="phoneNumber"
+                        value={userInfo.phoneNumber}
                         onChange={handleChangeInfo}
                         placeholder={t("profile.placeholder_phone")}
-                        style={inputStyle}
                       />
                     </div>
 
                     <div className="form-group mb-3">
-                      <label style={labelStyle}>
+                      <label className="profile-label">
                         {t("profile.label_address")}
                       </label>
                       <textarea
-                        className="form-control"
+                        className="form-control profile-input"
                         name="address"
                         rows="3"
                         value={userInfo.address}
                         onChange={handleChangeInfo}
                         placeholder={t("profile.placeholder_address")}
-                        style={inputStyle}
                       ></textarea>
                     </div>
                   </div>
                 </div>
 
-                {/* Foot Profile */}
+                {/* --- Foot Profile Column --- */}
                 <div className="col-md-6">
-                  <div
-                    style={{
-                      ...cardStyle,
-                      borderTop: "4px solid var(--primary)",
-                    }}
-                  >
-                    <div
-                      className="d-flex align-items-center mb-4 border-bottom pb-3"
-                      style={{ borderColor: "var(--border-color)" }}
-                    >
-                      <i
-                        className="fa-solid fa-shoe-prints me-3 fs-4"
-                        style={{ color: "var(--primary)" }}
-                      ></i>
-                      <h4 style={headingStyle}>
+                  <div className="profile-card foot-profile-card">
+                    <div className="profile-section-header">
+                      <i className="fa-solid fa-shoe-prints profile-icon-foot"></i>
+                      <h4 className="profile-heading">
                         {t("profile.title_foot_profile")}
                       </h4>
                     </div>
-                    <p
-                      className="small mb-4"
-                      style={{ color: "var(--text-main)" }}
+
+                    <div
+                      className="alert alert-warning py-2"
+                      style={{ fontSize: "0.8rem" }}
                     >
+                      <i className="fa-solid fa-triangle-exclamation me-2"></i>
+                      Tính năng lưu hồ sơ chân đang được cập nhật phía server.
+                    </div>
+
+                    <p className="profile-desc">
                       {t("profile.desc_foot_profile")}
                     </p>
 
                     <div className="row">
                       <div className="col-6">
                         <div className="form-group mb-3">
-                          <label style={labelStyle}>
+                          <label className="profile-label">
                             {t("profile.label_shoe_size")}
                           </label>
                           <input
                             type="number"
-                            className="form-control"
+                            className="form-control profile-input"
                             name="shoe_size"
                             value={userInfo.foot_profile.shoe_size}
                             onChange={handleFootProfileChange}
                             placeholder={t("profile.placeholder_shoe_size")}
-                            style={inputStyle}
                           />
                         </div>
                       </div>
                       <div className="col-6">
                         <div className="form-group mb-3">
-                          <label style={labelStyle}>
+                          <label className="profile-label">
                             {t("profile.label_gender")}
                           </label>
                           <select
-                            className="form-select"
+                            className="form-select profile-input"
                             name="gender"
                             value={userInfo.foot_profile.gender}
                             onChange={handleFootProfileChange}
-                            style={inputStyle}
                           >
                             <option value="unisex">
                               {t("profile.opt_unisex")}
@@ -320,15 +288,14 @@ const Profile = () => {
                     <div className="row">
                       <div className="col-6">
                         <div className="form-group mb-3">
-                          <label style={labelStyle}>
+                          <label className="profile-label">
                             {t("profile.label_foot_shape")}
                           </label>
                           <select
-                            className="form-select"
+                            className="form-select profile-input"
                             name="foot_shape"
                             value={userInfo.foot_profile.foot_shape}
                             onChange={handleFootProfileChange}
-                            style={inputStyle}
                           >
                             <option value="standard">
                               {t("profile.opt_standard")}
@@ -347,15 +314,14 @@ const Profile = () => {
                       </div>
                       <div className="col-6">
                         <div className="form-group mb-3">
-                          <label style={labelStyle}>
+                          <label className="profile-label">
                             {t("profile.label_skin_tone")}
                           </label>
                           <select
-                            className="form-select"
+                            className="form-select profile-input"
                             name="skin_tone"
                             value={userInfo.foot_profile.skin_tone}
                             onChange={handleFootProfileChange}
-                            style={inputStyle}
                           >
                             <option value="light">
                               {t("profile.opt_light")}
@@ -376,32 +342,24 @@ const Profile = () => {
                     </div>
 
                     <div className="form-group mb-3">
-                      <label style={labelStyle}>
+                      <label className="profile-label">
                         {t("profile.label_preferred_style")}
                       </label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control profile-input"
                         value={userInfo.foot_profile.preferred_style.join(", ")}
                         onChange={handleStyleChange}
                         placeholder={t("profile.placeholder_style")}
-                        style={inputStyle}
                       />
-                      <small
-                        className="text-muted"
-                        style={{ fontSize: "0.8rem" }}
-                      >
-                        {t("profile.help_style")}
-                      </small>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Action Button */}
+              {/* Action Buttons */}
               <div className="row mt-3 mb-5">
                 <div className="col-12 d-flex justify-content-between align-items-center">
-                  {/* Change Password */}
                   <Link
                     to="/change-password"
                     className="btn btn-outline-secondary rounded-pill px-4 fw-bold"
@@ -411,15 +369,9 @@ const Profile = () => {
                     {t("profile.btn_change_pass")}
                   </Link>
 
-                  {/* Save Info */}
                   <button
                     type="submit"
-                    className="btn rounded-pill px-5 py-3 fw-bold shadow-sm"
-                    style={{
-                      backgroundColor: "var(--brand-blue)",
-                      color: "#fff",
-                      border: "none",
-                    }}
+                    className="btn rounded-pill px-5 py-3 fw-bold shadow-sm btn-save-profile"
                   >
                     <i className="fa-solid fa-floppy-disk me-2"></i>
                     {t("profile.btn_save_all")}

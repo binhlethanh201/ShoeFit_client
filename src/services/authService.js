@@ -1,34 +1,41 @@
 import axiosClient from "./axiosClient";
 
 const authService = {
-  register: (data) => {
-    return axiosClient.post("/auth/register", data);
+  register: (formData) => {
+    return axiosClient.post("/api/v1/auth/register", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 
   login: (data) => {
-    return axiosClient.post("/auth/login", data);
+    return axiosClient.post("/api/v1/auth/login", data);
   },
 
-  forgotPassword: (data) => {
-    return axiosClient.post("/auth/forgot-password", data);
+  loginGoogle: (idToken) => {
+    return axiosClient.post("/api/v1/auth/login/google", { idToken });
+  },
+
+  otp: (data) => {
+    return axiosClient.post("/api/v1/auth/otp", data);
   },
 
   getProfile: () => {
-    return axiosClient.get("/auth/me");
+    return axiosClient.get("/api/v1/users/profile");
   },
 
-  updateProfile: (data) => {
-    return axiosClient.put("/auth/me", data);
-  },
-
-  changePassword: (data) => {
-    return axiosClient.put("/auth/password", data);
+  updateProfile: (formData) => {
+    return axiosClient.post("/api/v1/users", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 
   logout: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    return axiosClient.post("/auth/logout");
   },
 };
 

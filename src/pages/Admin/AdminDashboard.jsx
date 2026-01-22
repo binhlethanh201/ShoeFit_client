@@ -4,17 +4,15 @@ import authService from "../../services/authService";
 
 // Import các components con
 import DashboardHome from "../../components/admin/DashboardHome";
-import UserManagement from "../../components/admin/UserManagement";
 import ProductManagement from "../../components/admin/ProductManagement";
-import OrderManagement from "../../components/admin/OrderManagement";
-import Analytics from "../../components/admin/Analytics";
-import SystemConfig from "../../components/admin/SystemConfig";
+import CategoryManagement from "../../components/admin/CategoryManagement";
+import AttributeManagement from "../../components/admin/AttributeManagement";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const userStr = localStorage.getItem("user");
+  const user = userStr ? JSON.parse(userStr) : null;
 
-  // State để quản lý tab đang active
   const [activeTab, setActiveTab] = useState("dashboard");
 
   const handleLogout = () => {
@@ -22,27 +20,21 @@ const AdminDashboard = () => {
     navigate("/login");
   };
 
-  // Hàm render nội dung dựa trên tab đang chọn
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
         return <DashboardHome />;
-      case "users":
-        return <UserManagement />;
+      case "categories":
+        return <CategoryManagement />;
+      case "attributes":
+        return <AttributeManagement />;
       case "products":
         return <ProductManagement />;
-      case "orders":
-        return <OrderManagement />;
-      case "analytics":
-        return <Analytics />;
-      case "system":
-        return <SystemConfig />;
       default:
         return <DashboardHome />;
     }
   };
 
-  // Helper để set class active cho sidebar
   const getNavLinkClass = (tabName) => {
     return `nav-link text-start w-100 border-0 ${
       activeTab === tabName
@@ -73,46 +65,31 @@ const AdminDashboard = () => {
                   <i className="fa-solid fa-house me-2"></i> Dashboard
                 </button>
               </li>
+
               <li className="nav-item">
                 <button
-                  className={getNavLinkClass("users")}
-                  onClick={() => setActiveTab("users")}
+                  className={getNavLinkClass("categories")}
+                  onClick={() => setActiveTab("categories")}
                 >
-                  <i className="fa-solid fa-users me-2"></i> Quản lý người dùng
+                  <i className="fa-solid fa-layer-group me-2"></i> Quản lý danh
+                  mục
                 </button>
               </li>
+              <li className="nav-item">
+                <button
+                  className={getNavLinkClass("attributes")}
+                  onClick={() => setActiveTab("attributes")}
+                >
+                  <i className="fa-solid fa-tags me-2"></i> Quản lý thuộc tính
+                </button>
+              </li>
+
               <li className="nav-item">
                 <button
                   className={getNavLinkClass("products")}
                   onClick={() => setActiveTab("products")}
                 >
                   <i className="fa-solid fa-box me-2"></i> Quản lý sản phẩm
-                </button>
-              </li>
-              <li className="nav-item">
-                <button
-                  className={getNavLinkClass("orders")}
-                  onClick={() => setActiveTab("orders")}
-                >
-                  <i className="fa-solid fa-cart-shopping me-2"></i> Quản lý đơn
-                  hàng
-                </button>
-              </li>
-              <li className="nav-item">
-                <button
-                  className={getNavLinkClass("analytics")}
-                  onClick={() => setActiveTab("analytics")}
-                >
-                  <i className="fa-solid fa-chart-line me-2"></i> Report &
-                  Analytics
-                </button>
-              </li>
-              <li className="nav-item">
-                <button
-                  className={getNavLinkClass("system")}
-                  onClick={() => setActiveTab("system")}
-                >
-                  <i className="fa-solid fa-gears me-2"></i> System Config
                 </button>
               </li>
             </ul>
@@ -135,20 +112,17 @@ const AdminDashboard = () => {
           className="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4"
           style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
         >
-          {/* Content Header */}
           <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">
             <h1 className="h2">
               {activeTab === "dashboard"
                 ? "Tổng quan"
-                : activeTab === "users"
-                ? "Quản lý người dùng"
-                : activeTab === "products"
-                ? "Quản lý sản phẩm"
-                : activeTab === "orders"
-                ? "Quản lý đơn hàng"
-                : activeTab === "analytics"
-                ? "Báo cáo & Phân tích"
-                : "Cấu hình hệ thống"}
+                : activeTab === "categories"
+                  ? "Quản lý danh mục"
+                  : activeTab === "attributes"
+                    ? "Quản lý thuộc tính"
+                      : activeTab === "products"
+                        ? "Quản lý sản phẩm"
+                            : "Cấu hình hệ thống"}
             </h1>
             <div className="d-flex align-items-center">
               <span className="me-3">

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:9999/api", // URL Backend
+  baseURL: "https://api.shoefit.com.vn", // URL Backend
   headers: {
     "Content-Type": "application/json",
   },
@@ -20,12 +20,16 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {
-      return response.data; // Chỉ lấy phần data
+      return response.data; 
     }
     return response;
   },
   (error) => {
-    // Xử lý lỗi chung (ví dụ: Token hết hạn -> logout)
+   if (error.response && error.response.status === 401) {
+       localStorage.removeItem("token");
+       localStorage.removeItem("user");
+       window.location.href = "/login"; 
+      }
     throw error;
   }
 );

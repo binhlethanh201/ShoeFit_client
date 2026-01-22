@@ -1,15 +1,16 @@
 {
   "header": {
-    "home": "Khám Phá",
-    "collection": "Sản Phẩm",
-    "tryonvideo": "Video Thử Giày AI",
-    "tryon2d": "Ảnh Thử Giày AI",
-    "styleadvisor": "Tư Vấn Phong Cách",
-    "profile": "Hồ Sơ",
-    "settings": "Cài Đặt",
-    "logout": "Đăng Xuất",
-    "login": "Đăng Nhập",
-    "register": "Đăng Ký"
+    "home": "Khám phá",
+    "collection": "Danh mục sản phẩm",
+    "tryonvideo": "Video thử giày AI",
+    "tryon2d": "Ảnh thử giày AI",
+    "styleadvisor": "Tư vấn phong cách",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "features": "Tính năng"
   },
   "settings": {
     "title": "Cài Đặt",
@@ -67,6 +68,7 @@
     "change_pass_title": "Đổi Mật Khẩu",
     "change_pass_desc": "Để bảo mật tài khoản, vui lòng không chia sẻ mật khẩu cho người khác.",
     "label_email": "Email",
+    "label_username_or_email": "Tên đăng nhập hoặc Email",
     "label_password": "Mật khẩu",
     "label_username": "Tên đăng nhập",
     "label_fullname": "Họ và tên",
@@ -74,6 +76,7 @@
     "label_current_pass": "Mật khẩu hiện tại",
     "label_new_pass": "Mật khẩu mới",
     "placeholder_email": "name@example.com",
+    "placeholder_username_or_email": "Nhập tên đăng nhập hoặc email",
     "placeholder_pass": "••••••••",
     "placeholder_new_pass": "Nhập mật khẩu mới (tối thiểu 6 ký tự)",
     "btn_login": "Đăng Nhập",

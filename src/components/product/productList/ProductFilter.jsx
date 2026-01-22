@@ -13,17 +13,13 @@ const SearchFilter = () => {
           <div className="checkbox"></div>
           Giày Nữ
         </div>
-        <div className="filter-opt">
-          <div className="checkbox"></div>
-          Trẻ em
-        </div>
       </div>
 
       {/* Size Filter */}
       <div className="filter-group">
-        <span className="filter-title">Kích cỡ (US)</span>
+        <span className="filter-title">Kích cỡ (VN)</span>
         <div className="filter-size-grid">
-          {[7, 8, 8.5, 9, 9.5, 10, 11, 12].map((size) => (
+          {[36, 37, 38, 39, 40, 41, 42, 43, 44, 45].map((size) => (
             <div
               key={size}
               className={`filter-size-item ${size === 9 ? "active" : ""}`}

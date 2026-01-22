@@ -6,7 +6,6 @@ import { ThemeContext } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
 // Import Icons
-import storeIcon from "../../../assets/images/Effects/store.svg";
 import heartIcon from "../../../assets/images/Effects/heart.svg";
 import userIcon from "../../../assets/images/Effects/user.svg";
 import sunIcon from "../../../assets/images/Effects/sun.svg";
@@ -25,6 +24,18 @@ const Header = () => {
 
   const isActive = (path) => {
     return location.pathname === path ? "nav-item active" : "nav-item";
+  };
+
+  const isFeaturesActive = [
+    "/tryonvideo",
+    "/tryon2d",
+    "/styleadvisor",
+  ].includes(location.pathname);
+
+  const isChildActive = (path) => {
+    return location.pathname === path
+      ? "dropdown-item active-child"
+      : "dropdown-item";
   };
 
   const handleLogout = async (e) => {
@@ -78,39 +89,57 @@ const Header = () => {
               </Link>
             </li>
 
-            <li className={isActive("/tryonvideo")}>
-              <Link className="nav-link" to="/tryonvideo">
-                {t("header.tryonvideo")}
-              </Link>
+            <li
+              className={`nav-item dropdown ${isFeaturesActive ? "active" : ""}`}
+            >
+              <a
+                className="nav-link dropdown-toggle"
+                href="/services"
+                id="featuresDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {t("header.features") || "Tính năng"}
+              </a>
+              <ul
+                className="dropdown-menu shadow-sm border-0"
+                aria-labelledby="featuresDropdown"
+              >
+                <li>
+                  <Link
+                    className={isChildActive("/tryonvideo")}
+                    to="/tryonvideo"
+                  >
+                    <i className="fas fa-video me-2"></i>{" "}
+                    {t("header.tryonvideo")}
+                  </Link>
+                </li>
+                <li>
+                  <Link className={isChildActive("/tryon2d")} to="/tryon2d">
+                    <i className="fas fa-camera me-2"></i> 
+                    {t("header.tryon2d")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className={isChildActive("/styleadvisor")}
+                    to="/styleadvisor"
+                  >
+                    <i className="fas fa-wand-magic-sparkles me-2"></i>{" "}
+                    {t("header.styleadvisor")}
+                  </Link>
+                </li>
+              </ul>
             </li>
-
-            <li className={isActive("/tryon2d")}>
-              <Link className="nav-link" to="/tryon2d">
-                {t("header.tryon2d")}
-              </Link>
-            </li>
-
-            <li className={isActive("/styleadvisor")}>
-              <Link className="nav-link" to="/styleadvisor">
-                {t("header.styleadvisor")}
+            <li className={isActive("/collection")}>
+              <Link className="nav-link" to="/collection">
+                {t("header.collection")}
               </Link>
             </li>
           </ul>
 
           <div className="d-flex align-items-center gap-3">
-            {/* Collection Icon */}
-            <Link className="nav-link p-0" to="/collection">
-              <img
-                src={storeIcon}
-                alt="Store"
-                width="22"
-                style={{
-                  filter: "var(--icon-filter)",
-                  transition: "filter 0.3s ease",
-                }}
-              />
-            </Link>
-
             {/* Wishlist Icon */}
             <Link className="nav-link p-0" to="/wishlist">
               <img
