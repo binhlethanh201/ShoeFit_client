@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import authService from '../../services/authService';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next'; 
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../../services/authService";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation(); 
-  
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState({
-    username: '',
-    fullname: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
-    password: '',
-    confirmPassword: '',
-    otp: ''
+    username: "",
+    fullname: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    password: "",
+    confirmPassword: "",
+    otp: "",
   });
 
   // const [avatarFile, setAvatarFile] = useState(null); // Tạm thời bỏ dùng state này
@@ -36,7 +36,9 @@ const Register = () => {
   // --- XỬ LÝ GỬI OTP ---
   const handleSendOtp = async () => {
     if (!formData.email || !formData.username || !formData.phoneNumber) {
-      toast.warning("Vui lòng nhập Username, Email và Số điện thoại để lấy OTP");
+      toast.warning(
+        "Vui lòng nhập Username, Email và Số điện thoại để lấy OTP",
+      );
       return;
     }
 
@@ -45,12 +47,17 @@ const Register = () => {
       const payload = {
         email: formData.email,
         username: formData.username,
-        phoneNumber: formData.phoneNumber
+        phoneNumber: formData.phoneNumber,
       };
-      
+
       const response = await authService.otp(payload);
-      
-      if (response && (response.status === 0 || response.status === 200 || response.status === 201)) {
+
+      if (
+        response &&
+        (response.status === 0 ||
+          response.status === 200 ||
+          response.status === 201)
+      ) {
         toast.success("Mã OTP đã được gửi! Vui lòng kiểm tra email.");
       } else {
         toast.error(response.message || "Không thể gửi OTP.");
@@ -67,9 +74,9 @@ const Register = () => {
   // --- XỬ LÝ ĐĂNG KÝ ---
   const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
-      toast.error(t('auth.msg_pass_mismatch'));
+      toast.error(t("auth.msg_pass_mismatch"));
       return;
     }
 
@@ -81,15 +88,15 @@ const Register = () => {
     setLoading(true);
     try {
       const dataToSend = new FormData();
-      
+
       // Map đúng tên tham số theo Swagger (Viết hoa chữ cái đầu)
-      dataToSend.append('Username', formData.username);
-      dataToSend.append('Password', formData.password);
-      dataToSend.append('Email', formData.email);
-      dataToSend.append('FullName', formData.fullname);
-      dataToSend.append('PhoneNumber', formData.phoneNumber);
-      dataToSend.append('Address', formData.address || ""); // Gửi chuỗi rỗng nếu không nhập
-      dataToSend.append('Otp', formData.otp);
+      dataToSend.append("Username", formData.username);
+      dataToSend.append("Password", formData.password);
+      dataToSend.append("Email", formData.email);
+      dataToSend.append("FullName", formData.fullname);
+      dataToSend.append("PhoneNumber", formData.phoneNumber);
+      dataToSend.append("Address", formData.address || ""); // Gửi chuỗi rỗng nếu không nhập
+      dataToSend.append("Otp", formData.otp);
 
       // --- QUAN TRỌNG: KHÔNG GỬI AVATAR ---
       // Việc không append key 'Avatar' đồng nghĩa với việc gửi null cho Backend.
@@ -100,8 +107,8 @@ const Register = () => {
       const response = await authService.register(dataToSend);
 
       if (response && (response.status === 0 || response.data)) {
-        toast.success(t('auth.msg_register_success'));
-        navigate('/login');
+        toast.success(t("auth.msg_register_success"));
+        navigate("/login");
       } else {
         toast.error(response.message || "Đăng ký thất bại");
       }
@@ -120,12 +127,16 @@ const Register = () => {
         <div className="row justify-content-center">
           <div className="col-md-8 col-lg-7">
             <div className="p-4 border rounded bg-light shadow-sm">
-              <h3 className="text-black mb-4 text-center">{t('auth.register_title')}</h3>
-              
+              <h3 className="text-black mb-4 text-center">
+                {t("auth.register_title")}
+              </h3>
+
               <form onSubmit={handleRegister}>
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="text-black small fw-bold">Username <span className="text-danger">*</span></label>
+                    <label className="text-black small fw-bold">
+                      Username <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -136,7 +147,10 @@ const Register = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="text-black small fw-bold">{t('auth.label_fullname')} <span className="text-danger">*</span></label>
+                    <label className="text-black small fw-bold">
+                      {t("auth.label_fullname")}{" "}
+                      <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -150,7 +164,10 @@ const Register = () => {
 
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="text-black small fw-bold">{t('auth.label_email')} <span className="text-danger">*</span></label>
+                    <label className="text-black small fw-bold">
+                      {t("auth.label_email")}{" "}
+                      <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="email"
                       className="form-control"
@@ -161,7 +178,9 @@ const Register = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="text-black small fw-bold">Số điện thoại <span className="text-danger">*</span></label>
+                    <label className="text-black small fw-bold">
+                      Số điện thoại <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -198,7 +217,10 @@ const Register = () => {
 
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="text-black small fw-bold">{t('auth.label_password')} <span className="text-danger">*</span></label>
+                    <label className="text-black small fw-bold">
+                      {t("auth.label_password")}{" "}
+                      <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="password"
                       className="form-control"
@@ -210,7 +232,10 @@ const Register = () => {
                     />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="text-black small fw-bold">{t('auth.label_confirm_pass')} <span className="text-danger">*</span></label>
+                    <label className="text-black small fw-bold">
+                      {t("auth.label_confirm_pass")}{" "}
+                      <span className="text-danger">*</span>
+                    </label>
                     <input
                       type="password"
                       className="form-control"
@@ -221,11 +246,13 @@ const Register = () => {
                     />
                   </div>
                 </div>
-                
+
                 <hr />
-                
+
                 <div className="form-group mb-4">
-                  <label className="text-black small fw-bold">Mã xác thực OTP <span className="text-danger">*</span></label>
+                  <label className="text-black small fw-bold">
+                    Mã xác thực OTP <span className="text-danger">*</span>
+                  </label>
                   <div className="input-group">
                     <input
                       type="text"
@@ -236,9 +263,9 @@ const Register = () => {
                       placeholder="Nhập mã OTP gửi về email"
                       required
                     />
-                    <button 
-                      type="button" 
-                      className="btn btn-secondary" 
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
                       onClick={handleSendOtp}
                       disabled={otpLoading}
                     >
@@ -256,11 +283,16 @@ const Register = () => {
                   style={{ backgroundColor: "#000" }}
                   disabled={loading}
                 >
-                  {loading ? t('auth.processing') : t('auth.btn_register')}
+                  {loading ? t("auth.processing") : t("auth.btn_register")}
                 </button>
 
                 <div className="text-center mt-3">
-                  <p>{t('auth.text_have_account')} <Link to="/login" className="text-primary fw-bold">{t('auth.link_login_now')}</Link></p>
+                  <p>
+                    {t("auth.text_have_account")}{" "}
+                    <Link to="/login" className="text-primary fw-bold">
+                      {t("auth.link_login_now")}
+                    </Link>
+                  </p>
                 </div>
               </form>
             </div>

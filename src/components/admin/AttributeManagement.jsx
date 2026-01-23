@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import adminService from "../../services/adminService";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const AttributeManagement = () => {
-  // State dữ liệu
   const [attributes, setAttributes] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -19,8 +18,6 @@ const AttributeManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
-
-  // Form data cho 3 trường: material, color, style
   const [formData, setFormData] = useState({
     material: "",
     color: "",
@@ -50,7 +47,6 @@ const AttributeManagement = () => {
         }
       } catch (error) {
         toast.error("Lỗi tải danh sách thuộc tính!");
-        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -68,9 +64,9 @@ const AttributeManagement = () => {
       setIsEditMode(true);
       setCurrentId(attr.id);
       setFormData({
-        material: attr.material,
-        color: attr.color,
-        style: attr.style,
+        material: attr.material || "",
+        color: attr.color || "",
+        style: attr.style || "",
       });
     } else {
       setIsEditMode(false);
@@ -80,21 +76,24 @@ const AttributeManagement = () => {
     setShowModal(true);
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
 
-    // 1. Clean Data: Trim khoảng trắng
+    // Clean Data
     const material = formData.material.trim();
     const color = formData.color.trim();
     const style = formData.style.trim();
 
-    // Validate
     if (!material && !color && !style) {
       toast.warning("Vui lòng nhập ít nhất một thông tin");
       return;
     }
 
-    // 2. Chuyển chuỗi rỗng thành null (Tránh lỗi backend nếu có)
+    // Convert empty string to null
     const payload = {
       material: material === "" ? null : material,
       color: color === "" ? null : color,
@@ -109,40 +108,21 @@ const AttributeManagement = () => {
         res = await adminService.createAttribute(payload);
       }
 
-      // 3. Kiểm tra response
-      if (res) {
+      // Check success based on Swagger response (200 OK or 201 Created)
+      if (res && (res.status === 0 || res.data)) {
         toast.success(
           isEditMode ? "Cập nhật thành công!" : "Tạo mới thành công!",
         );
         setShowModal(false);
         fetchAttributes(pagination.page);
+      } else {
+        toast.error(res?.message || "Thao tác thất bại");
       }
     } catch (error) {
-      console.error("--- CHI TIẾT LỖI TỪ SERVER ---");
-      console.log(error.response); // Xem log này trong Console (F12)
-
-      // 4. Hiển thị lỗi chi tiết ra Toast để dễ debug
-      let errorMessage = "Có lỗi xảy ra!";
-
-      if (error.response) {
-        // Trường hợp Server trả về message lỗi cụ thể
-        if (error.response.data && typeof error.response.data === "string") {
-          errorMessage = error.response.data; // Nếu data là chuỗi
-        } else if (error.response.data && error.response.data.message) {
-          errorMessage = error.response.data.message; // Nếu data là object có message
-        } else {
-          errorMessage = `Lỗi Server (${error.response.status}): Vui lòng kiểm tra lại dữ liệu.`;
-        }
-      } else {
-        errorMessage = error.message;
-      }
-
-      toast.error(errorMessage);
+      console.error("Save Error:", error);
+      const msg = error.response?.data?.message || "Có lỗi xảy ra!";
+      toast.error(msg);
     }
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // --- UI RENDER ---
@@ -170,9 +150,9 @@ const AttributeManagement = () => {
               <thead className="table-light">
                 <tr>
                   <th>#</th>
-                  <th>Chất Liệu (Material)</th>
-                  <th>Màu Sắc (Color)</th>
-                  <th>Kiểu Dáng (Style)</th>
+                  <th>Chất Liệu</th>
+                  <th>Màu Sắc</th>
+                  <th>Kiểu Dáng</th>
                   <th>Ngày tạo</th>
                   <th className="text-end">Hành động</th>
                 </tr>
@@ -228,7 +208,7 @@ const AttributeManagement = () => {
           </div>
         )}
 
-        {/* --- PHÂN TRANG (Giống Category) --- */}
+        {/* --- PHÂN TRANG --- */}
         {pagination.totalPages > 1 && (
           <nav className="d-flex justify-content-end mt-3">
             <ul className="pagination">

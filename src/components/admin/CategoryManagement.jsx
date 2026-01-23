@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react"; // 1. Import useCallback
+import React, { useState, useEffect, useCallback } from "react";
 import adminService from "../../services/adminService";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const CategoryManagement = () => {
   // State dữ liệu
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  
+
   // State phân trang
   const [pagination, setPagination] = useState({
     page: 1,
@@ -21,39 +21,42 @@ const CategoryManagement = () => {
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState({ name: "" });
 
-  // --- 1. CALL API LẤY DANH SÁCH (Sử dụng useCallback để fix warning) ---
-  const fetchCategories = useCallback(async (page = 1) => {
-    setLoading(true);
-    try {
-      const response = await adminService.getCategories({
-        page: page,
-        size: pagination.size, // Giá trị này nằm trong dependency của useCallback
-        sortBy: "createdDate",
-        isAsc: false,
-      });
+  // --- CALL API LẤY DANH SÁCH ---
+  const fetchCategories = useCallback(
+    async (page = 1) => {
+      setLoading(true);
+      try {
+        const response = await adminService.getCategories({
+          page: page,
+          size: pagination.size, // Giá trị này nằm trong dependency của useCallback
+          sortBy: "createdDate",
+          isAsc: false,
+        });
 
-      if (response && response.data) {
-        setCategories(response.data.items);
-        setPagination((prev) => ({
-          ...prev,
-          page: response.data.page,
-          totalPages: response.data.totalPages,
-          totalElements: response.data.total,
-        }));
+        if (response && response.data) {
+          setCategories(response.data.items);
+          setPagination((prev) => ({
+            ...prev,
+            page: response.data.page,
+            totalPages: response.data.totalPages,
+            totalElements: response.data.total,
+          }));
+        }
+      } catch (error) {
+        toast.error("Lỗi tải danh sách danh mục!");
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      toast.error("Lỗi tải danh sách danh mục!");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [pagination.size]); // 2. Chỉ tạo lại hàm khi pagination.size thay đổi
+    },
+    [pagination.size],
+  ); // Chỉ tạo lại hàm khi pagination.size thay đổi
 
   useEffect(() => {
     fetchCategories(pagination.page);
-  }, [pagination.page, fetchCategories]); // 3. Đã an toàn để thêm fetchCategories vào đây
+  }, [pagination.page, fetchCategories]);
 
-  // --- 2. XỬ LÝ FORM (THÊM / SỬA) ---
+  // ---  XỬ LÝ FORM (THÊM / SỬA) ---
   const handleOpenModal = (category = null) => {
     if (category) {
       setIsEditMode(true);
@@ -78,17 +81,21 @@ const CategoryManagement = () => {
       let res;
       if (isEditMode) {
         // Gọi API Update (PATCH)
-        res = await adminService.updateCategory(currentId, { name: formData.name });
+        res = await adminService.updateCategory(currentId, {
+          name: formData.name,
+        });
       } else {
         // Gọi API Create (POST)
         res = await adminService.createCategory({ name: formData.name });
       }
 
       if (res) {
-        toast.success(isEditMode ? "Cập nhật thành công!" : "Tạo mới thành công!");
+        toast.success(
+          isEditMode ? "Cập nhật thành công!" : "Tạo mới thành công!",
+        );
         setShowModal(false);
         // Gọi lại hàm fetchCategories để load lại danh sách hiện tại
-        fetchCategories(pagination.page); 
+        fetchCategories(pagination.page);
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Có lỗi xảy ra!";
@@ -101,11 +108,14 @@ const CategoryManagement = () => {
     <div className="card border-0 shadow-sm">
       <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <h5 className="mb-0 fw-bold text-primary">Quản lý Danh Mục</h5>
-        <button className="btn btn-primary btn-sm" onClick={() => handleOpenModal(null)}>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => handleOpenModal(null)}
+        >
           <i className="fa-solid fa-plus me-1"></i> Thêm mới
         </button>
       </div>
-      
+
       <div className="card-body">
         {loading ? (
           <div className="text-center py-4">
@@ -128,13 +138,17 @@ const CategoryManagement = () => {
                 {categories.length > 0 ? (
                   categories.map((item, index) => (
                     <tr key={item.id}>
-                      <td>{(pagination.page - 1) * pagination.size + index + 1}</td>
+                      <td>
+                        {(pagination.page - 1) * pagination.size + index + 1}
+                      </td>
                       <td className="fw-bold">{item.name}</td>
                       <td className="small text-muted">
-                        {new Date(item.createdDate).toLocaleString('vi-VN')}
+                        {new Date(item.createdDate).toLocaleString("vi-VN")}
                       </td>
                       <td className="small text-muted">
-                        {new Date(item.lastModifiedDate).toLocaleString('vi-VN')}
+                        {new Date(item.lastModifiedDate).toLocaleString(
+                          "vi-VN",
+                        )}
                       </td>
                       <td className="text-end">
                         <button
@@ -143,8 +157,12 @@ const CategoryManagement = () => {
                         >
                           <i className="fa-solid fa-pen"></i>
                         </button>
-                        <button className="btn btn-outline-danger btn-sm" disabled title="Tính năng đang phát triển">
-                           <i className="fa-solid fa-trash"></i>
+                        <button
+                          className="btn btn-outline-danger btn-sm"
+                          disabled
+                          title="Tính năng đang phát triển"
+                        >
+                          <i className="fa-solid fa-trash"></i>
                         </button>
                       </td>
                     </tr>
@@ -165,10 +183,14 @@ const CategoryManagement = () => {
         {pagination.totalPages > 1 && (
           <nav className="d-flex justify-content-end mt-3">
             <ul className="pagination">
-              <li className={`page-item ${pagination.page === 1 ? "disabled" : ""}`}>
+              <li
+                className={`page-item ${pagination.page === 1 ? "disabled" : ""}`}
+              >
                 <button
                   className="page-link"
-                  onClick={() => setPagination((prev) => ({ ...prev, page: prev.page - 1 }))}
+                  onClick={() =>
+                    setPagination((prev) => ({ ...prev, page: prev.page - 1 }))
+                  }
                 >
                   Trước
                 </button>
@@ -180,16 +202,22 @@ const CategoryManagement = () => {
                 >
                   <button
                     className="page-link"
-                    onClick={() => setPagination((prev) => ({ ...prev, page: i + 1 }))}
+                    onClick={() =>
+                      setPagination((prev) => ({ ...prev, page: i + 1 }))
+                    }
                   >
                     {i + 1}
                   </button>
                 </li>
               ))}
-              <li className={`page-item ${pagination.page === pagination.totalPages ? "disabled" : ""}`}>
+              <li
+                className={`page-item ${pagination.page === pagination.totalPages ? "disabled" : ""}`}
+              >
                 <button
                   className="page-link"
-                  onClick={() => setPagination((prev) => ({ ...prev, page: prev.page + 1 }))}
+                  onClick={() =>
+                    setPagination((prev) => ({ ...prev, page: prev.page + 1 }))
+                  }
                 >
                   Sau
                 </button>
@@ -201,29 +229,47 @@ const CategoryManagement = () => {
 
       {showModal && (
         <>
-          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          >
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">{isEditMode ? "Cập Nhật Danh Mục" : "Thêm Danh Mục Mới"}</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                  <h5 className="modal-title">
+                    {isEditMode ? "Cập Nhật Danh Mục" : "Thêm Danh Mục Mới"}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setShowModal(false)}
+                  ></button>
                 </div>
                 <form onSubmit={handleSave}>
                   <div className="modal-body">
                     <div className="mb-3">
-                      <label className="form-label fw-bold">Tên Danh Mục <span className="text-danger">*</span></label>
+                      <label className="form-label fw-bold">
+                        Tên Danh Mục <span className="text-danger">*</span>
+                      </label>
                       <input
                         type="text"
                         className="form-control"
                         placeholder="Nhập tên danh mục (VD: Giày thể thao)"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         required
                       />
                     </div>
                   </div>
                   <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => setShowModal(false)}
+                    >
                       Hủy bỏ
                     </button>
                     <button type="submit" className="btn btn-primary">

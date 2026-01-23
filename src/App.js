@@ -8,8 +8,7 @@ import {
 } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "sonner"; 
 
 // --- Components ---
 import Footer from "./components/home/Footer/Footer";
@@ -45,18 +44,13 @@ import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 const RootLayout = () => {
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
+      <Toaster 
+        position="top-right" 
+        richColors 
+        closeButton
+        duration={1500} 
       />
+      
       <ScrollRestoration />
       <Outlet />
     </>

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import authService from "../../../services/authService";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
@@ -117,7 +117,7 @@ const Header = () => {
                 </li>
                 <li>
                   <Link className={isChildActive("/tryon2d")} to="/tryon2d">
-                    <i className="fas fa-camera me-2"></i> 
+                    <i className="fas fa-camera me-2"></i>
                     {t("header.tryon2d")}
                   </Link>
                 </li>
