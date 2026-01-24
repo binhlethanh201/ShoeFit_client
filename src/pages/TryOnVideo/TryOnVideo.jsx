@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import "../../assets/css/tryonvideo/tryonvideo.css";
 
-// Import Icons & Images (Giữ nguyên)
 import scanIcon from "../../assets/images/Effects/scan.svg";
 import af1Img from "../../assets/images/Shoes/af1.png";
 import vansImg from "../../assets/images/Shoes/vans.png";
@@ -19,7 +18,6 @@ const TryOnVideo = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // State
   const [userImage, setUserImage] = useState(null);
   const [selectedShoe, setSelectedShoe] = useState(null);
   const [result, setResult] = useState(null);
@@ -30,7 +28,6 @@ const TryOnVideo = () => {
   const [zoomScale, setZoomScale] = useState(1);
   const [selectedMotion, setSelectedMotion] = useState("walk");
 
-  // Mock Data
   const mockShoes = [
     {
       id: 1,
@@ -74,7 +71,6 @@ const TryOnVideo = () => {
 
   const handleGenerate = () => {
     if (!userImage || !selectedShoe) {
-      // Sửa key alert
       alert(t("tryonvideo.alert_missing_input"));
       return;
     }
@@ -108,7 +104,6 @@ const TryOnVideo = () => {
 
         <div className="video-tryon-content">
           <div className="col">
-            {/* Step 1: Upload */}
             <div className="row">
               <section className="video-tryon-section">
                 <h2>{t("tryonvideo.step1_title")}</h2>
@@ -142,7 +137,6 @@ const TryOnVideo = () => {
               </section>
             </div>
 
-            {/* Step 2: Choose Shoe & Motion */}
             <div className="row mt-4">
               <section className="video-tryon-section">
                 <h2>{t("tryonvideo.step2_title")}</h2>
@@ -170,7 +164,6 @@ const TryOnVideo = () => {
                   </div>
                 </div>
 
-                {/* Motion Buttons */}
                 <div className="mb-3">
                   <label
                     className="fw-bold mb-2 d-block"
@@ -198,7 +191,6 @@ const TryOnVideo = () => {
                   </div>
                 </div>
 
-                {/* Generate Button */}
                 <button
                   className="video-generate-btn btn"
                   id="video-generate-btn"
@@ -210,7 +202,6 @@ const TryOnVideo = () => {
                     : t("tryonvideo.btn_generate")}
                 </button>
 
-                {/* Style Advisor Button */}
                 <button
                   className="video-style-advisor-btn btn mt-3"
                   onClick={() => navigate("/styleadvisor")}
@@ -222,7 +213,6 @@ const TryOnVideo = () => {
             </div>
           </div>
 
-          {/* Step 3: Result */}
           <div className="col">
             <section className="video-tryon-section">
               <h2>{t("tryonvideo.step3_title")}</h2>
@@ -267,7 +257,6 @@ const TryOnVideo = () => {
             </section>
           </div>
 
-          {/* Drawer & Modal */}
           <div id="video-shoe-drawer" className={isDrawerOpen ? "active" : ""}>
             <div className="video-drawer-content">
               <h4>{t("tryonvideo.drawer_title")}</h4>
@@ -303,7 +292,6 @@ const TryOnVideo = () => {
         </div>
       </div>
 
-      {/* Modal */}
       <div
         className={`modal-overlay ${isModalOpen ? "active" : ""}`}
         id="video-image-modal"

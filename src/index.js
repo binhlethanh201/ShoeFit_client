@@ -19,5 +19,5 @@ root.render(
     <ThemeProvider>
       <App />
     </ThemeProvider>
-  </Provider>
+  </Provider>,
 );

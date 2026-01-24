@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-// Import Services & Assets
 import productService from "../../services/product/productService";
 import "../../assets/css/product/ProductList.css";
 
-// Import Components
 import SearchFilter from "../../components/product/productList/ProductFilter";
 import SearchResults from "../../components/product/productList/ProductResults";
 
@@ -17,14 +15,13 @@ const ProductList = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // --- Paging ---
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = allProducts.slice(
     indexOfFirstProduct,
-    indexOfLastProduct
+    indexOfLastProduct,
   );
 
   const paginate = (pageNumber) => {
@@ -61,7 +58,6 @@ const ProductList = () => {
       className="container"
       style={{ minHeight: "80vh", paddingBottom: "50px" }}
     >
-      {/* Mobile Filter Bar */}
       <div className="mobile-filter-bar" style={{ display: "none" }}>
         <div className="m-filter-btn active">Tất cả</div>
         <div className="m-filter-btn">Size</div>
@@ -73,7 +69,6 @@ const ProductList = () => {
         <SearchFilter />
 
         <div>
-          {/* Search Bar */}
           <form onSubmit={handleSearchSubmit} className="mb-4 d-flex">
             <input
               type="text"

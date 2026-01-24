@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
 
-// Import các components con
 import DashboardHome from "../../components/admin/DashboardHome";
 import ProductManagement from "../../components/admin/ProductManagement";
 import CategoryManagement from "../../components/admin/CategoryManagement";
@@ -46,7 +45,6 @@ const AdminDashboard = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        {/* --- SIDEBAR --- */}
         <nav className="col-md-2 d-none d-md-block bg-light sidebar vh-100 py-3 shadow-sm">
           <div className="position-sticky">
             <h4
@@ -107,7 +105,6 @@ const AdminDashboard = () => {
           </div>
         </nav>
 
-        {/* --- MAIN CONTENT --- */}
         <main
           className="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4"
           style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}
@@ -120,9 +117,9 @@ const AdminDashboard = () => {
                   ? "Quản lý danh mục"
                   : activeTab === "attributes"
                     ? "Quản lý thuộc tính"
-                      : activeTab === "products"
-                        ? "Quản lý sản phẩm"
-                            : "Cấu hình hệ thống"}
+                    : activeTab === "products"
+                      ? "Quản lý sản phẩm"
+                      : "Cấu hình hệ thống"}
             </h1>
             <div className="d-flex align-items-center">
               <span className="me-3">

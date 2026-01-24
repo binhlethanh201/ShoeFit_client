@@ -19,7 +19,6 @@ const Register = () => {
     otp: "",
   });
 
-  // const [avatarFile, setAvatarFile] = useState(null); // Tạm thời bỏ dùng state này
   const [loading, setLoading] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
 
@@ -27,13 +26,6 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleFileChange = (e) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     setAvatarFile(e.target.files[0]);
-  //   }
-  // };
-
-  // --- XỬ LÝ GỬI OTP ---
   const handleSendOtp = async () => {
     if (!formData.email || !formData.username || !formData.phoneNumber) {
       toast.warning(
@@ -71,7 +63,6 @@ const Register = () => {
     }
   };
 
-  // --- XỬ LÝ ĐĂNG KÝ ---
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -88,21 +79,13 @@ const Register = () => {
     setLoading(true);
     try {
       const dataToSend = new FormData();
-
-      // Map đúng tên tham số theo Swagger (Viết hoa chữ cái đầu)
       dataToSend.append("Username", formData.username);
       dataToSend.append("Password", formData.password);
       dataToSend.append("Email", formData.email);
       dataToSend.append("FullName", formData.fullname);
       dataToSend.append("PhoneNumber", formData.phoneNumber);
-      dataToSend.append("Address", formData.address || ""); // Gửi chuỗi rỗng nếu không nhập
+      dataToSend.append("Address", formData.address || "");
       dataToSend.append("Otp", formData.otp);
-
-      // --- QUAN TRỌNG: KHÔNG GỬI AVATAR ---
-      // Việc không append key 'Avatar' đồng nghĩa với việc gửi null cho Backend.
-      // if (avatarFile) {
-      //   dataToSend.append('Avatar', avatarFile);
-      // }
 
       const response = await authService.register(dataToSend);
 
@@ -202,18 +185,6 @@ const Register = () => {
                     onChange={handleChange}
                   />
                 </div>
-
-                {/* Tạm ẩn phần chọn Avatar để người dùng không bị nhầm lẫn */}
-                {/* <div className="form-group mb-3">
-                  <label className="text-black small fw-bold">Avatar</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                </div> 
-                */}
 
                 <div className="row">
                   <div className="col-md-6 mb-3">

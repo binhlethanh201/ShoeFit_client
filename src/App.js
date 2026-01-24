@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Toaster } from "sonner"; 
+import { Toaster } from "sonner";
 
 // --- Components ---
 import Footer from "./components/home/Footer/Footer";
@@ -44,13 +44,8 @@ import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 const RootLayout = () => {
   return (
     <>
-      <Toaster 
-        position="top-right" 
-        richColors 
-        closeButton
-        duration={1500} 
-      />
-      
+      <Toaster position="top-right" richColors closeButton duration={1500} />
+
       <ScrollRestoration />
       <Outlet />
     </>
@@ -101,8 +96,8 @@ const router = createBrowserRouter(
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Route>
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 function App() {

@@ -5,7 +5,6 @@ const ProductInfo = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(0);
 
-  // Format Price
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -22,7 +21,6 @@ const ProductInfo = ({ product }) => {
 
       <div className="p-price">{formatPrice(product.price)}</div>
 
-      {/* Colors */}
       <div className="selector-group">
         <span className="lbl">Màu sắc</span>
         <div className="color-list">
@@ -47,7 +45,6 @@ const ProductInfo = ({ product }) => {
         </div>
       </div>
 
-      {/* Sizes */}
       <div className="selector-group">
         <span className="lbl">Kích cỡ (EU)</span>
         <div className="size-grid">
@@ -85,7 +82,6 @@ const ProductInfo = ({ product }) => {
         </button>
       </div>
 
-      {/* Actions */}
       <div className="action-btns">
         <button className="btn-pd btn-pd-black">THÊM VÀO GIỎ</button>
         <Link

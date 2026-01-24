@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 
-// Import Icons
 import heartIcon from "../../../assets/images/Effects/heart.svg";
 import userIcon from "../../../assets/images/Effects/user.svg";
 import sunIcon from "../../../assets/images/Effects/sun.svg";
@@ -52,7 +51,6 @@ const Header = () => {
     }
   };
 
-  // Xác định icon hiển thị cho nút chuyển theme
   const getCurrentThemeIcon = () => {
     if (theme === "dark") return moonIcon;
     if (theme === "coffee") return coffeeIcon;
@@ -140,7 +138,6 @@ const Header = () => {
           </ul>
 
           <div className="d-flex align-items-center gap-3">
-            {/* Wishlist Icon */}
             <Link className="nav-link p-0" to="/wishlist">
               <img
                 src={heartIcon}
@@ -152,8 +149,6 @@ const Header = () => {
                 }}
               />
             </Link>
-
-            {/* User Dropdown */}
             <div className="dropdown custom-dropdown">
               <button
                 className="btn dropdown-toggle p-0 bg-transparent border-0"
@@ -221,8 +216,6 @@ const Header = () => {
                 )}
               </ul>
             </div>
-
-            {/* Theme Switcher */}
             <div className="dropdown custom-dropdown">
               <button
                 className="btn dropdown-toggle p-0 bg-transparent border-0"

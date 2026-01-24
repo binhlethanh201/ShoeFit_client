@@ -18,7 +18,8 @@
   box-shadow: 0 5px 15px var(--shadow-color);
   transition: all 0.3s ease;
   border: 1px solid transparent;
-  background-image: linear-gradient(var(--bg-card), var(--bg-card)),
+  background-image:
+    linear-gradient(var(--bg-card), var(--bg-card)),
     linear-gradient(to bottom, #f3af71, #9bcae7);
   background-origin: border-box;
   background-clip: padding-box, border-box;
@@ -352,7 +353,9 @@
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 10px;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   cursor: pointer;
   background: var(--bg-card);
 }

@@ -4,7 +4,6 @@ import authService from "../../services/authService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
-// --- IMPORT FIREBASE ---
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../../configs/firebase";
 
@@ -22,11 +21,12 @@ const Login = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // --- HÀM GIẢI MÃ TOKEN ---
   const parseJwt = (token) => {
     try {
       const base64Url = token.split(".")[1];
@@ -46,8 +46,6 @@ const Login = () => {
     }
   };
 
-  // --- HÀM XỬ LÝ CHUNG SAU KHI CÓ RESPONSE TỪ BACKEND ---
-  // (Dùng chung cho cả Login thường và Google Login để tránh lặp code)
   const processLoginSuccess = (response) => {
     if (response && response.data && response.data.accessToken) {
       const token = response.data.accessToken;
@@ -73,7 +71,6 @@ const Login = () => {
     }
   };
 
-  // --- 1. LOGIN THƯỜNG ---
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -93,24 +90,15 @@ const Login = () => {
     }
   };
 
-  // --- 2. LOGIN GOOGLE (MỚI) ---
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      // A. Mở popup Google
       const result = await signInWithPopup(auth, provider);
-
-      // B. Lấy ID Token từ Firebase
       const idToken = await result.user.getIdToken();
-
-      // C. Gửi ID Token về Backend
       const response = await authService.loginGoogle(idToken);
-
-      // D. Xử lý kết quả từ Backend
       processLoginSuccess(response);
     } catch (error) {
       console.error("Google Login Error:", error);
-      // Xử lý lỗi cụ thể
       let msg = "Đăng nhập Google thất bại.";
       if (error.code === "auth/popup-closed-by-user") {
         msg = "Bạn đã đóng cửa sổ đăng nhập.";
@@ -123,7 +111,6 @@ const Login = () => {
     }
   };
 
-  // --- XỬ LÝ QUÊN MẬT KHẨU ---
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     if (!resetEmail) {
@@ -182,7 +169,7 @@ const Login = () => {
                         value={formData.usernameOrEmail}
                         onChange={handleChange}
                         required
-                        placeholder={t("auth.placeholder_username_or_email")}
+                        placeholder=""
                         style={{ fontSize: "0.95rem" }}
                       />
                     </div>
@@ -191,16 +178,43 @@ const Login = () => {
                       <label className="text-secondary small fw-bold mb-1">
                         {t("auth.label_password")}
                       </label>
-                      <input
-                        type="password"
-                        className="form-control py-2"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        placeholder={t("auth.placeholder_pass")}
-                        style={{ fontSize: "0.95rem" }}
-                      />
+                      <div className="position-relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          className="form-control py-2"
+                          name="password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                          placeholder=""
+                          style={{
+                            fontSize: "0.95rem",
+                            paddingRight: "40px",
+                            fontFamily: showPassword ? "inherit" : "sans-serif",
+                            letterSpacing: showPassword ? "normal" : "0px",
+                          }}
+                        />
+
+                        <span
+                          onClick={() => setShowPassword(!showPassword)}
+                          style={{
+                            position: "absolute",
+                            right: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            cursor: "pointer",
+                            color: "#6c757d",
+                            zIndex: 10,
+                          }}
+                          title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                        >
+                          {showPassword ? (
+                            <i className="fas fa-eye-slash"></i>
+                          ) : (
+                            <i className="fas fa-eye"></i>
+                          )}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="d-flex justify-content-end mb-4">
@@ -223,7 +237,6 @@ const Login = () => {
                       {loading ? t("auth.processing") : t("auth.btn_login")}
                     </button>
 
-                    {/* --- BUTTON GOOGLE LOGIN --- */}
                     <div className="mt-3">
                       <button
                         type="button"
@@ -237,7 +250,6 @@ const Login = () => {
                         onClick={handleGoogleLogin}
                         disabled={loading}
                       >
-                        {/* Icon Google SVG */}
                         <svg
                           className="me-2"
                           xmlns="http://www.w3.org/2000/svg"
@@ -281,7 +293,6 @@ const Login = () => {
                   </form>
                 </>
               ) : (
-                // --- PHẦN FORGOT PASSWORD (Giữ nguyên) ---
                 <>
                   <h3
                     className="mb-3 text-center fw-bold"

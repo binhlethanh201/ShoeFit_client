@@ -3,11 +3,9 @@ import adminService from "../../services/adminService";
 import { toast } from "sonner";
 
 const CategoryManagement = () => {
-  // State dữ liệu
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // State phân trang
   const [pagination, setPagination] = useState({
     page: 1,
     size: 10,
@@ -15,20 +13,18 @@ const CategoryManagement = () => {
     totalElements: 0,
   });
 
-  // State Modal & Form
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [formData, setFormData] = useState({ name: "" });
 
-  // --- CALL API LẤY DANH SÁCH ---
   const fetchCategories = useCallback(
     async (page = 1) => {
       setLoading(true);
       try {
         const response = await adminService.getCategories({
           page: page,
-          size: pagination.size, // Giá trị này nằm trong dependency của useCallback
+          size: pagination.size,
           sortBy: "createdDate",
           isAsc: false,
         });
@@ -50,13 +46,12 @@ const CategoryManagement = () => {
       }
     },
     [pagination.size],
-  ); // Chỉ tạo lại hàm khi pagination.size thay đổi
+  );
 
   useEffect(() => {
     fetchCategories(pagination.page);
   }, [pagination.page, fetchCategories]);
 
-  // ---  XỬ LÝ FORM (THÊM / SỬA) ---
   const handleOpenModal = (category = null) => {
     if (category) {
       setIsEditMode(true);
@@ -80,12 +75,10 @@ const CategoryManagement = () => {
     try {
       let res;
       if (isEditMode) {
-        // Gọi API Update (PATCH)
         res = await adminService.updateCategory(currentId, {
           name: formData.name,
         });
       } else {
-        // Gọi API Create (POST)
         res = await adminService.createCategory({ name: formData.name });
       }
 
@@ -94,7 +87,6 @@ const CategoryManagement = () => {
           isEditMode ? "Cập nhật thành công!" : "Tạo mới thành công!",
         );
         setShowModal(false);
-        // Gọi lại hàm fetchCategories để load lại danh sách hiện tại
         fetchCategories(pagination.page);
       }
     } catch (error) {
@@ -103,7 +95,6 @@ const CategoryManagement = () => {
     }
   };
 
-  // --- UI RENDER (Giữ nguyên không đổi) ---
   return (
     <div className="card border-0 shadow-sm">
       <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -179,7 +170,6 @@ const CategoryManagement = () => {
           </div>
         )}
 
-        {/* --- PHÂN TRANG --- */}
         {pagination.totalPages > 1 && (
           <nav className="d-flex justify-content-end mt-3">
             <ul className="pagination">

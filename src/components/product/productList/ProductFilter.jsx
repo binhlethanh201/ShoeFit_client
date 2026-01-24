@@ -14,8 +14,6 @@ const SearchFilter = () => {
           Giày Nữ
         </div>
       </div>
-
-      {/* Size Filter */}
       <div className="filter-group">
         <span className="filter-title">Kích cỡ (VN)</span>
         <div className="filter-size-grid">
@@ -30,7 +28,6 @@ const SearchFilter = () => {
         </div>
       </div>
 
-      {/* Price Filter */}
       <div className="filter-group">
         <span className="filter-title">Khoảng giá</span>
         <div className="filter-opt">

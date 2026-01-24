@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductRelated = ({ styleHints, relatedProducts }) => {
-  // Format Price Helper
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -12,7 +11,6 @@ const ProductRelated = ({ styleHints, relatedProducts }) => {
 
   return (
     <>
-      {/* Style Hints Section */}
       <div className="bottom-section">
         <span className="block-title">Phối đồ cực chất</span>
         <div className="h-scroll-view">
@@ -52,7 +50,6 @@ const ProductRelated = ({ styleHints, relatedProducts }) => {
         </div>
       </div>
 
-      {/*  Products Section */}
       <div
         className="bottom-section"
         style={{ border: "none", paddingTop: "20px" }}

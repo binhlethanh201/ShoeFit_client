@@ -16,7 +16,7 @@ const productService = {
             (p.description &&
               p.description.toLowerCase().includes(lowerQuery)) ||
             (p.ai_description &&
-              p.ai_description.toLowerCase().includes(lowerQuery))
+              p.ai_description.toLowerCase().includes(lowerQuery)),
         );
 
         resolve(filtered);
@@ -34,7 +34,7 @@ const productService = {
             if (styleData[gender]) {
               Object.values(styleData[gender]).forEach((categoryArray) => {
                 const matches = categoryArray.filter(
-                  (item) => item.shoeId === id
+                  (item) => item.shoeId === id,
                 );
                 foundStyles = [...foundStyles, ...matches];
               });

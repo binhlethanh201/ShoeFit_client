@@ -1,7 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-// Import Social Icons (PNG)
 import emailIcon from "../../assets/images/Effects/email.png";
 import hotlineIcon from "../../assets/images/Effects/hotline.png";
 import locationIcon from "../../assets/images/Effects/location.png";
@@ -43,15 +42,12 @@ const Contact = () => {
       >
         <div className="container">
           <div className="block">
-            {/* Row 1 */}
             <div className="row justify-content-between mb-5">
-              {/* Col 1 */}
               <div className="col-lg-7 mb-5 mb-lg-0">
                 <h3 className=" h2 mb-4 fw-bold mt-4" style={headingStyle}>
                   {t("contact.title")}
                 </h3>
                 <form onSubmit={handleSubmit}>
-                  {/* Name */}
                   <div className="form-group mb-3">
                     <label
                       className="h7 fw-bold mb-1"
@@ -69,7 +65,6 @@ const Contact = () => {
                     />
                   </div>
 
-                  {/* Email & Phone Number */}
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <div className="form-group">
@@ -142,7 +137,6 @@ const Contact = () => {
                 </form>
               </div>
 
-              {/* Col 2 */}
               <div className="col-lg-4 d-flex justify-content-lg-end justify-content-center">
                 <div className="p-4">
                   <h3 className="h3 mb-4 fw-bold" style={headingStyle}>
@@ -150,7 +144,6 @@ const Contact = () => {
                   </h3>
 
                   <ul className="list-unstyled social-icons m-0">
-                    {/* Instagram */}
                     <li className="mb-4">
                       <a
                         href="https://instagram.com"
@@ -176,7 +169,6 @@ const Contact = () => {
                       </a>
                     </li>
 
-                    {/* Facebook */}
                     <li className="mb-4">
                       <a
                         href="https://facebook.com"
@@ -202,7 +194,6 @@ const Contact = () => {
                       </a>
                     </li>
 
-                    {/* TikTok */}
                     <li className="mb-4">
                       <a
                         href="https://tiktok.com"
@@ -231,13 +222,10 @@ const Contact = () => {
                 </div>
               </div>
             </div>
-
-            {/* Row 2 */}
             <div
               className="row mt-5 pt-5 border-top"
               style={{ borderColor: "var(--border-color)" }}
             >
-              {/* Email */}
               <div className="col-md-4 mb-4 mb-md-0 d-flex align-items-center justify-content-center justify-content-md-start">
                 <img
                   src={emailIcon}
@@ -257,7 +245,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Hotline */}
               <div className="col-md-4 mb-4 mb-md-0 d-flex align-items-center justify-content-center justify-content-md-start">
                 <img
                   src={hotlineIcon}
@@ -277,7 +264,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Location */}
               <div className="col-md-4 d-flex align-items-center justify-content-center justify-content-md-start">
                 <img
                   src={locationIcon}

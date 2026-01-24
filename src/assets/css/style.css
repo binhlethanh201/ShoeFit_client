@@ -97,7 +97,9 @@ body {
   background-color: var(--bg-body);
   overflow-x: hidden;
   position: relative;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   padding-top: 50px;
 }
 

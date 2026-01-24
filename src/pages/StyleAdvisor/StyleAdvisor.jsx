@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 import { styleData } from "../../data/mockData";
 import "../../assets/css/styleAdvisor/styleAdvisor.css";
 
 const StyleAdvisor = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [currentGender, setCurrentGender] = useState("MEN");
   const [currentOccasion, setCurrentOccasion] = useState("everyday");
   const [styles, setStyles] = useState([]);
@@ -15,29 +15,22 @@ const StyleAdvisor = () => {
     setStyles(filteredStyles);
   }, [currentGender, currentOccasion]);
 
-  // Các tùy chọn Occasion (Dùng key dịch)
   const occasions = [
-    { key: "everyday", label: t('style_advisor.occasion_everyday') },
-    { key: "party", label: t('style_advisor.occasion_party') },
-    { key: "travel", label: t('style_advisor.occasion_travel') },
-    { key: "formal", label: t('style_advisor.occasion_formal') },
-    { key: "sport", label: t('style_advisor.occasion_sport') },
+    { key: "everyday", label: t("style_advisor.occasion_everyday") },
+    { key: "party", label: t("style_advisor.occasion_party") },
+    { key: "travel", label: t("style_advisor.occasion_travel") },
+    { key: "formal", label: t("style_advisor.occasion_formal") },
+    { key: "sport", label: t("style_advisor.occasion_sport") },
   ];
 
   return (
     <>
-      {/* Style Session Section */}
       <section className="style-session py-5 pb-5">
         <div className="container">
-          {/* Title */}
           <div className="text-center mb-5">
-            <h2 className="fw-bold mb-3">{t('style_advisor.title')}</h2>
-            <p className="text-muted">
-              {t('style_advisor.subtitle')}
-            </p>
+            <h2 className="fw-bold mb-3">{t("style_advisor.title")}</h2>
+            <p className="text-muted">{t("style_advisor.subtitle")}</p>
           </div>
-
-          {/* Gender Selection */}
           <ul
             className="nav nav-pills justify-content-center mb-4"
             id="genderTabs"
@@ -49,7 +42,7 @@ const StyleAdvisor = () => {
                 }`}
                 onClick={() => setCurrentGender("MEN")}
               >
-                {t('style_advisor.gender_men')}
+                {t("style_advisor.gender_men")}
               </button>
             </li>
             <li className="nav-item">
@@ -59,12 +52,10 @@ const StyleAdvisor = () => {
                 }`}
                 onClick={() => setCurrentGender("WOMEN")}
               >
-                {t('style_advisor.gender_women')}
+                {t("style_advisor.gender_women")}
               </button>
             </li>
           </ul>
-
-          {/* Occasion Tabs */}
           <ul
             className="nav nav-pills justify-content-center mb-4"
             id="occasionTabs"
@@ -82,8 +73,6 @@ const StyleAdvisor = () => {
               </li>
             ))}
           </ul>
-
-          {/* Pinterest-style Grid */}
           <div className="pinterest-grid" id="styleGrid">
             {styles.length > 0 ? (
               styles.map((style, index) => {
@@ -110,7 +99,7 @@ const StyleAdvisor = () => {
               })
             ) : (
               <p className="text-center text-muted w-100">
-                {t('style_advisor.no_style_found')}
+                {t("style_advisor.no_style_found")}
               </p>
             )}
           </div>

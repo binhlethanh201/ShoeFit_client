@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import productService from "../../services/product/productService";
-
-// Import CSS
 import "../../assets/css/product/ProductDetail.css";
 
-// Import Components
 import ProductGallery from "../../components/product/productDetail/ProductGallery";
 import ProductDescription from "../../components/product/productDetail/ProductDescription";
 import ProductReviews from "../../components/product/productDetail/ProductReviews";
@@ -22,10 +19,7 @@ const ProductDetail = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Lấy thông tin sản phẩm (bao gồm cả styleHints đã enrich trong service)
         const productData = await productService.getById(productId);
-
-        // Lấy sản phẩm tương tự (loại trừ sản phẩm hiện tại)
         const relatedData = await productService.getRelated(productId);
 
         setProduct(productData);
@@ -78,7 +72,6 @@ const ProductDetail = () => {
   return (
     <div className="pd-container">
       <div className="product-layout">
-        {/*  Left Content */}
         <div className="main-content">
           <ProductGallery images={product.images} />
 
@@ -93,14 +86,10 @@ const ProductDetail = () => {
             count={product.reviews_count}
           />
         </div>
-
-        {/*  Right Content */}
         <div className="sticky-col">
           <ProductInfo product={product} />
         </div>
       </div>
-
-      {/* Bottom Content */}
       <ProductRelated
         styleHints={product.styleHints}
         relatedProducts={relatedProducts}

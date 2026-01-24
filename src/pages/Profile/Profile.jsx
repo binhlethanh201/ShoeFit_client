@@ -4,7 +4,6 @@ import authService from "../../services/authService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
-// Import CSS
 import "../../assets/css/profile/profile.css";
 
 const Profile = () => {
@@ -12,7 +11,6 @@ const Profile = () => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
 
-  // --- State ---
   const [userInfo, setUserInfo] = useState({
     fullName: "",
     email: "",
@@ -27,17 +25,12 @@ const Profile = () => {
     },
   });
 
-  // --- Fetch Data ---
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await authService.getProfile();
-        // console.log("Fetch Profile Response:", response);
-
         if (response && response.status === 200 && response.data) {
           const apiData = response.data;
-
-          // Xử lý dữ liệu foot_profile (nếu chưa có thì dùng object rỗng)
           const fpData = apiData.footProfile || apiData.foot_profile || {};
 
           setUserInfo({
@@ -74,7 +67,6 @@ const Profile = () => {
     fetchProfile();
   }, [navigate, t]);
 
-  // --- Handlers ---
   const handleChangeInfo = (e) => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
@@ -103,7 +95,6 @@ const Profile = () => {
     }));
   };
 
-  // --- Update Action ---
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
@@ -111,8 +102,6 @@ const Profile = () => {
       formData.append("FullName", userInfo.fullName);
       formData.append("Address", userInfo.address);
       formData.append("PhoneNumber", userInfo.phoneNumber);
-
-      // formData.append("FootProfile", JSON.stringify(userInfo.foot_profile));
 
       const response = await authService.updateProfile(formData);
 
@@ -148,7 +137,6 @@ const Profile = () => {
   return (
     <div className="untree_co-section before-footer-section mt-5 mb-5">
       <div className="container">
-        {/* Title Page */}
         <div className="text-center mb-3">
           <h2 className="profile-heading fs-2">{t("header.profile")}</h2>
         </div>
@@ -157,7 +145,6 @@ const Profile = () => {
           <div className="col-lg-10 col-md-12">
             <form onSubmit={handleUpdateProfile}>
               <div className="row g-4">
-                {/* --- Personal Information Column --- */}
                 <div className="col-md-6">
                   <div className="profile-card">
                     <div className="profile-section-header">
@@ -222,7 +209,6 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {/* --- Foot Profile Column --- */}
                 <div className="col-md-6">
                   <div className="profile-card foot-profile-card">
                     <div className="profile-section-header">
@@ -357,7 +343,6 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="row mt-3 mb-5">
                 <div className="col-12 d-flex justify-content-between align-items-center">
                   <Link

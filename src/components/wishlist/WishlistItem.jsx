@@ -11,7 +11,6 @@ const WishlistItem = ({ item, onRemove }) => {
 
   return (
     <div className="cart-item">
-      {/* Product Info */}
       <div className="c-product">
         <Link to={`/product/${item.id}`}>
           <img src={item.image} className="c-img" alt={item.name} />
@@ -41,17 +40,12 @@ const WishlistItem = ({ item, onRemove }) => {
         </div>
       </div>
 
-      {/*  Price  */}
       <div className="item-price desktop-only">{formatPrice(item.price)}</div>
-
-      {/* Actions  */}
       <div className="desktop-only">
         <Link to="/services" className="btn-tryon">
           Thử Ngay
         </Link>
       </div>
-
-      {/* Remove Button */}
       <div
         className="c-remove desktop-only"
         onClick={() => onRemove(item.id, item.name)}
@@ -59,17 +53,6 @@ const WishlistItem = ({ item, onRemove }) => {
       >
         <i className="fas fa-times"></i>
       </div>
-
-      {/* --- MOBILE LAYOUT ---
-      <div className="mobile-actions d-md-none w-100">
-         <div className="d-flex justify-content-between w-100 align-items-center mb-3">
-             <div className="item-price">{formatPrice(item.price)}</div>
-         </div>
-         <Link to="/services" className="btn-tryon w-100">
-            Thử Ngay
-         </Link>
-         <div className="c-remove d-md-none" onClick={() => onRemove(item.id, item.name)}></div>
-      </div> */}
     </div>
   );
 };

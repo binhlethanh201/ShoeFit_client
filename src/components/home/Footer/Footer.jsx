@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-// Import Images
 import footerImg from "../../../assets/images/Effects/footer_img.png";
 import envelopeIcon from "../../../assets/images/Effects/envelope-outline.svg";
 import "../../../assets/css/home/footer/footer.css";
@@ -16,8 +15,6 @@ const Footer = () => {
         <div className="sofa-img">
           <img src={footerImg} alt="Footer decoration" className="img-fluid" />
         </div>
-
-        {/* Subscription Form */}
         <div className="row">
           <div className="col-lg-8">
             <div className="subscription-form">
@@ -58,7 +55,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Footer Content */}
         <div className="row g-5 align-items-start justify-content-between">
           <div className="col-lg-4">
             <div className="mt-4 footer-logo-wrap">
@@ -69,7 +65,6 @@ const Footer = () => {
             </div>
             <p className="mb-4">{t("footer.slogan")}</p>
 
-            {/* Social Icons */}
             <ul className="list-unstyled custom-social d-flex gap-3 mb-4">
               <li>
                 <a
@@ -101,10 +96,8 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Footer Links */}
           <div className="col-lg-7 ms-auto">
             <div className="row links-wrap">
-              {/* Col 1 */}
               <div className="col-6 col-md-4 mb-4 mb-md-0">
                 <ul className="list-unstyled">
                   <li className="mb-3">
@@ -132,7 +125,6 @@ const Footer = () => {
                 </ul>
               </div>
 
-              {/* Col 2*/}
               <div className="col-6 col-md-4 mb-4 mb-md-0">
                 <ul className="list-unstyled">
                   <li className="mb-3">
@@ -163,7 +155,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="copyright border-top pt-4 mt-4">
           <div className="row align-items-center">
             <div className="col-lg-6 text-center text-lg-start">

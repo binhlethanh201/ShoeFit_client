@@ -43,12 +43,10 @@ const SearchResults = ({
         ))}
       </div>
 
-      {/* Pagination */}
       {pageNumbers.length > 1 && (
         <div className="d-flex justify-content-center mt-5">
           <nav aria-label="Page navigation">
             <ul className="pagination">
-              {/* Previous Button */}
               <li
                 className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
               >
@@ -66,7 +64,6 @@ const SearchResults = ({
                 </button>
               </li>
 
-              {/* Paging Number */}
               {pageNumbers.map((number) => (
                 <li key={number} className="page-item mx-1">
                   <button
@@ -89,7 +86,6 @@ const SearchResults = ({
                 </li>
               ))}
 
-              {/* Next Button */}
               <li
                 className={`page-item ${
                   currentPage === pageNumbers.length ? "disabled" : ""

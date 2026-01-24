@@ -67,7 +67,6 @@ const StyleDetail = () => {
       <section className="style-detail-section py-5">
         <div className="container">
           <div className="row align-items-center g-5">
-            {/* Style Image */}
             <div className="col-md-6">
               <div className="style-preview shadow-sm rounded overflow-hidden">
                 <img
@@ -78,8 +77,6 @@ const StyleDetail = () => {
                 />
               </div>
             </div>
-
-            {/* Recommended Shoe */}
             <div className="col-md-6 text-center">
               <h3 className="fw-semibold mb-3">
                 {t("style_advisor.suggested_shoe")}
@@ -111,8 +108,6 @@ const StyleDetail = () => {
               </div>
             </div>
           </div>
-
-          {/* More Styles */}
           <div className="more-section mt-5">
             <h4 className="fw-semibold mb-4 text-center">
               {t("style_advisor.more_styles")}

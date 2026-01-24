@@ -6,7 +6,6 @@ const AttributeManagement = () => {
   const [attributes, setAttributes] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // State phân trang
   const [pagination, setPagination] = useState({
     page: 1,
     size: 10,
@@ -14,7 +13,6 @@ const AttributeManagement = () => {
     totalElements: 0,
   });
 
-  // State Modal & Form
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
@@ -24,7 +22,6 @@ const AttributeManagement = () => {
     style: "",
   });
 
-  // --- 1. CALL API LẤY DANH SÁCH ---
   const fetchAttributes = useCallback(
     async (page = 1) => {
       setLoading(true);
@@ -58,7 +55,6 @@ const AttributeManagement = () => {
     fetchAttributes(pagination.page);
   }, [pagination.page, fetchAttributes]);
 
-  // --- 2. XỬ LÝ FORM ---
   const handleOpenModal = (attr = null) => {
     if (attr) {
       setIsEditMode(true);
@@ -83,7 +79,6 @@ const AttributeManagement = () => {
   const handleSave = async (e) => {
     e.preventDefault();
 
-    // Clean Data
     const material = formData.material.trim();
     const color = formData.color.trim();
     const style = formData.style.trim();
@@ -93,7 +88,6 @@ const AttributeManagement = () => {
       return;
     }
 
-    // Convert empty string to null
     const payload = {
       material: material === "" ? null : material,
       color: color === "" ? null : color,
@@ -108,7 +102,6 @@ const AttributeManagement = () => {
         res = await adminService.createAttribute(payload);
       }
 
-      // Check success based on Swagger response (200 OK or 201 Created)
       if (res && (res.status === 0 || res.data)) {
         toast.success(
           isEditMode ? "Cập nhật thành công!" : "Tạo mới thành công!",
@@ -125,7 +118,6 @@ const AttributeManagement = () => {
     }
   };
 
-  // --- UI RENDER ---
   return (
     <div className="card border-0 shadow-sm">
       <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -208,7 +200,6 @@ const AttributeManagement = () => {
           </div>
         )}
 
-        {/* --- PHÂN TRANG --- */}
         {pagination.totalPages > 1 && (
           <nav className="d-flex justify-content-end mt-3">
             <ul className="pagination">
@@ -256,7 +247,6 @@ const AttributeManagement = () => {
         )}
       </div>
 
-      {/* --- MODAL --- */}
       {showModal && (
         <div
           className="modal fade show d-block"

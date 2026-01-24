@@ -3,7 +3,10 @@ import axiosClient from "./axiosClient";
 const adminService = {
   // --- USER ---
   getAllUsers: async () => {
-    return Promise.resolve({ success: true, data: [{ id: 1, name: "User A" }] });
+    return Promise.resolve({
+      success: true,
+      data: [{ id: 1, name: "User A" }],
+    });
   },
 
   // --- CATEGORY ---
@@ -34,38 +37,38 @@ const adminService = {
     return axiosClient.get(`/api/v1/attributes/${id}`);
   },
 
-  // --- PRODUCT (SHOES) - MỚI ---
+  // --- PRODUCT ---
   getShoes: (params) => {
-    // params: { PageNumber, PageSize, Search, Filter }
     return axiosClient.get("/api/v1/shoes", { params });
   },
-  
+
   getShoeById: (id) => {
     return axiosClient.get(`/api/v1/shoes/${id}`);
   },
 
   createShoe: (data) => {
-    // data bao gồm: sku, name, attributeIds[], images[], ...
     return axiosClient.post("/api/v1/shoes", data);
   },
 
   updateShoe: (id, data) => {
-    // PATCH: chỉ update thông tin cơ bản (sku, name, desc...)
     return axiosClient.patch(`/api/v1/shoes/${id}`, data);
   },
 
-  // Các hàm phụ trợ để thêm/xóa attribute và media (dành cho tính năng Edit nâng cao)
   addShoeAttribute: (id, attributeIds) => {
     return axiosClient.post(`/api/v1/shoes/${id}/attribute`, { attributeIds });
   },
   removeShoeAttribute: (id, attributeIds) => {
-    return axiosClient.delete(`/api/v1/shoes/${id}/attribute`, { data: { attributeIds } });
+    return axiosClient.delete(`/api/v1/shoes/${id}/attribute`, {
+      data: { attributeIds },
+    });
   },
   addShoeMedia: (id, urls) => {
     return axiosClient.post(`/api/v1/shoes/${id}/media`, { urls });
   },
   removeShoeMedia: (id, imageIds) => {
-    return axiosClient.delete(`/api/v1/shoes/${id}/media`, { data: { imageIds } });
+    return axiosClient.delete(`/api/v1/shoes/${id}/media`, {
+      data: { imageIds },
+    });
   },
 
   // --- STATISTICS ---

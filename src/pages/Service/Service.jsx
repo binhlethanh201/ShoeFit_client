@@ -1,14 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { servicesData } from "../../data/mockData"; // Import dữ liệu giống trang Home
+import { servicesData } from "../../data/mockData";
 
 const Service = () => {
   const { t } = useTranslation();
 
   return (
     <>
-      {/* Services Section */}
       <div className="product-section mt-5" style={{ marginBottom: "200px" }}>
         <div className="container">
           <div className="row">
@@ -17,16 +16,14 @@ const Service = () => {
                 key={item.id}
                 className="col-12 col-md-6 col-lg-4 mb-5 text-center d-flex flex-column align-items-center"
               >
-                {/* Sử dụng class product-item-full-image giống Home */}
                 <div className="product-item product-item-full-image">
                   <img
                     src={item.image}
                     alt={item.title}
                     className="img-fluid product-thumbnail mb-4"
                   />
-                  {/* Sử dụng btn-blue giống Home */}
                   <Link to={item.link} className="btn btn-blue">
-                    {t('home.try_now')}
+                    {t("home.try_now")}
                   </Link>
                 </div>
               </div>
