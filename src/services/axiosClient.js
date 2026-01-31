@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "https://api.shoefit.com.vn",
+  baseURL: process.env.REACT_APP_API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -26,7 +26,14 @@ axiosClient.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      window.location.href = "/login";
+      if (!window.location.pathname.includes("/login")) {
+        const currentPath = window.location.pathname;
+        alert(
+          "Phiên đăng nhập đã hết hạn hoặc bạn chưa đăng nhập. Vui lòng đăng nhập để sử dụng tính năng này.",
+        );
+
+        window.location.href = `/login?redirect=${currentPath}`;
+      }
     }
     throw error;
   },

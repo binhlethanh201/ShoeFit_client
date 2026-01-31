@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProductGallery = ({ images }) => {
+const ProductGallery = ({ images, onAddToWishlist }) => {
   const [activeImg, setActiveImg] = useState(images[0]);
 
   return (
@@ -19,12 +19,15 @@ const ProductGallery = ({ images }) => {
       <div className="main-img">
         <img src={activeImg} alt="Main Product" />
         <div
+          onClick={onAddToWishlist}
           style={{
             position: "absolute",
             top: "15px",
             right: "15px",
-            fontSize: "20px",
+            fontSize: "25px",
             cursor: "pointer",
+            zIndex: 10,
+            color: "#ff4757",
           }}
         >
           <i className="far fa-heart"></i>

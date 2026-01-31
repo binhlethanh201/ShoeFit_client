@@ -1,45 +1,50 @@
 import axiosClient from "./axiosClient";
 
 const adminService = {
-  // --- USER ---
-  getAllUsers: async () => {
-    return Promise.resolve({
-      success: true,
-      data: [{ id: 1, name: "User A" }],
-    });
+  // --- CATEGORIES ---
+  getAllCategories: (page = 1, size = 10) => {
+    return axiosClient.get(`/api/v1/categories`, { params: { page, size } });
   },
 
-  // --- CATEGORY ---
-  getCategories: (params) => {
-    return axiosClient.get("/api/v1/categories", { params });
-  },
   createCategory: (data) => {
-    return axiosClient.post("/api/v1/categories", data);
+    return axiosClient.post(`/api/v1/categories`, data);
   },
+
   updateCategory: (id, data) => {
     return axiosClient.patch(`/api/v1/categories/${id}`, data);
   },
-  getCategoryById: (id) => {
-    return axiosClient.get(`/api/v1/categories/${id}`);
+
+  // --- MATERIALS ---
+  getAllMaterials: (page = 1, size = 10) => {
+    return axiosClient.get(`/api/v1/materials`, { params: { page, size } });
   },
 
-  // --- ATTRIBUTE ---
-  getAttributes: (params) => {
-    return axiosClient.get("/api/v1/attributes", { params });
-  },
-  createAttribute: (data) => {
-    return axiosClient.post("/api/v1/attributes", data);
-  },
-  updateAttribute: (id, data) => {
-    return axiosClient.patch(`/api/v1/attributes/${id}`, data);
-  },
-  getAttributeById: (id) => {
-    return axiosClient.get(`/api/v1/attributes/${id}`);
+  createMaterial: (data) => {
+    return axiosClient.post(`/api/v1/materials`, data);
   },
 
-  // --- PRODUCT ---
-  getShoes: (params) => {
-    return axiosClient.get("/api/v1/shoes", { params });
+  deleteMaterial: (id) => {
+    return axiosClient.delete(`/api/v1/materials/${id}`);
+  },
+
+  // --- STYLES ---
+  getAllStyles: (page = 1, size = 10) => {
+    return axiosClient.get(`/api/v1/styles`, { params: { page, size } });
+  },
+
+  createStyle: (data) => {
+    return axiosClient.post(`/api/v1/styles`, data);
+  },
+
+  deleteStyle: (id) => {
+    return axiosClient.delete(`/api/v1/styles/${id}`);
+  },
+
+  // --- SHOES ---
+  getAllShoes: (pageNumber = 1, pageSize = 10, search = "") => {
+    return axiosClient.get(`/api/v1/shoes`, {
+      params: { PageNumber: pageNumber, PageSize: pageSize, Search: search },
+    });
   },
 
   getShoeById: (id) => {
@@ -47,28 +52,60 @@ const adminService = {
   },
 
   createShoe: (data) => {
-    return axiosClient.post("/api/v1/shoes", data);
+    return axiosClient.post(`/api/v1/shoes`, data);
   },
 
   updateShoe: (id, data) => {
     return axiosClient.patch(`/api/v1/shoes/${id}`, data);
   },
 
-  addShoeAttribute: (id, attributeIds) => {
-    return axiosClient.post(`/api/v1/shoes/${id}/attribute`, { attributeIds });
+  addShoeAttributes: (shoeId, data) => {
+    return axiosClient.post(`/api/v1/shoes/${shoeId}/attribute`, data);
   },
-  removeShoeAttribute: (id, attributeIds) => {
-    return axiosClient.delete(`/api/v1/shoes/${id}/attribute`, {
+
+  deleteShoeAttributes: (shoeId, attributeIds) => {
+    return axiosClient.delete(`/api/v1/shoes/${shoeId}/attribute`, {
       data: { attributeIds },
     });
   },
-  addShoeMedia: (id, urls) => {
-    return axiosClient.post(`/api/v1/shoes/${id}/media`, { urls });
+
+  addShoeMedia: (shoeId, urls) => {
+    return axiosClient.post(`/api/v1/shoes/${shoeId}/media`, { urls });
   },
-  removeShoeMedia: (id, imageIds) => {
-    return axiosClient.delete(`/api/v1/shoes/${id}/media`, {
+
+  deleteShoeMedia: (shoeId, imageIds) => {
+    return axiosClient.delete(`/api/v1/shoes/${shoeId}/media`, {
       data: { imageIds },
     });
+  },
+
+  addShoeCategories: (shoeId, categoryIds) => {
+    return axiosClient.post(`/api/v1/shoes/${shoeId}/categories`, {
+      categoryIds,
+    });
+  },
+
+  deleteShoeCategories: (shoeId, categoryIds) => {
+    return axiosClient.delete(`/api/v1/shoes/${shoeId}/categories`, {
+      data: { categoryIds },
+    });
+  },
+
+  // --- ATTRIBUTES ---
+  getAllAttributes: (page = 1, size = 10) => {
+    return axiosClient.get(`/api/v1/attributes`, { params: { page, size } });
+  },
+
+  createAttribute: (data) => {
+    return axiosClient.post(`/api/v1/attributes`, data);
+  },
+
+  getAttributeById: (id) => {
+    return axiosClient.get(`/api/v1/attributes/${id}`);
+  },
+
+  updateAttribute: (id, data) => {
+    return axiosClient.patch(`/api/v1/attributes/${id}`, data);
   },
 
   // --- STATISTICS ---

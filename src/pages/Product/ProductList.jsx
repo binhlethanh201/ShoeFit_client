@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-
 import productService from "../../services/product/productService";
 import "../../assets/css/product/ProductList.css";
-
 import SearchFilter from "../../components/product/productList/ProductFilter";
 import SearchResults from "../../components/product/productList/ProductResults";
 
@@ -14,25 +12,19 @@ const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState(initialQuery);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = allProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct,
-  );
 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    window.scrollTo(0, 0);
-  };
+  const [filters, setFilters] = useState({
+    categoryId: null,
+    materialId: null,
+    styleId: null,
+  });
 
-  const performSearch = async (term) => {
+  const performSearch = useCallback(async (term, currentFilters) => {
     setLoading(true);
     try {
-      const results = await productService.getProducts(term);
+      const results = await productService.getProducts(term, currentFilters);
       setAllProducts(results);
       setCurrentPage(1);
     } catch (error) {
@@ -40,35 +32,48 @@ const ProductList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    performSearch(initialQuery);
+    performSearch(initialQuery, filters);
     setSearchTerm(initialQuery);
-  }, [initialQuery]);
+  }, [initialQuery, filters, performSearch]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setSearchParams({ q: searchTerm });
-    performSearch(searchTerm);
   };
+
+  const handleFilterChange = (newFilter) => {
+    setFilters((prev) => ({ ...prev, ...newFilter }));
+  };
+
+  const clearAllFilters = () => {
+    setFilters({ categoryId: null, materialId: null, styleId: null });
+    setSearchTerm("");
+    setSearchParams({});
+  };
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = allProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
 
   return (
     <div
       className="container"
       style={{ minHeight: "80vh", paddingBottom: "50px" }}
     >
-      <div className="mobile-filter-bar" style={{ display: "none" }}>
-        <div className="m-filter-btn active">Tất cả</div>
-        <div className="m-filter-btn">Size</div>
-        <div className="m-filter-btn">Màu sắc</div>
-        <div className="m-filter-btn">Giá</div>
-      </div>
-
       <div className="search-layout">
-        <SearchFilter />
+        <SearchFilter
+          onFilterChange={handleFilterChange}
+          filters={filters}
+          onClear={clearAllFilters}
+        />
 
-        <div>
+        <div style={{ flex: 1 }}>
           <form onSubmit={handleSearchSubmit} className="mb-4 d-flex">
             <input
               type="text"
@@ -90,7 +95,6 @@ const ProductList = () => {
                 background: "var(--brand-blue)",
                 border: "none",
                 height: "50px",
-                minWidth: "60px",
               }}
             >
               <i className="fas fa-search"></i>
@@ -110,7 +114,10 @@ const ProductList = () => {
               totalProducts={allProducts.length}
               productsPerPage={productsPerPage}
               currentPage={currentPage}
-              paginate={paginate}
+              paginate={(num) => {
+                setCurrentPage(num);
+                window.scrollTo(0, 0);
+              }}
               searchTerm={initialQuery}
             />
           )}

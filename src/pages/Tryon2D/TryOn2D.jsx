@@ -1,26 +1,24 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import tryOn2DService from "../../services/tryon/2dService";
 import "../../assets/css/tryon2d/tryon2d.css";
 
 import scanIcon from "../../assets/images/Effects/scan.svg";
-import af1Img from "../../assets/images/Shoes/af1.png";
-import vansImg from "../../assets/images/Shoes/vans.png";
-import jordan4Img from "../../assets/images/Shoes/jordan4cementwhite.png";
-import sambaImg from "../../assets/images/Shoes/samba.png";
-import converseImg from "../../assets/images/Shoes/converse.png";
-
-import result1 from "../../assets/images/AIGenerate/result1.png";
-import result2 from "../../assets/images/AIGenerate/result2.png";
-import result3 from "../../assets/images/AIGenerate/result3.png";
-import result4 from "../../assets/images/AIGenerate/result4.png";
 
 const TryOn2D = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
 
+  const [shoesList, setShoesList] = useState([]);
+  const [isLoadingShoes, setIsLoadingShoes] = useState(false);
+
   const [userImage, setUserImage] = useState(null);
+  const [userImageFile, setUserImageFile] = useState(null);
   const [selectedShoe, setSelectedShoe] = useState(null);
+
   const [result, setResult] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -28,65 +26,114 @@ const TryOn2D = () => {
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [zoomScale, setZoomScale] = useState(1);
 
-  const mockShoes = [
-    {
-      id: 1,
-      name: "Nike Air Force 1 ’07 ‘Triple White’",
-      path: af1Img,
-      result: result1 || af1Img,
-    },
-    {
-      id: 2,
-      name: "Vans Old Skool OG Black White",
-      path: vansImg,
-      result: result2 || vansImg,
-    },
-    {
-      id: 3,
-      name: "Air Jordan 4 Retro OG ‘White Cement’ 2016",
-      path: jordan4Img,
-      result: result3 || jordan4Img,
-    },
-    {
-      id: 4,
-      name: "Adidas Samba OG ‘White Black Gum’",
-      path: sambaImg,
-      result: sambaImg,
-    },
-    {
-      id: 5,
-      name: "Converse Chuck Taylor All-Stars High-top",
-      path: converseImg,
-      result: result4 || converseImg,
-    },
-  ];
+  useEffect(() => {
+    const shoeFromState = location.state?.selectedShoeFromDetail;
+
+    if (shoeFromState) {
+      const autoSelectShoe = async () => {
+        try {
+          const resDetail = await tryOn2DService.getShoeDetail(
+            shoeFromState.id,
+          );
+          const detailData = resDetail.data;
+          const firstImageId = detailData.images?.[0]?.id || null;
+
+          setSelectedShoe({
+            ...shoeFromState,
+            shoeImageId: firstImageId,
+            path: shoeFromState.imageUrl,
+          });
+
+          toast.success(`Đã chọn: ${shoeFromState.name}`);
+        } catch (error) {
+          console.error("Lỗi tự động chọn giày:", error);
+        }
+      };
+
+      autoSelectShoe();
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    const fetchShoes = async () => {
+      setIsLoadingShoes(true);
+      try {
+        const response = await tryOn2DService.getShoes(1, 100);
+        if (response.status === 200) {
+          setShoesList(response.data.items);
+        }
+      } catch (error) {
+        toast.error("Không thể tải danh sách giày từ máy chủ");
+      } finally {
+        setIsLoadingShoes(false);
+      }
+    };
+    fetchShoes();
+  }, []);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setUserImage(imageUrl);
+      setUserImageFile(file);
+      setUserImage(URL.createObjectURL(file));
     }
   };
 
-  const handleSelectShoe = (shoe) => {
-    setSelectedShoe(shoe);
-    setIsDrawerOpen(false);
+  const handleSelectShoe = async (shoe) => {
+    try {
+      const resDetail = await tryOn2DService.getShoeDetail(shoe.id);
+      const detailData = resDetail.data;
+      const firstImageId = detailData.images?.[0]?.id || null;
+
+      setSelectedShoe({
+        ...shoe,
+        shoeImageId: firstImageId,
+        path: shoe.imageUrl,
+      });
+      setIsDrawerOpen(false);
+    } catch (error) {
+      toast.error("Lỗi khi lấy thông tin ảnh mẫu của giày");
+    }
   };
 
-  const handleGenerate = () => {
-    if (!userImage || !selectedShoe) {
-      alert(t("tryon2d.alert_missing_input"));
+  const handleGenerate = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Bạn cần đăng nhập để sử dụng tính năng thử giày AI!");
+      setTimeout(() => {
+        navigate("/login", { state: { from: location.pathname } });
+      }, 3000);
+      return;
+    }
+
+    if (!userImageFile || !selectedShoe) {
+      toast.warning(t("tryon2d.alert_missing_input"));
       return;
     }
 
     setIsProcessing(true);
     setResult(null);
 
-    setTimeout(() => {
-      setResult(selectedShoe.result);
+    try {
+      const response = await tryOn2DService.generateTryOn(
+        selectedShoe.id,
+        selectedShoe.shoeImageId,
+        userImageFile,
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        setResult(response.data);
+        toast.success("AI đã tạo ảnh thành công!");
+      }
+    } catch (error) {
+      if (error.response?.status !== 401) {
+        console.error("AI Error:", error);
+        toast.error("Có lỗi xảy ra trong quá trình xử lý AI.");
+      }
+    } finally {
       setIsProcessing(false);
-    }, 2000);
+    }
   };
 
   const handleWheelZoom = (e) => {
@@ -105,6 +152,7 @@ const TryOn2D = () => {
           <h2 className="fw-bold mb-3">{t("tryon2d.title")}</h2>
           <p className="text-muted">{t("tryon2d.subtitle")}</p>
         </div>
+
         <div className="tryon-content">
           <div className="col">
             <div className="row">
@@ -127,7 +175,7 @@ const TryOn2D = () => {
                     )}
 
                     <span className="btn-choose-file-fake">
-                      {t("tryon2d.btn_choose_image") || "Choose Image"}
+                      {t("tryon2d.btn_choose_image")}
                     </span>
 
                     <p className="upload-instruction">
@@ -138,6 +186,7 @@ const TryOn2D = () => {
                 </div>
               </section>
             </div>
+
             <div className="row mt-4">
               <section className="tryon-section">
                 <h2>{t("tryon2d.step2_title")}</h2>
@@ -187,12 +236,13 @@ const TryOn2D = () => {
               </section>
             </div>
           </div>
+
           <div className="col">
             <section className="tryon-section">
               <h2>{t("tryon2d.step3_title")}</h2>
               <div className="result-display" id="result-mock">
                 {isProcessing ? (
-                  <p style={{ color: "blue" }}>
+                  <p style={{ color: "blue", fontWeight: "bold" }}>
                     {t("tryon2d.result_processing")}
                   </p>
                 ) : result ? (
@@ -219,6 +269,8 @@ const TryOn2D = () => {
                       download="ShoeFit_TryOn2D.png"
                       className="btn-download"
                       style={{ marginTop: "10px" }}
+                      target="_blank"
+                      rel="noreferrer"
                     >
                       <i className="fa fa-download me-2"></i>{" "}
                       {t("tryon2d.btn_download")}
@@ -230,6 +282,7 @@ const TryOn2D = () => {
               </div>
             </section>
           </div>
+
           <div id="shoe-drawer" className={isDrawerOpen ? "active" : ""}>
             <div className="drawer-content">
               <h4>{t("tryon2d.drawer_title")}</h4>
@@ -237,30 +290,35 @@ const TryOn2D = () => {
                 &times;
               </span>
               <div className="shoe-grid">
-                {mockShoes.map((shoe) => (
-                  <div
-                    key={shoe.id}
-                    className="shoe-item"
-                    title={shoe.name}
-                    onClick={() => handleSelectShoe(shoe)}
-                  >
-                    <img src={shoe.path} alt={shoe.name} />
-                    <p
-                      style={{
-                        fontSize: "0.9rem",
-                        textAlign: "center",
-                        marginTop: "5px",
-                      }}
+                {isLoadingShoes ? (
+                  <p>Đang tải danh sách giày...</p>
+                ) : (
+                  shoesList.map((shoe) => (
+                    <div
+                      key={shoe.id}
+                      className="shoe-item"
+                      title={shoe.name}
+                      onClick={() => handleSelectShoe(shoe)}
                     >
-                      {shoe.name}
-                    </p>
-                  </div>
-                ))}
+                      <img src={shoe.imageUrl} alt={shoe.name} />
+                      <p
+                        style={{
+                          fontSize: "0.9rem",
+                          textAlign: "center",
+                          marginTop: "5px",
+                        }}
+                      >
+                        {shoe.name}
+                      </p>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div
         className={`modal-overlay ${isModalOpen ? "active" : ""}`}
         id="image-modal"
@@ -275,7 +333,7 @@ const TryOn2D = () => {
         <div className="modal-content">
           <img
             src={modalImageSrc}
-            alt="Zoomed Result"
+            alt="Zoomed"
             className="modal-image"
             style={{ transform: `scale(${zoomScale})` }}
             onWheel={handleWheelZoom}

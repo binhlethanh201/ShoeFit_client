@@ -9,8 +9,10 @@ const SearchResults = ({
   paginate,
   searchTerm,
 }) => {
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalProducts / productsPerPage); i++) {
+  for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
@@ -20,11 +22,12 @@ const SearchResults = ({
         <span className="results-count">
           {totalProducts > 0 ? (
             <>
-              Hiển thị <b>{products.length}</b> trên tổng <b>{totalProducts}</b>{" "}
-              kết quả{" "}
+              Hiển thị <b>{products.length}</b> sản phẩm (Tổng{" "}
+              <b>{totalProducts}</b>){" "}
               {searchTerm && (
                 <>
-                  cho <b>"{searchTerm}"</b>
+                  {" "}
+                  cho từ khóa <b>"{searchTerm}"</b>
                 </>
               )}
             </>
@@ -32,9 +35,6 @@ const SearchResults = ({
             <>Không tìm thấy kết quả nào.</>
           )}
         </span>
-        <div className="sort-dropdown">
-          Sắp xếp: <b>Mới nhất</b> <i className="fas fa-chevron-down ms-1"></i>
-        </div>
       </div>
 
       <div className="product-grid">
@@ -43,7 +43,7 @@ const SearchResults = ({
         ))}
       </div>
 
-      {pageNumbers.length > 1 && (
+      {totalPages > 1 && (
         <div className="d-flex justify-content-center mt-5">
           <nav aria-label="Page navigation">
             <ul className="pagination">
@@ -87,9 +87,7 @@ const SearchResults = ({
               ))}
 
               <li
-                className={`page-item ${
-                  currentPage === pageNumbers.length ? "disabled" : ""
-                }`}
+                className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
               >
                 <button
                   className="page-link border-0 rounded-circle ms-2 d-flex align-items-center justify-content-center"
@@ -99,7 +97,7 @@ const SearchResults = ({
                     height: "40px",
                     color: "var(--text-heading)",
                   }}
-                  disabled={currentPage === pageNumbers.length}
+                  disabled={currentPage === totalPages}
                 >
                   <i className="fas fa-chevron-right"></i>
                 </button>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/authService";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 const Register = () => {
@@ -34,33 +34,37 @@ const Register = () => {
       return;
     }
 
+    const payload = {
+      email: formData.email,
+      username: formData.username,
+      phoneNumber: formData.phoneNumber,
+    };
+
     setOtpLoading(true);
-    try {
-      const payload = {
-        email: formData.email,
-        username: formData.username,
-        phoneNumber: formData.phoneNumber,
-      };
 
-      const response = await authService.otp(payload);
-
-      if (
-        response &&
-        (response.status === 0 ||
-          response.status === 200 ||
-          response.status === 201)
-      ) {
-        toast.success("Mã OTP đã được gửi! Vui lòng kiểm tra email.");
-      } else {
-        toast.error(response.message || "Không thể gửi OTP.");
-      }
-    } catch (error) {
-      console.error(error);
-      const msg = error.response?.data?.message || "Gửi OTP thất bại!";
-      toast.error(msg);
-    } finally {
-      setOtpLoading(false);
-    }
+    toast.promise(authService.otp(payload), {
+      loading: "Đang gửi mã OTP đến email của bạn...",
+      success: (response) => {
+        setOtpLoading(false);
+        if (
+          response &&
+          (response.status === 0 ||
+            response.status === 200 ||
+            response.status === 201)
+        ) {
+          return `Mã OTP đã được gửi thành công đến ${formData.email}!`;
+        } else {
+          throw new Error(response.message || "Không thể gửi OTP.");
+        }
+      },
+      error: (error) => {
+        setOtpLoading(false);
+        const msg =
+          error.response?.data?.message ||
+          "Gửi OTP thất bại! Vui lòng thử lại.";
+        return msg;
+      },
+    });
   };
 
   const handleRegister = async (e) => {

@@ -1,80 +1,104 @@
-import { productsData, styleData } from "../../data/mockData";
+import axiosClient from "../axiosClient";
+
+const mapProductApiToUi = (apiData) => {
+  if (!apiData) return null;
+
+  let allImages = [];
+  if (apiData.imageUrl) allImages.push(apiData.imageUrl);
+  if (apiData.images) {
+    apiData.images.forEach((img) => allImages.push(img.url));
+  }
+  if (allImages.length === 0)
+    allImages = ["https://placehold.co/600x600?text=No+Image"];
+
+  const displayPrice =
+    apiData.attributes && apiData.attributes.length > 0
+      ? apiData.attributes[0].price
+      : apiData.price || 0;
+
+  return {
+    ...apiData,
+    title: apiData.name,
+    image: apiData.imageUrl,
+    images: allImages,
+    price: displayPrice,
+    brand: apiData.brand || "ShoeFit",
+    displaySizes: apiData.size ? apiData.size : "Liên hệ",
+    sizes: apiData.size ? apiData.size.split(",").map((s) => s.trim()) : [],
+    colors: ["#fff", "#000", "#15228b"],
+    specs: [
+      { label: "Thương hiệu", value: apiData.brand || "N/A" },
+      { label: "SKU", value: apiData.sku || "N/A" },
+      {
+        label: "Chất liệu",
+        value: apiData.attributes?.[0]?.materialName || "Đang cập nhật",
+      },
+      {
+        label: "Kiểu dáng",
+        value: apiData.attributes?.[0]?.styleName || "Đang cập nhật",
+      },
+    ],
+    rating: 4.5,
+    reviews_count: 120,
+    ai_description:
+      "Sản phẩm được đánh giá cao về độ bền và tính thẩm mỹ đường phố.",
+  };
+};
 
 const productService = {
-  getProducts: (query) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (!query || query.trim() === "") {
-          resolve(productsData);
-          return;
-        }
-        const lowerQuery = query.toLowerCase();
-
-        const filtered = productsData.filter(
-          (p) =>
-            p.title.toLowerCase().includes(lowerQuery) ||
-            (p.description &&
-              p.description.toLowerCase().includes(lowerQuery)) ||
-            (p.ai_description &&
-              p.ai_description.toLowerCase().includes(lowerQuery)),
-        );
-
-        resolve(filtered);
-      }, 300);
-    });
-  },
-  getById: (id) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const product = productsData.find((p) => p.id === id);
-
-        if (product) {
-          let foundStyles = [];
-          ["MEN", "WOMEN"].forEach((gender) => {
-            if (styleData[gender]) {
-              Object.values(styleData[gender]).forEach((categoryArray) => {
-                const matches = categoryArray.filter(
-                  (item) => item.shoeId === id,
-                );
-                foundStyles = [...foundStyles, ...matches];
-              });
-            }
-          });
-          if (foundStyles.length === 0) {
-            foundStyles = styleData.MEN.everyday.slice(0, 5);
-          }
-          const enrichedProduct = {
-            ...product,
-            images: [
-              product.image,
-              product.image,
-              product.image,
-              product.image,
-            ],
-            colors: ["#fff", "#000"],
-            sizes: [38, 39, 40, 41, 42, 43],
-            specs: [
-              { label: "Thương hiệu", value: "Nike / Adidas / Generic" },
-              { label: "Thiết kế", value: "Nike" },
-              { label: "Mã sản phẩm", value: `SKU-${id.toUpperCase()}` },
-              { label: "Xuất xứ", value: "Việt Nam" },
-            ],
-            reviews_count: Math.floor(Math.random() * 200) + 50,
-            rating: (Math.random() * (5 - 4) + 4).toFixed(1),
-            styleHints: foundStyles,
-          };
-          resolve(enrichedProduct);
-        } else {
-          resolve(null);
-        }
-      }, 500);
-    });
+  getProducts: async (searchTerm = "", filters = {}) => {
+    try {
+      const params = { PageNumber: 1, PageSize: 100, Search: searchTerm };
+      const response = await axiosClient.get("/api/v1/shoes", { params });
+      const data = response.data;
+      return (data.items || []).map(mapProductApiToUi);
+    } catch (error) {
+      return [];
+    }
   },
 
-  getRelated: (currentId) => {
-    const otherProducts = productsData.filter((p) => p.id !== currentId);
-    const shuffled = otherProducts.sort(() => 0.5 - Math.random());
-    return Promise.resolve(shuffled.slice(0, 5));
+  getById: async (id) => {
+    try {
+      const response = await axiosClient.get(`/api/v1/shoes/${id}`);
+      const rawData = response.data || response;
+
+      return mapProductApiToUi(rawData);
+    } catch (error) {
+      console.error("Lỗi API getById:", error);
+      return null;
+    }
+  },
+
+  getRelated: async (id) => {
+    try {
+      const response = await axiosClient.get(
+        "/api/v1/shoes?PageNumber=1&PageSize=6",
+      );
+      const data = response.data || response;
+      return (data.items || [])
+        .filter((p) => p.id !== id)
+        .map(mapProductApiToUi);
+    } catch (error) {
+      return [];
+    }
+  },
+
+  getCategories: async () => {
+    try {
+      const res = await axiosClient.get("/api/v1/categories?page=1&size=100");
+      return res.data.items || [];
+    } catch (error) {
+      return [];
+    }
+  },
+
+  getAttributes: async () => {
+    try {
+      const res = await axiosClient.get("/api/v1/attributes?page=1&size=100");
+      return res.data.items || [];
+    } catch (error) {
+      return [];
+    }
   },
 };
 

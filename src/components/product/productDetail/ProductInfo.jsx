@@ -1,15 +1,30 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ProductInfo = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedColor, setSelectedColor] = useState(0);
+  const navigate = useNavigate();
 
   const formatPrice = (price) => {
+    if (!price) return "Liên hệ";
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
     }).format(price);
+  };
+
+  const handleTryOnNow = (e) => {
+    e.preventDefault();
+    navigate("/tryon2d", {
+      state: {
+        selectedShoeFromDetail: {
+          id: product.id,
+          name: product.title,
+          imageUrl: product.image,
+          sku: product.sku,
+        },
+      },
+    });
   };
 
   return (
@@ -18,78 +33,37 @@ const ProductInfo = ({ product }) => {
         NEW ARRIVAL
       </div>
       <h1 className="p-title">{product.title}</h1>
-
       <div className="p-price">{formatPrice(product.price)}</div>
-
-      <div className="selector-group">
-        <span className="lbl">Màu sắc</span>
-        <div className="color-list">
-          {product.colors &&
-            product.colors.map((color, index) => (
-              <div
-                key={index}
-                className={`c-item ${
-                  selectedColor === index ? "selected" : ""
-                }`}
-                onClick={() => setSelectedColor(index)}
-              >
-                <div
-                  className="c-in"
-                  style={{
-                    background: color,
-                    border: color === "#fff" ? "1px solid #ddd" : "none",
-                  }}
-                ></div>
-              </div>
-            ))}
-        </div>
-      </div>
 
       <div className="selector-group">
         <span className="lbl">Kích cỡ (EU)</span>
         <div className="size-grid">
-          {product.sizes &&
-            product.sizes.map((size) => (
-              <div
-                key={size}
-                className={`s-item ${selectedSize === size ? "selected" : ""}`}
-                onClick={() => setSelectedSize(size)}
-              >
-                {size}
-              </div>
-            ))}
+          {product.sizes?.map((size) => (
+            <div
+              key={size}
+              className={`s-item ${selectedSize === size ? "selected" : ""}`}
+              onClick={() => setSelectedSize(size)}
+            >
+              {size}
+            </div>
+          ))}
         </div>
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            alert("Chức năng hướng dẫn chọn size đang phát triển");
-          }}
-          style={{
-            fontSize: "12px",
-            textDecoration: "underline",
-            marginTop: "8px",
-            display: "block",
-            background: "transparent",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-            color: "inherit",
-            textAlign: "left",
-          }}
-        >
-          Hướng dẫn chọn size
-        </button>
       </div>
 
       <div className="action-btns">
         <button className="btn-pd btn-pd-black">THÊM VÀO GIỎ</button>
-        <Link
-          to="/tryon2d"
-          className="btn-pd btn-pd-outline text-decoration-none"
+        <button
+          onClick={handleTryOnNow}
+          className="btn-pd btn-pd-outline w-100 mt-2"
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
           <i className="fas fa-camera me-2"></i> THỬ GIÀY AI (Try-On)
-        </Link>
+        </button>
       </div>
 
       <div
