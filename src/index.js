@@ -5,6 +5,7 @@ import { store } from "./redux/store";
 import App from "./App";
 import { ThemeProvider } from "./context/ThemeContext";
 import "./i18n";
+import { initGA } from "./analytics";
 
 // CSS
 import "./assets/css/bootstrap.min.css";
@@ -12,6 +13,8 @@ import "./assets/css/style.css";
 
 // JS Libraries
 import "./assets/js/bootstrap.bundle.min.js";
+
+initGA();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -5,10 +5,12 @@ import {
   createRoutesFromElements,
   Route,
   ScrollRestoration,
+  useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Toaster } from "sonner";
+import ReactGA from "react-ga4";
 
 // --- Components ---
 import Footer from "./components/home/Footer/Footer";
@@ -41,11 +43,24 @@ import Settings from "./pages/Setting/Settings.jsx";
 // --- Admin Dashboard ---
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    ReactGA.send({
+      hitType: "pageview",
+      page: location.pathname + location.search,
+    });
+  }, [location]);
+
+  return null;
+};
+
 const RootLayout = () => {
   return (
     <>
+      <AnalyticsTracker />
       <Toaster position="top-right" richColors closeButton duration={1500} />
-
       <ScrollRestoration />
       <Outlet />
     </>

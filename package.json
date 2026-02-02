@@ -1,5 +1,5 @@
 {
-  "name": "ShoeFit_client",
+  "name": "shoefit-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,6 +16,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",
+    "react-ga4": "^2.1.0",
     "react-i18next": "^16.5.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.11.0",
