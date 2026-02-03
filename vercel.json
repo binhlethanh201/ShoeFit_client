@@ -1,8 +1,16 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/((?!api/|static/|.*\\..*).*)",
-      "destination": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html",
+      "has": [
+        {
+          "type": "header",
+          "key": "Accept",
+          "value": "text/html"
+        }
+      ]
     }
   ]
 }
