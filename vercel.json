@@ -1,16 +1,8 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html",
-      "has": [
-        {
-          "type": "header",
-          "key": "Accept",
-          "value": "text/html"
-        }
-      ]
+      "source": "/((?!.*\\.(?:js|css|png|jpg|jpeg|gif|svg|ico|json|woff|woff2|ttf|otf)$|api/).*)",
+      "destination": "/index.html"
     }
   ]
 }
