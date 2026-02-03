@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/((?!logo-shoefit.png|manifest.json|static/.*|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
