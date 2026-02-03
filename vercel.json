@@ -1,7 +1,9 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/((?!.*\\.(?:js|css|png|jpg|jpeg|gif|svg|ico|json|woff|woff2|ttf|otf)$|api/).*)",
+      "source": "/((?!logo-shoefit\\.png|manifest\\.json|static/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
