@@ -32,6 +32,7 @@ import TryOnVideo from "./pages/TryOnVideo/TryOnVideo.jsx";
 import TryOn2D from "./pages/Tryon2D/TryOn2D.jsx";
 import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
 import StyleDetail from "./pages/StyleAdvisor/StyleDetail.jsx";
+import Pricing from "./pages/Pricing/Pricing.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 // --- Auth ----
@@ -99,6 +100,7 @@ const router = createBrowserRouter(
         <Route path="/styledetail/:styleId" element={<StyleDetail />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/pricing" element={<Pricing />}></Route>
 
         {/* Protected Auth Route */}
         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>

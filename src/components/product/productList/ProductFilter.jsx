@@ -43,7 +43,7 @@ const SearchFilter = ({ onFilterChange, filters, onClear }) => {
           style={{
             fontSize: "11px",
             fontWeight: "600",
-            color: "var(--text-main)",
+            color: "var(--text-inverse)",
             textTransform: "uppercase",
             border: "1px solid var(--border-color)",
             borderRadius: "2px",

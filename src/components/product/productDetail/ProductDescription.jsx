@@ -8,15 +8,6 @@ const ProductDescription = ({ description, specs, aiDescription }) => {
         {description || "Chưa có mô tả chi tiết cho sản phẩm này."}
       </p>
 
-      {aiDescription && (
-        <div className="alert alert-light border mb-4">
-          <strong>
-            <i className="fas fa-robot me-2"></i>AI Analysis:
-          </strong>
-          <p className="fst-italic mb-0 mt-1 small">"{aiDescription}"</p>
-        </div>
-      )}
-
       {specs && (
         <table className="specs-table">
           <tbody>

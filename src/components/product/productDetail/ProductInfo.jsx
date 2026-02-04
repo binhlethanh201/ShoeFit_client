@@ -55,12 +55,7 @@ const ProductInfo = ({ product }) => {
         <button
           onClick={handleTryOnNow}
           className="btn-pd btn-pd-outline w-100 mt-2"
-          style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={{ cursor: "pointer" }}
         >
           <i className="fas fa-camera me-2"></i> THỬ GIÀY AI (Try-On)
         </button>

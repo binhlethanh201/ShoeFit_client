@@ -37,9 +37,11 @@ const SearchResults = ({
         </span>
       </div>
 
-      <div className="product-grid">
+      <div className="product-grid" key={`${currentPage}-${searchTerm}`}>
         {products.map((product) => (
-          <SearchProductCard key={product.id} product={product} />
+          <div className="p-card-animate" key={product.id}>
+            <SearchProductCard product={product} />
+          </div>
         ))}
       </div>
 

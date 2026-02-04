@@ -66,7 +66,7 @@ const Footer = () => {
             <p className="mb-4">{t("footer.slogan")}</p>
 
             <ul className="list-unstyled custom-social d-flex gap-3 mb-4">
-              <li>
+              {/* <li>
                 <a
                   href="https://facebook.com"
                   target="_blank"
@@ -74,10 +74,10 @@ const Footer = () => {
                 >
                   <i className="fa-brands fa-facebook"></i>
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/shoefit.tryon"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -86,7 +86,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://tiktok.com"
+                  href="https://www.tiktok.com/@shoefit.tryon"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -120,6 +120,12 @@ const Footer = () => {
                   <li className="mb-2">
                     <Link to="/services" className="footer-link">
                       {t("footer.services")}
+                    </Link>
+                  </li>
+
+                  <li className="mb-2">
+                    <Link to="/pricing" className="footer-link">
+                      {t("footer.pricing")}
                     </Link>
                   </li>
                 </ul>

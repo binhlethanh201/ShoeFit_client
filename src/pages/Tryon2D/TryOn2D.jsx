@@ -12,6 +12,7 @@ const TryOn2D = () => {
   const location = useLocation();
   const { t } = useTranslation();
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [shoesList, setShoesList] = useState([]);
   const [isLoadingShoes, setIsLoadingShoes] = useState(false);
 
@@ -21,6 +22,8 @@ const TryOn2D = () => {
 
   const [result, setResult] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showBefore, setShowBefore] = useState(false);
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
@@ -28,7 +31,6 @@ const TryOn2D = () => {
 
   useEffect(() => {
     const shoeFromState = location.state?.selectedShoeFromDetail;
-
     if (shoeFromState) {
       const autoSelectShoe = async () => {
         try {
@@ -43,13 +45,11 @@ const TryOn2D = () => {
             shoeImageId: firstImageId,
             path: shoeFromState.imageUrl,
           });
-
           toast.success(`Đã chọn: ${shoeFromState.name}`);
         } catch (error) {
           console.error("Lỗi tự động chọn giày:", error);
         }
       };
-
       autoSelectShoe();
       window.history.replaceState({}, document.title);
     }
@@ -103,7 +103,7 @@ const TryOn2D = () => {
       toast.error("Bạn cần đăng nhập để sử dụng tính năng thử giày AI!");
       setTimeout(() => {
         navigate("/login", { state: { from: location.pathname } });
-      }, 3000);
+      }, 2000);
       return;
     }
 
@@ -128,7 +128,6 @@ const TryOn2D = () => {
       }
     } catch (error) {
       if (error.response?.status !== 401) {
-        console.error("AI Error:", error);
         toast.error("Có lỗi xảy ra trong quá trình xử lý AI.");
       }
     } finally {
@@ -138,12 +137,13 @@ const TryOn2D = () => {
 
   const handleWheelZoom = (e) => {
     e.preventDefault();
-    if (e.deltaY < 0) {
-      setZoomScale((prev) => Math.min(prev + 0.1, 3));
-    } else {
-      setZoomScale((prev) => Math.max(prev - 0.1, 0.5));
-    }
+    if (e.deltaY < 0) setZoomScale((prev) => Math.min(prev + 0.1, 3));
+    else setZoomScale((prev) => Math.max(prev - 0.1, 0.5));
   };
+
+  const filteredShoes = shoesList.filter((shoe) =>
+    shoe.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <>
@@ -173,11 +173,9 @@ const TryOn2D = () => {
                         style={{ backgroundImage: `url(${userImage})` }}
                       ></div>
                     )}
-
                     <span className="btn-choose-file-fake">
                       {t("tryon2d.btn_choose_image")}
                     </span>
-
                     <p className="upload-instruction">
                       {t("tryon2d.upload_instruction")} <br />
                       <span>{t("tryon2d.upload_note")}</span>
@@ -249,10 +247,25 @@ const TryOn2D = () => {
                   <>
                     <div className="image-container">
                       <img
-                        src={result}
-                        className="generated-image fade-in"
-                        alt="AI Result"
+                        src={showBefore ? userImage : result}
+                        className={`generated-image fade-in ${showBefore ? "viewing-before" : ""}`}
+                        alt="Result"
                       />
+                      <div
+                        className="comparison-badge"
+                        style={{
+                          position: "absolute",
+                          top: "10px",
+                          left: "10px",
+                          background: "rgba(0,0,0,0.5)",
+                          color: "white",
+                          padding: "2px 10px",
+                          borderRadius: "10px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {showBefore ? "ẢNH GỐC" : "ẢNH AI"}
+                      </div>
                       <button
                         className="zoom-btn"
                         onClick={() => {
@@ -264,6 +277,26 @@ const TryOn2D = () => {
                         <img src={scanIcon} alt="Zoom" />
                       </button>
                     </div>
+
+                    <button
+                      className="btn-compare w-100 mt-2"
+                      style={{
+                        background: "#34495e",
+                        color: "white",
+                        border: "none",
+                        padding: "8px",
+                        borderRadius: "6px",
+                        fontWeight: "bold",
+                      }}
+                      onMouseDown={() => setShowBefore(true)}
+                      onMouseUp={() => setShowBefore(false)}
+                      onMouseLeave={() => setShowBefore(false)}
+                      onTouchStart={() => setShowBefore(true)}
+                      onTouchEnd={() => setShowBefore(false)}
+                    >
+                      GIỮ ĐỂ XEM ẢNH GỐC
+                    </button>
+
                     <a
                       href={result}
                       download="ShoeFit_TryOn2D.png"
@@ -289,11 +322,22 @@ const TryOn2D = () => {
               <span id="close-drawer" onClick={() => setIsDrawerOpen(false)}>
                 &times;
               </span>
+
+              <div className="drawer-search-container">
+                <input
+                  type="text"
+                  placeholder="Tìm tên sản phẩm..."
+                  className="drawer-search-input"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+
               <div className="shoe-grid">
                 {isLoadingShoes ? (
-                  <p>Đang tải danh sách giày...</p>
-                ) : (
-                  shoesList.map((shoe) => (
+                  <p>Đang tải...</p>
+                ) : filteredShoes.length > 0 ? (
+                  filteredShoes.map((shoe) => (
                     <div
                       key={shoe.id}
                       className="shoe-item"
@@ -301,17 +345,13 @@ const TryOn2D = () => {
                       onClick={() => handleSelectShoe(shoe)}
                     >
                       <img src={shoe.imageUrl} alt={shoe.name} />
-                      <p
-                        style={{
-                          fontSize: "0.9rem",
-                          textAlign: "center",
-                          marginTop: "5px",
-                        }}
-                      >
-                        {shoe.name}
-                      </p>
+                      <p>{shoe.name}</p>
                     </div>
                   ))
+                ) : (
+                  <p className="no-result-text">
+                    Không tìm thấy sản phẩm phù hợp.
+                  </p>
                 )}
               </div>
             </div>
@@ -322,10 +362,9 @@ const TryOn2D = () => {
       <div
         className={`modal-overlay ${isModalOpen ? "active" : ""}`}
         id="image-modal"
-        onClick={(e) => {
-          if (e.target.className.includes("modal-overlay"))
-            setIsModalOpen(false);
-        }}
+        onClick={(e) =>
+          e.target.className.includes("modal-overlay") && setIsModalOpen(false)
+        }
       >
         <span className="modal-close" onClick={() => setIsModalOpen(false)}>
           &times;

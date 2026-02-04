@@ -330,10 +330,44 @@
   background: transparent;
   border: 2px solid var(--text-heading);
   color: var(--text-heading);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
+
 .btn-pd-outline:hover {
   background: var(--bg-section);
-  color: var(--text-heading);
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(38, 60, 223, 0.15);
+}
+
+.btn-pd-outline:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(38, 60, 223, 0.1);
+}
+
+.btn-pd-outline:hover i {
+  animation: camera-wiggle 0.5s ease-in-out;
+}
+
+@keyframes camera-wiggle {
+  0% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }
 
 .bottom-section {
@@ -385,4 +419,38 @@
 }
 .bottom-section .outfit-card .text-dark {
   color: var(--text-heading) !important;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 10;
+  color: #ff4757;
+  background: rgba(255, 255, 255, 0.8);
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.15);
+  background: #fff;
+  color: #ff6b81;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.wishlist-btn:active {
+  transform: scale(0.9);
+}
+
+.wishlist-btn:hover i {
+  font-weight: 900;
 }
