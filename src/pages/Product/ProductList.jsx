@@ -38,13 +38,26 @@ const ProductList = () => {
   }, [filters, fetchData]);
 
   const filteredProducts = useMemo(() => {
-    const result = allProducts.filter(
-      (p) =>
+    return allProducts.filter((p) => {
+      const matchesSearch =
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.brand?.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    return result;
-  }, [allProducts, searchTerm]);
+        p.brand?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        !filters.categoryId ||
+        p.categories?.some((cat) => cat.id === filters.categoryId);
+      const matchesStyle =
+        !filters.styleId ||
+        p.attributes?.some((attr) => attr.styleId === filters.styleId);
+      const matchesMaterial =
+        !filters.materialId ||
+        p.attributes?.some((attr) => attr.materialId === filters.materialId);
+
+      return (
+        matchesSearch && matchesCategory && matchesStyle && matchesMaterial
+      );
+    });
+  }, [allProducts, searchTerm, filters]);
 
   useEffect(() => {
     setCurrentPage(1);

@@ -11,6 +11,7 @@ const mapProductApiToUi = (apiData) => {
   if (allImages.length === 0)
     allImages = ["https://placehold.co/600x600?text=No+Image"];
 
+  // Lấy giá từ thuộc tính đầu tiên nếu có
   const displayPrice =
     apiData.attributes && apiData.attributes.length > 0
       ? apiData.attributes[0].price
@@ -48,7 +49,14 @@ const mapProductApiToUi = (apiData) => {
 const productService = {
   getProducts: async (searchTerm = "", filters = {}) => {
     try {
-      const params = { PageNumber: 1, PageSize: 100, Search: searchTerm };
+      const params = {
+        PageNumber: 1,
+        PageSize: 100,
+        Search: searchTerm,
+        CategoryId: filters.categoryId || undefined,
+        MaterialId: filters.materialId || undefined,
+        StyleId: filters.styleId || undefined,
+      };
       const response = await axiosClient.get("/api/v1/shoes", { params });
       const data = response.data;
       return (data.items || []).map(mapProductApiToUi);
@@ -60,11 +68,13 @@ const productService = {
   getById: async (id) => {
     try {
       const response = await axiosClient.get(`/api/v1/shoes/${id}`);
+
       const rawData = response.data || response;
 
       return mapProductApiToUi(rawData);
     } catch (error) {
       console.error("Lỗi API getById:", error);
+
       return null;
     }
   },
@@ -74,9 +84,13 @@ const productService = {
       const response = await axiosClient.get(
         "/api/v1/shoes?PageNumber=1&PageSize=6",
       );
+
       const data = response.data || response;
+
       return (data.items || [])
+
         .filter((p) => p.id !== id)
+
         .map(mapProductApiToUi);
     } catch (error) {
       return [];
@@ -92,9 +106,20 @@ const productService = {
     }
   },
 
-  getAttributes: async () => {
+  // API lấy danh sách Chất liệu
+  getMaterials: async () => {
     try {
-      const res = await axiosClient.get("/api/v1/attributes?page=1&size=100");
+      const res = await axiosClient.get("/api/v1/materials?page=1&size=100");
+      return res.data.items || [];
+    } catch (error) {
+      return [];
+    }
+  },
+
+  // API lấy danh sách Kiểu dáng
+  getStyles: async () => {
+    try {
+      const res = await axiosClient.get("/api/v1/styles?page=1&size=100");
       return res.data.items || [];
     } catch (error) {
       return [];

@@ -18,23 +18,10 @@ const SearchResults = ({
 
   return (
     <main>
-      <div className="results-header">
-        <span className="results-count">
-          {totalProducts > 0 ? (
-            <>
-              Hiển thị <b>{products.length}</b> sản phẩm (Tổng{" "}
-              <b>{totalProducts}</b>){" "}
-              {searchTerm && (
-                <>
-                  {" "}
-                  cho từ khóa <b>"{searchTerm}"</b>
-                </>
-              )}
-            </>
-          ) : (
-            <>Không tìm thấy kết quả nào.</>
-          )}
-        </span>
+      <div className="results-header" style={{ marginBottom: "20px" }}>
+        {totalProducts === 0 && (
+          <span className="results-count">Không tìm thấy kết quả nào.</span>
+        )}
       </div>
 
       <div className="product-grid" key={`${currentPage}-${searchTerm}`}>

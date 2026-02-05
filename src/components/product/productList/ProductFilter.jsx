@@ -3,16 +3,19 @@ import productService from "../../../services/product/productService";
 
 const SearchFilter = ({ onFilterChange, filters, onClear }) => {
   const [categories, setCategories] = useState([]);
-  const [attributes, setAttributes] = useState([]);
+  // const [materials, setMaterials] = useState([]);
+  // const [styles, setStyles] = useState([]);
 
   useEffect(() => {
     const loadData = async () => {
-      const [cats, attrs] = await Promise.all([
+      const [cats] = await Promise.all([
         productService.getCategories(),
-        productService.getAttributes(),
+        productService.getMaterials(),
+        productService.getStyles(),
       ]);
       setCategories(cats);
-      setAttributes(attrs);
+      // setMaterials(mats);
+      // setStyles(styls);
     };
     loadData();
   }, []);
@@ -21,12 +24,6 @@ const SearchFilter = ({ onFilterChange, filters, onClear }) => {
     const newValue = filters[key] === id ? null : id;
     onFilterChange({ [key]: newValue });
   };
-
-  const styles = [
-    ...new Map(
-      attributes.filter((a) => a.styleName).map((item) => [item.styleId, item]),
-    ).values(),
-  ];
 
   return (
     <aside className="filter-sidebar">
@@ -43,11 +40,12 @@ const SearchFilter = ({ onFilterChange, filters, onClear }) => {
           style={{
             fontSize: "11px",
             fontWeight: "600",
-            color: "var(--text-inverse)",
+            color: "var(--brand-blue)",
             textTransform: "uppercase",
             border: "1px solid var(--border-color)",
             borderRadius: "2px",
             padding: "4px 10px",
+            backgroundColor: "transparent",
           }}
         >
           Làm mới
@@ -77,20 +75,32 @@ const SearchFilter = ({ onFilterChange, filters, onClear }) => {
         ))}
       </div>
 
-      <div className="filter-group">
+      {/* <div className="filter-group">
         <span className="filter-title">Kiểu dáng</span>
         <div className="filter-size-grid">
           {styles.map((s) => (
             <div
-              key={s.styleId}
-              className={`filter-size-item ${filters.styleId === s.styleId ? "active" : ""}`}
-              onClick={() => handleToggle("styleId", s.styleId)}
+              key={s.id}
+              className={`filter-size-item ${filters.styleId === s.id ? "active" : ""}`}
+              onClick={() => handleToggle("styleId", s.id)}
             >
-              {s.styleName}
+              {s.name}
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
+
+      {/* <div className="filter-group">
+        <span className="filter-title">Chất liệu</span>
+        {materials.map((m) => (
+          <div key={m.id} className="filter-opt" onClick={() => handleToggle("materialId", m.id)}>
+            <div className={`checkbox ${filters.materialId === m.id ? "checked" : ""}`}>
+              {filters.materialId === m.id && <i className="fas fa-check" style={{ fontSize: "8px", color: "#fff" }}></i>}
+            </div>
+            {m.name}
+          </div>
+        ))}
+      </div> */}
     </aside>
   );
 };

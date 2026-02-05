@@ -6,7 +6,7 @@ const ProductInfo = ({ product }) => {
   const navigate = useNavigate();
 
   const formatPrice = (price) => {
-    if (!price) return "Liên hệ";
+    if (!price) return "Đang cập nhật";
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
@@ -51,7 +51,7 @@ const ProductInfo = ({ product }) => {
       </div>
 
       <div className="action-btns">
-        <button className="btn-pd btn-pd-black">THÊM VÀO GIỎ</button>
+        <button className="btn-pd btn-pd-black">MUA NGAY</button>
         <button
           onClick={handleTryOnNow}
           className="btn-pd btn-pd-outline w-100 mt-2"
