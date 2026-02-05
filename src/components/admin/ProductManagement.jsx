@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import adminService from "../../services/adminService";
 import { toast } from "sonner";
 
@@ -8,6 +8,7 @@ const ProductManagement = () => {
   const [attributes, setAttributes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tempImages, setTempImages] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [pagination, setPagination] = useState({
     PageNumber: 1,
@@ -34,6 +35,18 @@ const ProductManagement = () => {
   });
 
   const [existingImages, setExistingImages] = useState([]);
+
+  const filteredProducts = useMemo(() => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return products;
+
+    return products.filter(
+      (p) =>
+        p.name?.toLowerCase().includes(term) ||
+        p.sku?.toLowerCase().includes(term) ||
+        p.brand?.toLowerCase().includes(term),
+    );
+  }, [searchTerm, products]);
 
   const fetchDependencies = async () => {
     try {
@@ -249,14 +262,45 @@ const ProductManagement = () => {
 
   return (
     <div className="card border-0 shadow-sm h-100">
-      <div className="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
-        <h5 className="mb-0 fw-bold text-dark">Quản lý Sản phẩm</h5>
-        <button
-          className="btn btn-dark btn-sm px-3"
-          onClick={() => handleOpenModal(null)}
-        >
-          <i className="fa-solid fa-plus me-2"></i>Thêm mới
-        </button>
+      <div className="card-header bg-white py-3 border-bottom">
+        <div className="row align-items-center justify-content-between g-3">
+          {/* <div className="col-auto">
+            <h5 className="mb-0 fw-bold text-dark">Quản lý Sản phẩm</h5>
+          </div> */}
+
+          <div className="col-12 col-md-5">
+            <div className="input-group input-group-sm">
+              <span className="input-group-text bg-light border-end-0 text-muted">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control bg-light border-start-0 ps-0"
+                placeholder="Tìm theo tên, SKU, hiệu..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  className="btn btn-outline-secondary border-start-0"
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="col-auto">
+            <button
+              className="btn btn-dark btn-sm px-3"
+              onClick={() => handleOpenModal(null)}
+            >
+              <i className="fa-solid fa-plus me-2"></i>Thêm mới
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="card-body p-0">
@@ -277,8 +321,8 @@ const ProductManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.length > 0 ? (
-                  products.map((item) => (
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((item) => (
                     <tr key={item.id}>
                       <td className="ps-4">
                         <img
@@ -292,7 +336,9 @@ const ProductManagement = () => {
                           }}
                         />
                       </td>
-                      <td className="small font-monospace">{item.sku}</td>
+                      <td className="small font-monospace text-muted">
+                        {item.sku}
+                      </td>
                       <td className="fw-bold">{item.name}</td>
                       <td>
                         <span className="badge bg-light text-dark border fw-normal">
@@ -311,8 +357,13 @@ const ProductManagement = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-center py-5 text-muted">
-                      Không có dữ liệu
+                    <td
+                      colSpan="5"
+                      className="text-center py-5 text-muted fst-italic"
+                    >
+                      {searchTerm
+                        ? `Không tìm thấy sản phẩm nào khớp với "${searchTerm}"`
+                        : "Không có dữ liệu"}
                     </td>
                   </tr>
                 )}
@@ -323,10 +374,10 @@ const ProductManagement = () => {
       </div>
 
       <div className="card-footer bg-white border-top py-3 d-flex justify-content-end">
-        <div className="btn-group">
+        <div className="btn-group shadow-sm">
           <button
             className="btn btn-outline-secondary btn-sm"
-            disabled={pagination.PageNumber === 1}
+            disabled={pagination.PageNumber === 1 || searchTerm.trim() !== ""}
             onClick={() =>
               setPagination((p) => ({ ...p, PageNumber: p.PageNumber - 1 }))
             }
@@ -334,11 +385,14 @@ const ProductManagement = () => {
             Trước
           </button>
           <button className="btn btn-outline-secondary btn-sm disabled text-dark fw-bold">
-            {pagination.PageNumber} / {pagination.totalPages}
+            Trang {pagination.PageNumber}
           </button>
           <button
             className="btn btn-outline-secondary btn-sm"
-            disabled={pagination.PageNumber === pagination.totalPages}
+            disabled={
+              pagination.PageNumber === pagination.totalPages ||
+              searchTerm.trim() !== ""
+            }
             onClick={() =>
               setPagination((p) => ({ ...p, PageNumber: p.PageNumber + 1 }))
             }
@@ -347,7 +401,6 @@ const ProductManagement = () => {
           </button>
         </div>
       </div>
-
       {showModal && (
         <div
           className="modal fade show d-block"
