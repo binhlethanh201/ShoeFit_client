@@ -59,10 +59,11 @@ const Register = () => {
       },
       error: (error) => {
         setOtpLoading(false);
-        const msg =
-          error.response?.data?.message ||
-          "Gửi OTP thất bại! Vui lòng thử lại.";
-        return msg;
+        const serverData = error.response?.data;
+        if (serverData) {
+          return `${serverData.message}: ${serverData.data}`;
+        }
+        return "Gửi OTP thất bại! Vui lòng thử lại.";
       },
     });
   };
@@ -101,8 +102,15 @@ const Register = () => {
       }
     } catch (error) {
       console.error(error);
-      const msg = error.response?.data?.message || "Đăng ký thất bại!";
-      toast.error(msg);
+      const serverError = error.response?.data;
+      if (serverError) {
+        const fullMsg = serverError.data
+          ? `${serverError.message} - ${serverError.data}`
+          : serverError.message;
+        toast.error(fullMsg);
+      } else {
+        toast.error("Đăng ký thất bại! Lỗi kết nối server.");
+      }
     } finally {
       setLoading(false);
     }

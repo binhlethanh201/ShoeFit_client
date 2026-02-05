@@ -174,7 +174,7 @@ const Login = () => {
                       />
                     </div>
 
-                    <div className="form-group mb-2">
+                    <div className="form-group mb-5">
                       <label className="text-secondary small fw-bold mb-1">
                         {t("auth.label_password")}
                       </label>
@@ -217,7 +217,7 @@ const Login = () => {
                       </div>
                     </div>
 
-                    <div className="d-flex justify-content-end mb-4">
+                    {/* <div className="d-flex justify-content-end mb-4">
                       <button
                         type="button"
                         className="bg-transparent border-0 p-0 text-decoration-none fw-bold small"
@@ -226,7 +226,7 @@ const Login = () => {
                       >
                         {t("auth.btn_forgot_pass")}
                       </button>
-                    </div>
+                    </div> */}
 
                     <button
                       type="submit"
