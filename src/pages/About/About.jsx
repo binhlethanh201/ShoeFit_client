@@ -1,96 +1,127 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import aboutImage from "../../assets/images/Effects/why-choose.jpg";
 import "../../assets/css/about/about.css";
 
 const About = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+      easing: "ease-in-out",
+    });
+  }, []);
+
   return (
     <div className="about-page-wrapper">
       <div className="container">
         <section className="about-section">
           <div className="row align-items-center">
-            <div className="col-lg-6 mb-4 mb-lg-0">
+            <div className="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
               <h2 className="about-title">VỀ SHOEFIT</h2>
               <div className="about-text">
                 <p>
-                  ShoeFit là một website thương mại điện tử được phát triển như
-                  một giải pháp công nghệ để giải quyết khó khăn của người tiêu
-                  dùng khi mua giày online:{" "}
-                  <strong>
-                    không thể đánh giá độ phù hợp của sản phẩm trước khi mua.
-                  </strong>
+                  <strong>ShoeFit</strong> là nền tảng thử giày bằng công nghệ
+                  AI, giúp bạn nhìn thấy hình ảnh mình mang đôi giày yêu thích
+                  trước khi quyết định mua sắm online. Trải nghiệm trực quan qua{" "}
+                  <strong>hình ảnh và video AI</strong> giúp việc mua sắm trở
+                  nên tự tin hơn bao giờ hết.
                 </p>
                 <p>
-                  Hiện nay, người dùng chủ yếu dựa vào mô tả đơn thuần và hình
-                  ảnh tĩnh - những thứ chưa đủ trực quan, dẫn đến tâm lý do dự
-                  và tỷ lệ đổi trả cao.
+                  Chúng mình hiểu rằng việc khó hình dung độ phù hợp khi mang
+                  lên chân là rào cản lớn nhất. ShoeFit ra đời để xóa bỏ sự do
+                  dự đó. Chỉ cần chọn mẫu, tải ảnh và xem kết quả ngay lập tức.
                 </p>
                 <p>
-                  Chúng tôi ra đời để thu hẹp khoảng cách giữa mua sắm online và
-                  offline. Thông qua công nghệ <strong>AI thử giày</strong>, bạn
-                  chỉ cần tải ảnh lên và ngay lập tức xem được đôi giày hiển thị
-                  trên chân mình.
-                </p>
-                <p>
-                  Đặc biệt, ShoeFit tối ưu hóa cho thị trường Việt Nam với dữ
-                  liệu mẫu giày phổ biến và hành vi mua sắm đặc thù trong nước.
+                  Nền tảng được tối ưu riêng cho{" "}
+                  <strong>thị trường Việt Nam</strong>, thấu hiểu từng form chân
+                  và phong cách mua sắm đặc trưng của người trẻ trong nước.
                 </p>
               </div>
             </div>
-            <div className="col-lg-5 offset-lg-1">
+            <div className="col-lg-5 offset-lg-1" data-aos="fade-left">
               <div className="about-img-container">
-                <img src={aboutImage} alt="ShoeFit AI Technology" />
+                <img
+                  src={aboutImage}
+                  alt="ShoeFit AI Technology"
+                  className="about-img"
+                />
               </div>
             </div>
           </div>
         </section>
 
-        <section className="about-section">
-          <h2 className="about-title text-center mb-5">VISION & MISSION</h2>
-          <div className="row g-4">
-            <div className="col-md-6">
-              <div className="vm-card">
-                <h3 className="vm-title">
-                  <i className="fas fa-eye text-primary"></i> Vision - Tầm nhìn
-                </h3>
-                <p className="about-text">
-                  Trở thành nền tảng thử giày ảo và gợi ý trang phục hàng đầu,
-                  giúp mọi người thể hiện phong cách cá nhân thông qua công nghệ
-                  AI tiên tiến nhất thế giới.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="vm-card">
-                <h3 className="vm-title">
-                  <i className="fas fa-rocket text-primary"></i> Mission - Sứ
-                  mệnh
-                </h3>
-                <p className="about-text">
-                  Mang đến trải nghiệm thời trang thông minh, tiện lợi và chân
-                  thực. ShoeFit cung cấp insights về sở thích khách hàng để giúp
-                  các thương hiệu hiểu rõ hơn về người tiêu dùng của họ.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="about-section">
-          <h2 className="about-title text-center mb-5">SLOGAN</h2>
-          <div className="slogan-box shadow-lg">
-            <h2 className="slogan-text">"Try On. Fit Right. Shop Smart"</h2>
-            <p className="slogan-desc">
-              Slogan thể hiện trọn vẹn giá trị cốt lõi: Từ trải nghiệm thử giày
-              công nghệ, đến sự phù hợp cá nhân hoá và cuối cùng là quyết định
-              mua sắm online thông minh, hiệu quả.
+        <section className="about-section text-center">
+          <h2 className="about-title" data-aos="fade-up">
+            VISION
+          </h2>
+          <div className="vision-box" data-aos="zoom-in" data-aos-delay="200">
+            <p className="about-text text-center large-text">
+              ShoeFit hướng tới trở thành nền tảng AI hàng đầu giúp mọi người
+              tìm được đôi giày <strong>vừa vặn hoàn hảo</strong> dù mua sắm ở
+              bất kỳ đâu hay trên bất kỳ nền tảng nào.
             </p>
-            <Link
-              to="/"
-              className="btn btn-light rounded-pill px-5 mt-4 fw-bold"
-            >
-              Trải nghiệm ngay
-            </Link>
+          </div>
+        </section>
+
+        <section className="about-section">
+          <h2 className="about-title text-center mb-5" data-aos="fade-up">
+            MISSION
+          </h2>
+          <div className="row g-4">
+            <div className="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+              <div className="mission-card-v2">
+                <span className="mission-number">01</span>
+                <strong className="text-highlight">Người tiêu dùng</strong>
+                <p className="about-text small">
+                  Giúp người dùng thử giày trực tuyến chính xác, hiểu rõ hình
+                  thái bàn chân và chọn đúng size, đúng form, đúng nhu cầu, giảm
+                  rủi ro mua sai.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+              <div className="mission-card-v2">
+                <span className="mission-number">02</span>
+                <strong className="text-highlight">Doanh nghiệp</strong>
+                <p className="about-text small">
+                  Cung cấp giải pháp AI sizing & try-on giúp thương hiệu giảm tỷ
+                  lệ hoàn hàng, tăng tỷ lệ chuyển đổi và tối ưu trải nghiệm
+                  khách hàng.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+              <div className="mission-card-v2">
+                <span className="mission-number">03</span>
+                <strong className="text-highlight">Ngành thời trang</strong>
+                <p className="about-text small">
+                  Xây dựng hệ sinh thái mua sắm bền vững, giảm thiểu lãng phí và
+                  chi phí logistics, đồng thời góp phần bảo vệ môi trường.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="about-section mb-0" data-aos="zoom-in">
+          <div className="slogan-box shadow-lg text-center">
+            <h2 className="slogan-text" data-aos="fade-up">
+              "Try On. Fit Right. Shop Smart"
+            </h2>
+            <p className="slogan-desc">
+              Thể hiện trọn vẹn giá trị cốt lõi của ShoeFit, từ trải nghiệm thử
+              giày ứng dụng công nghệ hiện đại, đảm bảo sự phù hợp mang tính cá
+              nhân hoá, đến việc hỗ trợ người dùng đưa ra quyết định mua sắm
+              trực tuyến một cách thông minh và hiệu quả hơn.
+            </p>
+            <div className="mt-4">
+              <Link to="/" className="btn-experience-call-to-action">
+                Trải nghiệm ngay
+              </Link>
+            </div>
           </div>
         </section>
       </div>

@@ -57,12 +57,23 @@ const Header = () => {
     return sunIcon;
   };
 
+  const closeMobileMenu = () => {
+    const nav = document.getElementById("navbarsFurni");
+    if (nav?.classList.contains("show")) {
+      nav.classList.remove("show");
+    }
+  };
+
   return (
     <nav
       className="custom-navbar navbar navbar-expand-md navbar-dark"
       aria-label="ShoeFit navigation bar"
     >
       <div className="container d-flex align-items-center justify-content-between">
+        <Link className="navbar-brand fw-bold fs-3" to="/">
+          ShoeFit<span>.</span>
+        </Link>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -76,13 +87,9 @@ const Header = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarsFurni">
-          <Link className="navbar-brand fw-bold fs-3" to="/">
-            ShoeFit<span>.</span>
-          </Link>
-
           <ul className="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0 me-4">
             <li className={isActive("/")}>
-              <Link className="nav-link" to="/">
+              <Link className="nav-link" to="/" onClick={closeMobileMenu}>
                 {t("header.home")}
               </Link>
             </li>
@@ -103,6 +110,7 @@ const Header = () => {
               <ul
                 className="dropdown-menu shadow-sm border-0"
                 aria-labelledby="featuresDropdown"
+                onClick={closeMobileMenu}
               >
                 <li>
                   <Link
@@ -130,15 +138,32 @@ const Header = () => {
                 </li>
               </ul>
             </li>
+            <li className={isActive("/pricing")}>
+              <Link
+                className="nav-link"
+                to="/pricing"
+                onClick={closeMobileMenu}
+              >
+                Gói dịch vụ
+              </Link>
+            </li>
             <li className={isActive("/collection")}>
-              <Link className="nav-link" to="/collection">
+              <Link
+                className="nav-link"
+                to="/collection"
+                onClick={closeMobileMenu}
+              >
                 {t("header.collection")}
               </Link>
             </li>
           </ul>
 
           <div className="d-flex align-items-center gap-3">
-            <Link className="nav-link p-0" to="/wishlist">
+            <Link
+              className="nav-link p-0"
+              to="/wishlist"
+              onClick={closeMobileMenu}
+            >
               <img
                 src={heartIcon}
                 alt="Wishlist"
@@ -174,13 +199,21 @@ const Header = () => {
                 {isLoggedIn ? (
                   <>
                     <li>
-                      <Link className="dropdown-item" to="/profile">
+                      <Link
+                        className="dropdown-item"
+                        to="/profile"
+                        onClick={closeMobileMenu}
+                      >
                         <i className="fa-regular fa-user me-2"></i>{" "}
                         {t("header.profile")}
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" to="/settings">
+                      <Link
+                        className="dropdown-item"
+                        to="/settings"
+                        onClick={closeMobileMenu}
+                      >
                         <i className="fa-solid fa-gear me-2"></i>{" "}
                         {t("header.settings")}
                       </Link>
@@ -201,13 +234,21 @@ const Header = () => {
                 ) : (
                   <>
                     <li>
-                      <Link className="dropdown-item" to="/login">
+                      <Link
+                        className="dropdown-item"
+                        to="/login"
+                        onClick={closeMobileMenu}
+                      >
                         <i className="fa-solid fa-right-to-bracket me-2"></i>{" "}
                         {t("header.login")}
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" to="/register">
+                      <Link
+                        className="dropdown-item"
+                        to="/register"
+                        onClick={closeMobileMenu}
+                      >
                         <i className="fa-solid fa-user-plus me-2"></i>{" "}
                         {t("header.register")}
                       </Link>

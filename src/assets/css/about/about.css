@@ -1,97 +1,158 @@
 .about-page-wrapper {
   background-color: var(--bg-body);
-  padding: 60px 0 100px;
+  padding: 80px 0 120px;
+  overflow-x: hidden;
 }
 
 .about-section {
-  margin-bottom: 80px;
-}
-
-.about-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--brand-blue);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-  display: block;
+  margin-bottom: 120px;
 }
 
 .about-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--text-heading);
-  margin-bottom: 25px;
-  line-height: 1.3;
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--brand-blue);
+  margin-bottom: 40px;
+  letter-spacing: 2px;
 }
 
 .about-text {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--text-main);
-  text-align: justify;
+  text-align: left;
+}
+
+.large-text {
+  font-size: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .about-img-container {
-  border-radius: 20px;
+  border-radius: 30px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
-.about-img-container img {
+.about-img {
   width: 100%;
+  max-width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
   transition: transform 0.5s ease;
 }
 
-.about-img-container:hover img {
-  transform: scale(1.03);
+.about-img-container:hover .about-img {
+  transform: scale(1.05);
 }
 
-.vm-card {
-  background: var(--bg-card);
+.vision-box {
+  background: #ffffff;
+  padding: 50px;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  border: 1.5px solid #15228b;
+}
+
+.mission-card-v2 {
+  background: #ffffff;
   padding: 40px;
-  border-radius: 20px;
+  border-radius: 24px;
   height: 100%;
-  border: 1px solid var(--border-color);
+  position: relative;
+  border: 1.5px solid #15228b;
   transition: all 0.3s ease;
 }
 
-.vm-card:hover {
-  border-color: var(--brand-blue);
-  box-shadow: 0 5px 20px var(--shadow-color);
+.mission-card-v2:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(21, 34, 139, 0.15);
 }
 
-.vm-title {
-  font-size: 20px;
-  font-weight: 700;
+.mission-number {
+  font-size: 40px;
+  font-weight: 900;
+  color: rgba(21, 34, 139, 0.1);
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+
+.text-highlight {
+  color: #15228b;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
   margin-bottom: 15px;
-  color: var(--text-heading);
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .slogan-box {
-  background: var(--brand-blue);
+  background: linear-gradient(
+    135deg,
+    #0a0f30 0%,
+    #15228b 35%,
+    #3d5afe 70%,
+    #6200ea 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientAnimation 6s ease-in-out infinite;
   color: #ffffff;
-  padding: 60px 20px;
-  border-radius: 20px;
-  text-align: center;
-  margin-top: 40px;
+  padding: 100px 20px;
+  border-radius: 40px;
 }
 
 .slogan-text {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  margin-bottom: 15px;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 900;
+  margin-bottom: 25px;
+  letter-spacing: -1px;
 }
 
 .slogan-desc {
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.8;
   opacity: 0.9;
-  max-width: 700px;
-  margin: 0 auto;
+  font-weight: 500;
+  max-width: 1070px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.btn-experience-call-to-action {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #15228b !important;
+  font-weight: 800;
+  padding: 18px 70px;
+  border-radius: 50px;
+  margin-top: 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-experience-call-to-action:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  background-color: #f8f9fa;
 }

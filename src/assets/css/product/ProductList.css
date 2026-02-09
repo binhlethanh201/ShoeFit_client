@@ -61,45 +61,11 @@
   border-color: var(--brand-blue);
 }
 
-.filter-size-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-.filter-size-item {
-  border: 1px solid var(--border-color);
-  padding: 8px;
-  text-align: center;
-  font-size: 12px;
-  cursor: pointer;
-  color: var(--text-main);
-  border-radius: 4px;
-}
-.filter-size-item:hover {
-  border-color: var(--text-heading);
-}
-.filter-size-item.active {
-  background: var(--text-heading);
-  color: var(--bg-card);
-  border-color: var(--text-heading);
-}
-
 .results-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  color: var(--text-heading);
-}
-
-.results-count {
-  font-size: 14px;
-  color: var(--text-main);
-}
-
-.sort-dropdown {
-  font-size: 14px;
-  cursor: pointer;
   color: var(--text-heading);
 }
 
@@ -115,6 +81,7 @@
   background: var(--bg-card);
   border-radius: 8px;
   overflow: hidden;
+  text-decoration: none !important;
 }
 
 .p-img-box {
@@ -173,13 +140,6 @@
   color: var(--brand-blue);
 }
 
-.p-info .category {
-  font-size: 12px;
-  color: var(--text-main);
-  margin-bottom: 4px;
-  opacity: 0.8;
-}
-
 @keyframes softFadeUp {
   from {
     opacity: 0;
@@ -190,44 +150,121 @@
     transform: translateY(0);
   }
 }
-
 .p-card-animate {
   opacity: 0;
   animation: softFadeUp 0.6s ease-out forwards;
 }
 
-.p-card-animate:nth-child(1) {
-  animation-delay: 0.02s;
-}
-.p-card-animate:nth-child(2) {
-  animation-delay: 0.04s;
-}
-.p-card-animate:nth-child(3) {
-  animation-delay: 0.06s;
-}
-.p-card-animate:nth-child(4) {
-  animation-delay: 0.08s;
-}
-.p-card-animate:nth-child(5) {
-  animation-delay: 0.1s;
-}
-.p-card-animate:nth-child(6) {
-  animation-delay: 0.12s;
-}
-.p-card-animate:nth-child(7) {
-  animation-delay: 0.14s;
-}
-.p-card-animate:nth-child(8) {
-  animation-delay: 0.16s;
-}
-.p-card-animate:nth-child(9) {
-  animation-delay: 0.18s;
+@media (max-width: 768px) {
+  .search-layout {
+    display: block;
+    margin-top: 20px;
+    padding: 0 5px;
+  }
+  .filter-sidebar {
+    position: relative;
+    top: 0;
+    width: 100%;
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px var(--shadow-color);
+  }
+
+  .filter-group {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+  }
+
+  .mb-4.d-flex {
+    gap: 8px;
+    margin-bottom: 20px !important;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    margin: 0;
+  }
+
+  .p-card {
+    border-radius: 16px !important;
+    border: 1px solid var(--border-color);
+    height: 100%;
+    background: var(--bg-card);
+  }
+
+  .p-img-box {
+    border-radius: 15px 15px 0 0 !important;
+    margin-bottom: 0;
+  }
+
+  .p-info {
+    padding: 12px 10px !important;
+  }
+
+  .p-info h3 {
+    font-size: 14px !important;
+    white-space: normal !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 40px;
+    margin: 5px 0 !important;
+    font-weight: 500;
+  }
+
+  .p-info .price {
+    font-size: 14px !important;
+    font-weight: 700;
+  }
+
+  .p-info .category {
+    font-size: 11px !important;
+    opacity: 0.7;
+  }
+
+  .product-card-footer {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 4px;
+    margin-top: 8px;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 8px;
+  }
+
+  .size-info {
+    font-size: 11px !important;
+  }
+
+  .product-card-footer .text-dark {
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--brand-blue) !important;
+  }
+
+  .pagination .page-link {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 12px;
+    margin: 0 2px !important;
+  }
 }
 
-.p-card {
-  transition: box-shadow 0.4s ease !important;
-}
+@media (max-width: 480px) {
+  .product-grid {
+    gap: 8px !important;
+  }
 
-.p-card:hover {
-  box-shadow: 0 8px 20px var(--shadow-color);
+  .p-info {
+    padding: 10px 6px !important;
+  }
+
+  .p-info h3 {
+    font-size: 13px !important;
+  }
 }

@@ -687,6 +687,32 @@ textarea {
     width: 40px;
     height: 40px;
   }
+
+  .cart-item {
+    display: flex !important;
+    flex-direction: column;
+    padding: 15px !important;
+    background: var(--bg-card);
+    border-radius: 15px !important;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+  }
+
+  .c-img {
+    width: 100% !important;
+    height: 180px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Profile Card */
+  .profile-card {
+    padding: 1.5rem !important;
+    border-radius: 20px !important;
+  }
+
+  .profile-input {
+    border-radius: 10px !important;
+  }
 }
 
 @media (max-width: 480px) {

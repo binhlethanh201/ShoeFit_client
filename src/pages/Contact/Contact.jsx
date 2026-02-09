@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import "../../assets/css/contact/contact.css";
 
 import emailIcon from "../../assets/images/Effects/email.png";
 import hotlineIcon from "../../assets/images/Effects/hotline.png";
@@ -146,7 +147,7 @@ const Contact = () => {
                   <ul className="list-unstyled social-icons m-0">
                     <li className="mb-4">
                       <a
-                        href="https://instagram.com"
+                        href="https://www.instagram.com/shoefit.tryon"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="d-flex align-items-center text-decoration-none"
@@ -168,35 +169,9 @@ const Contact = () => {
                         </span>
                       </a>
                     </li>
-
                     <li className="mb-4">
                       <a
-                        href="https://facebook.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="d-flex align-items-center text-decoration-none"
-                      >
-                        <span
-                          className="icon-wrap rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm"
-                          style={iconBgStyle}
-                        >
-                          <i
-                            className="fa-brands fa-facebook-f fs-4"
-                            style={{ color: "#1877F2" }}
-                          ></i>
-                        </span>
-                        <span
-                          className="fs-6 mb-0 fw-semibold"
-                          style={headingStyle}
-                        >
-                          Facebook
-                        </span>
-                      </a>
-                    </li>
-
-                    <li className="mb-4">
-                      <a
-                        href="https://tiktok.com"
+                        href="https://www.tiktok.com/@shoefit.tryon"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="d-flex align-items-center text-decoration-none"
@@ -260,7 +235,7 @@ const Contact = () => {
                   <h6 className="fw-bold mb-1" style={headingStyle}>
                     Hotline
                   </h6>
-                  <p style={textStyle}>+1 294 3925 3939</p>
+                  <p style={textStyle}>+84 971 009 866</p>
                 </div>
               </div>
 

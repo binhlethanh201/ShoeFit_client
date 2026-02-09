@@ -7,6 +7,9 @@ import "../../assets/css/tryon2d/tryon2d.css";
 
 import scanIcon from "../../assets/images/Effects/scan.svg";
 
+const DEFAULT_NAME = "My Custom Try-on Image";
+const DEFAULT_DESC = "Created with ShoeFit AI";
+
 const TryOn2D = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -28,6 +31,18 @@ const TryOn2D = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [zoomScale, setZoomScale] = useState(1);
+
+  const checkAuth = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Bạn cần đăng nhập để sử dụng tính năng thử giày AI!");
+      setTimeout(() => {
+        navigate("/login", { state: { from: location.pathname } });
+      }, 1500);
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
     const shoeFromState = location.state?.selectedShoeFromDetail;
@@ -72,6 +87,13 @@ const TryOn2D = () => {
     fetchShoes();
   }, []);
 
+  const handleImageUploadTrigger = (e) => {
+    if (!checkAuth()) {
+      e.preventDefault();
+      return;
+    }
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -98,14 +120,7 @@ const TryOn2D = () => {
   };
 
   const handleGenerate = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Bạn cần đăng nhập để sử dụng tính năng thử giày AI!");
-      setTimeout(() => {
-        navigate("/login", { state: { from: location.pathname } });
-      }, 2000);
-      return;
-    }
+    if (!checkAuth()) return;
 
     if (!userImageFile || !selectedShoe) {
       toast.warning(t("tryon2d.alert_missing_input"));
@@ -120,6 +135,8 @@ const TryOn2D = () => {
         selectedShoe.id,
         selectedShoe.shoeImageId,
         userImageFile,
+        selectedShoe.name || DEFAULT_NAME,
+        DEFAULT_DESC,
       );
 
       if (response.status === 200 || response.status === 201) {
@@ -128,6 +145,7 @@ const TryOn2D = () => {
       }
     } catch (error) {
       if (error.response?.status !== 401) {
+        console.error("AI Error:", error);
         toast.error("Có lỗi xảy ra trong quá trình xử lý AI.");
       }
     } finally {
@@ -163,6 +181,7 @@ const TryOn2D = () => {
                     type="file"
                     id="user-image"
                     accept="image/*"
+                    onClick={handleImageUploadTrigger}
                     onChange={handleImageUpload}
                     style={{ display: "none" }}
                   />
@@ -322,7 +341,6 @@ const TryOn2D = () => {
               <span id="close-drawer" onClick={() => setIsDrawerOpen(false)}>
                 &times;
               </span>
-
               <div className="drawer-search-container">
                 <input
                   type="text"
@@ -332,7 +350,6 @@ const TryOn2D = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-
               <div className="shoe-grid">
                 {isLoadingShoes ? (
                   <p>Đang tải...</p>
