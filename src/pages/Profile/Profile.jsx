@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import authService from "../../services/authService";
+import checkOutService from "../../services/checkOutService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
@@ -10,49 +11,37 @@ const Profile = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
+  const [purchasedServices, setPurchasedServices] = useState([]);
 
   const [userInfo, setUserInfo] = useState({
     fullName: "",
     email: "",
     phoneNumber: "",
     address: "",
-    foot_profile: {
-      shoe_size: "",
-      foot_shape: "standard",
-      skin_tone: "medium",
-      gender: "unisex",
-      preferred_style: [],
-    },
   });
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
-        const response = await authService.getProfile();
-        if (response && response.status === 200 && response.data) {
-          const apiData = response.data;
-          const fpData = apiData.footProfile || apiData.foot_profile || {};
-
+        setLoading(true);
+        const [profileRes, servicesRes] = await Promise.all([
+          authService.getProfile(),
+          checkOutService.getServices(),
+        ]);
+        if (profileRes && profileRes.status === 200 && profileRes.data) {
+          const apiData = profileRes.data;
           setUserInfo({
             fullName: apiData.fullName || "",
             email: apiData.email || "",
             phoneNumber: apiData.phoneNumber || "",
             address: apiData.address || "",
-
-            foot_profile: {
-              shoe_size: fpData.shoeSize || fpData.shoe_size || "",
-              foot_shape: fpData.footShape || fpData.foot_shape || "standard",
-              skin_tone: fpData.skinTone || fpData.skin_tone || "medium",
-              gender: fpData.gender || "unisex",
-              preferred_style:
-                fpData.preferredStyle || fpData.preferred_style || [],
-            },
           });
-        } else {
-          toast.error(response?.message || "Không thể tải thông tin.");
+        }
+        if (servicesRes && servicesRes.data) {
+          setPurchasedServices(servicesRes.data);
         }
       } catch (error) {
-        console.error("Failed to fetch profile:", error);
+        console.error("Failed to fetch data:", error);
         if (error.response && error.response.status === 401) {
           toast.error(t("auth.msg_session_expired"));
           localStorage.removeItem("token");
@@ -64,35 +53,12 @@ const Profile = () => {
       }
     };
 
-    fetchProfile();
+    fetchData();
   }, [navigate, t]);
 
   const handleChangeInfo = (e) => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFootProfileChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo((prev) => ({
-      ...prev,
-      foot_profile: {
-        ...prev.foot_profile,
-        [name]: value,
-      },
-    }));
-  };
-
-  const handleStyleChange = (e) => {
-    const value = e.target.value;
-    const styleArray = value.split(",").map((item) => item.trim());
-    setUserInfo((prev) => ({
-      ...prev,
-      foot_profile: {
-        ...prev.foot_profile,
-        preferred_style: styleArray,
-      },
-    }));
   };
 
   const handleUpdateProfile = async (e) => {
@@ -109,7 +75,6 @@ const Profile = () => {
         toast.success(
           t("profile.msg_update_success") || "Cập nhật thành công!",
         );
-
         const savedUser = JSON.parse(localStorage.getItem("user")) || {};
         savedUser.fullName = userInfo.fullName;
         localStorage.setItem("user", JSON.stringify(savedUser));
@@ -189,7 +154,6 @@ const Profile = () => {
                         name="phoneNumber"
                         value={userInfo.phoneNumber}
                         onChange={handleChangeInfo}
-                        placeholder={t("profile.placeholder_phone")}
                       />
                     </div>
 
@@ -203,141 +167,91 @@ const Profile = () => {
                         rows="3"
                         value={userInfo.address}
                         onChange={handleChangeInfo}
-                        placeholder={t("profile.placeholder_address")}
                       ></textarea>
                     </div>
                   </div>
                 </div>
 
                 <div className="col-md-6">
-                  <div className="profile-card foot-profile-card">
+                  <div className="profile-card purchased-services-card">
                     <div className="profile-section-header">
-                      <i className="fa-solid fa-shoe-prints profile-icon-foot"></i>
+                      <i className="fa-solid fa-box-open profile-icon-foot"></i>
                       <h4 className="profile-heading">
-                        {t("profile.title_foot_profile")}
+                        Gói dịch vụ đã đăng ký
                       </h4>
                     </div>
 
                     <div
-                      className="alert alert-warning py-2"
-                      style={{ fontSize: "0.8rem" }}
+                      className="services-list-container mt-3"
+                      style={{ maxHeight: "400px", overflowY: "auto" }}
                     >
-                      <i className="fa-solid fa-triangle-exclamation me-2"></i>
-                      Tính năng lưu hồ sơ chân đang được cập nhật phía server.
-                    </div>
-
-                    <p className="profile-desc">
-                      {t("profile.desc_foot_profile")}
-                    </p>
-
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="form-group mb-3">
-                          <label className="profile-label">
-                            {t("profile.label_shoe_size")}
-                          </label>
-                          <input
-                            type="number"
-                            className="form-control profile-input"
-                            name="shoe_size"
-                            value={userInfo.foot_profile.shoe_size}
-                            onChange={handleFootProfileChange}
-                            placeholder={t("profile.placeholder_shoe_size")}
-                          />
-                        </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="form-group mb-3">
-                          <label className="profile-label">
-                            {t("profile.label_gender")}
-                          </label>
-                          <select
-                            className="form-select profile-input"
-                            name="gender"
-                            value={userInfo.foot_profile.gender}
-                            onChange={handleFootProfileChange}
+                      {purchasedServices.length > 0 ? (
+                        purchasedServices.map((service) => (
+                          <div
+                            key={service.id}
+                            className={`service-item-card mb-3 p-3 border rounded-3 ${service.isValid ? "border-primary" : "border-secondary opacity-75"}`}
                           >
-                            <option value="unisex">
-                              {t("profile.opt_unisex")}
-                            </option>
-                            <option value="male">
-                              {t("profile.opt_male")}
-                            </option>
-                            <option value="female">
-                              {t("profile.opt_female")}
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
+                            <div className="d-flex justify-content-between align-items-center mb-2">
+                              <span className="badge bg-primary fs-6">
+                                {service.serviceType}
+                              </span>
+                              <span
+                                className={`badge ${service.isValid ? "bg-success" : "bg-danger"}`}
+                              >
+                                {service.isValid ? "Đang hiệu lực" : "Hết hạn"}
+                              </span>
+                            </div>
 
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="form-group mb-3">
-                          <label className="profile-label">
-                            {t("profile.label_foot_shape")}
-                          </label>
-                          <select
-                            className="form-select profile-input"
-                            name="foot_shape"
-                            value={userInfo.foot_profile.foot_shape}
-                            onChange={handleFootProfileChange}
+                            <div
+                              className="service-details"
+                              style={{ fontSize: "0.9rem" }}
+                            >
+                              <div className="d-flex justify-content-between">
+                                <span className="text-muted">Ngày mua:</span>
+                                <span>
+                                  {new Date(
+                                    service.createdDate,
+                                  ).toLocaleDateString("vi-VN")}
+                                </span>
+                              </div>
+                              <div className="d-flex justify-content-between">
+                                <span className="text-muted">
+                                  Thời hạn gói:
+                                </span>
+                                <span>{service.expirationInDays} ngày</span>
+                              </div>
+                              <hr className="my-2" />
+                              <div className="d-flex justify-content-around text-center">
+                                <div>
+                                  <div className="fw-bold text-primary">
+                                    {service.imageNumber}
+                                  </div>
+                                  <div className="small text-muted">Ảnh</div>
+                                </div>
+                                <div>
+                                  <div className="fw-bold text-primary">
+                                    {service.videoNumber}
+                                  </div>
+                                  <div className="small text-muted">Video</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center py-5">
+                          <i className="fa-solid fa-circle-info mb-2 fs-3 text-muted"></i>
+                          <p className="text-muted">
+                            Bạn chưa đăng ký gói dịch vụ nào.
+                          </p>
+                          <Link
+                            to="/pricing"
+                            className="btn btn-sm btn-primary rounded-pill"
                           >
-                            <option value="standard">
-                              {t("profile.opt_standard")}
-                            </option>
-                            <option value="narrow">
-                              {t("profile.opt_narrow")}
-                            </option>
-                            <option value="wide">
-                              {t("profile.opt_wide")}
-                            </option>
-                            <option value="flat">
-                              {t("profile.opt_flat")}
-                            </option>
-                          </select>
+                            Đăng ký ngay
+                          </Link>
                         </div>
-                      </div>
-                      <div className="col-6">
-                        <div className="form-group mb-3">
-                          <label className="profile-label">
-                            {t("profile.label_skin_tone")}
-                          </label>
-                          <select
-                            className="form-select profile-input"
-                            name="skin_tone"
-                            value={userInfo.foot_profile.skin_tone}
-                            onChange={handleFootProfileChange}
-                          >
-                            <option value="light">
-                              {t("profile.opt_light")}
-                            </option>
-                            <option value="medium">
-                              {t("profile.opt_medium")}
-                            </option>
-                            <option value="tan">{t("profile.opt_tan")}</option>
-                            <option value="dark">
-                              {t("profile.opt_dark")}
-                            </option>
-                            <option value="deep">
-                              {t("profile.opt_deep")}
-                            </option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group mb-3">
-                      <label className="profile-label">
-                        {t("profile.label_preferred_style")}
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control profile-input"
-                        value={userInfo.foot_profile.preferred_style.join(", ")}
-                        onChange={handleStyleChange}
-                        placeholder={t("profile.placeholder_style")}
-                      />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -345,14 +259,13 @@ const Profile = () => {
 
               <div className="row mt-3 mb-5">
                 <div className="col-12 d-flex justify-content-between align-items-center">
-                  <Link
+                  {/* <Link
                     to="/change-password"
                     className="btn btn-outline-secondary rounded-pill px-4 fw-bold"
-                    style={{ textDecoration: "none" }}
                   >
                     <i className="fa-solid fa-key me-2"></i>
                     {t("profile.btn_change_pass")}
-                  </Link>
+                  </Link> */}
 
                   <button
                     type="submit"

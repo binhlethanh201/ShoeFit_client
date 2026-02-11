@@ -33,6 +33,10 @@ import TryOn2D from "./pages/Tryon2D/TryOn2D.jsx";
 import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
 import StyleDetail from "./pages/StyleAdvisor/StyleDetail.jsx";
 import Pricing from "./pages/Pricing/Pricing.jsx";
+import Checkout from "./pages/Pricing/Checkout.jsx";
+import PaymentSuccess from "./components/pricing/PaymentSuccess.jsx";
+import PaymentFailed from "./components/pricing/PaymentFailed.jsx";
+import PaymentProcessing from "./components/pricing/PaymentProcessing.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 // --- Auth ----
@@ -101,7 +105,10 @@ const router = createBrowserRouter(
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/pricing" element={<Pricing />}></Route>
-
+        <Route path="/checkout" element={<Checkout />}></Route>
+        <Route path="/processing" element={<PaymentProcessing />}></Route>
+        <Route path="/payment-success" element={<PaymentSuccess />}></Route>
+        <Route path="/payment-failure" element={<PaymentFailed />}></Route>
         {/* Protected Auth Route */}
         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
           <Route path="/change-password" element={<ChangePassword />}></Route>

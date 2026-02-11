@@ -1,12 +1,47 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import checkOutService from "../../services/checkOutService";
+import PaymentProcessing from "../../components/pricing/PaymentProcessing";
 import "../../assets/css/pricing/pricing.css";
 
 const Pricing = () => {
   const [activeTab, setActiveTab] = useState("main");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSelectPlan = async (serviceType) => {
+    setLoading(true);
+    try {
+      const response = await checkOutService.createPayment(serviceType);
+
+      console.log("API Response:", response);
+
+      if (response && response.data) {
+        navigate("/checkout", {
+          state: {
+            paymentData: response.data,
+            serviceName: serviceType,
+          },
+        });
+      } else {
+        alert("Dữ liệu thanh toán không hợp lệ!");
+      }
+    } catch (error) {
+      console.error("Lỗi khởi tạo thanh toán:", error);
+      if (error.response?.status !== 401) {
+        alert("Không thể khởi tạo thanh toán. Vui lòng thử lại sau!");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <PaymentProcessing />;
 
   return (
     <div className="pricing-container">
       <h1>Bảng Giá Dịch Vụ ShoeFit</h1>
+
       <div className="tabs-container">
         <button
           className={`tab-btn ${activeTab === "main" ? "active" : ""}`}
@@ -21,8 +56,9 @@ const Pricing = () => {
           Gói Mua Thêm
         </button>
       </div>
+
       <div className={`pricing-grid ${activeTab === "main" ? "active" : ""}`}>
-        <div className="pricing-card">
+        <div className="pricing-card" onClick={() => handleSelectPlan("Basic")}>
           <div className="plan-name">Basic</div>
           <div className="price">
             19.000 <span>đ / tháng</span>
@@ -36,7 +72,11 @@ const Pricing = () => {
             <li>Lưu trữ lịch sử 1 ngày</li>
           </ul>
         </div>
-        <div className="pricing-card highlight">
+
+        <div
+          className="pricing-card highlight"
+          onClick={() => handleSelectPlan("Standard")}
+        >
           <div className="badge">PHỔ BIẾN</div>
           <div className="plan-name">Standard</div>
           <div className="price">
@@ -50,7 +90,8 @@ const Pricing = () => {
             <li>Ưu tiên xử lý nhanh</li>
           </ul>
         </div>
-        <div className="pricing-card">
+
+        <div className="pricing-card" onClick={() => handleSelectPlan("Pro")}>
           <div className="plan-name">Pro</div>
           <div className="price">
             119.000 <span>đ / tháng</span>
@@ -64,15 +105,17 @@ const Pricing = () => {
           </ul>
         </div>
       </div>
+
       <div className={`pricing-grid ${activeTab === "addon" ? "active" : ""}`}>
-        <div className="pricing-card">
+        <div
+          className="pricing-card"
+          onClick={() => handleSelectPlan("ImageOnly")}
+        >
           <div className="plan-name">Image Only</div>
           <div className="price">
             29.000 <span>đ</span>
           </div>
-          <p className="description">
-            Chỉ bổ sung lượt tạo ảnh chất lượng cao.
-          </p>
+          <p className="description">Bổ sung lượt tạo ảnh chất lượng cao.</p>
           <button className="btn-upgrade">Mua ngay</button>
           <ul className="features-list">
             <li>10 ảnh chất lượng cao</li>
@@ -80,14 +123,15 @@ const Pricing = () => {
           </ul>
         </div>
 
-        <div className="pricing-card">
+        <div
+          className="pricing-card"
+          onClick={() => handleSelectPlan("VideoOnly")}
+        >
           <div className="plan-name">Video Only</div>
           <div className="price">
             59.000 <span>đ</span>
           </div>
-          <p className="description">
-            Chỉ bổ sung lượt tạo video chuyên nghiệp.
-          </p>
+          <p className="description">Bổ sung lượt tạo video chuyên nghiệp.</p>
           <button className="btn-upgrade">Mua ngay</button>
           <ul className="features-list">
             <li>5 video chuyên nghiệp</li>
