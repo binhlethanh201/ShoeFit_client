@@ -264,18 +264,20 @@ const ProductManagement = () => {
     <div className="card border-0 shadow-sm h-100">
       <div className="card-header bg-white py-3 border-bottom">
         <div className="row align-items-center justify-content-between g-3">
-          {/* <div className="col-auto">
-            <h5 className="mb-0 fw-bold text-dark">Quản lý Sản phẩm</h5>
-          </div> */}
+          <div className="col-auto">
+            <h5 className="mb-0 fw-bold text-dark text-uppercase">
+              Quản lý Sản phẩm
+            </h5>
+          </div>
 
           <div className="col-12 col-md-5">
-            <div className="input-group input-group-sm">
-              <span className="input-group-text bg-light border-end-0 text-muted">
+            <div className="input-group input-group-sm shadow-sm">
+              <span className="input-group-text bg-white border-end-0 text-muted">
                 <i className="fa-solid fa-magnifying-glass"></i>
               </span>
               <input
                 type="text"
-                className="form-control bg-light border-start-0 ps-0"
+                className="form-control border-start-0 ps-0"
                 placeholder="Tìm theo tên, SKU, hiệu..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -378,14 +380,12 @@ const ProductManagement = () => {
           <button
             className="btn btn-outline-secondary btn-sm"
             disabled={pagination.PageNumber === 1 || searchTerm.trim() !== ""}
-            onClick={() =>
-              setPagination((p) => ({ ...p, PageNumber: p.PageNumber - 1 }))
-            }
+            onClick={() => fetchProducts(pagination.PageNumber - 1)}
           >
-            Trước
+            Sau
           </button>
           <button className="btn btn-outline-secondary btn-sm disabled text-dark fw-bold">
-            Trang {pagination.PageNumber}
+            {pagination.PageNumber} / {pagination.totalPages}
           </button>
           <button
             className="btn btn-outline-secondary btn-sm"
@@ -393,14 +393,13 @@ const ProductManagement = () => {
               pagination.PageNumber === pagination.totalPages ||
               searchTerm.trim() !== ""
             }
-            onClick={() =>
-              setPagination((p) => ({ ...p, PageNumber: p.PageNumber + 1 }))
-            }
+            onClick={() => fetchProducts(pagination.PageNumber + 1)}
           >
-            Sau
+            Tiếp
           </button>
         </div>
       </div>
+
       {showModal && (
         <div
           className="modal fade show d-block"

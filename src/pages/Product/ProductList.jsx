@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import productService from "../../services/product/productService";
 import "../../assets/css/product/ProductList.css";
 import SearchFilter from "../../components/product/productList/ProductFilter";
@@ -7,12 +7,17 @@ import SearchResults from "../../components/product/productList/ProductResults";
 
 const ProductList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialQuery = searchParams.get("q") || "";
-
+  const { pageNumber } = useParams();
+  const navigate = useNavigate();
+  
+  // Lấy giá trị query từ URL
+  const initialQuery = useMemo(() => searchParams.get("q") || "", [searchParams]);
+  
   const [searchTerm, setSearchTerm] = useState(initialQuery);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  
+  const currentPage = parseInt(pageNumber) || 1;
   const productsPerPage = 9;
 
   const [filters, setFilters] = useState({
@@ -20,6 +25,11 @@ const ProductList = () => {
     materialId: null,
     styleId: null,
   });
+
+  // Đồng bộ searchTerm khi nhấn Back/Forward trên trình duyệt
+  useEffect(() => {
+    setSearchTerm(initialQuery);
+  }, [initialQuery]);
 
   const fetchData = useCallback(async (currentFilters) => {
     setLoading(true);
@@ -59,10 +69,16 @@ const ProductList = () => {
     });
   }, [allProducts, searchTerm, filters]);
 
+  // FIX WARNING: Thêm initialQuery vào dependency array
   useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
+    if (searchTerm !== initialQuery) {
+        const query = searchTerm ? `?q=${searchTerm}` : "";
+        // Khi người dùng gõ, ép về trang 1 để kết quả tìm kiếm chính xác
+        navigate(`/collection/page/1${query}`, { replace: true });
+    }
+  }, [searchTerm, navigate, initialQuery]);
 
+  // Debounce cập nhật searchParams
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setSearchParams(searchTerm ? { q: searchTerm } : {});
@@ -77,7 +93,13 @@ const ProductList = () => {
   const clearAllFilters = () => {
     setFilters({ categoryId: null, materialId: null, styleId: null });
     setSearchTerm("");
-    setSearchParams({});
+    navigate("/collection/page/1");
+  };
+
+  const paginate = (num) => {
+    const query = searchTerm ? `?q=${searchTerm}` : "";
+    navigate(`/collection/page/${num}${query}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -142,10 +164,7 @@ const ProductList = () => {
                   totalProducts={filteredProducts.length}
                   productsPerPage={productsPerPage}
                   currentPage={currentPage}
-                  paginate={(num) => {
-                    setCurrentPage(num);
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
+                  paginate={paginate}
                   searchTerm={searchTerm}
                 />
               </div>

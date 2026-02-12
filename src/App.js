@@ -37,6 +37,7 @@ import Checkout from "./pages/Pricing/Checkout.jsx";
 import PaymentSuccess from "./components/pricing/PaymentSuccess.jsx";
 import PaymentFailed from "./components/pricing/PaymentFailed.jsx";
 import PaymentProcessing from "./components/pricing/PaymentProcessing.jsx";
+import ShoeCollect from "./pages/Profile/ShoeCollect.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 // --- Auth ----
@@ -93,6 +94,10 @@ const router = createBrowserRouter(
         <Route path="/about" element={<About />}></Route>
         <Route path="/blog" element={<Blog />}></Route>
         <Route path="/collection" element={<ProductList />}></Route>
+        <Route
+          path="/collection/page/:pageNumber"
+          element={<ProductList />}
+        ></Route>
         <Route path="/product/:productId" element={<ProductDetail />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
@@ -109,6 +114,7 @@ const router = createBrowserRouter(
         <Route path="/processing" element={<PaymentProcessing />}></Route>
         <Route path="/payment-success" element={<PaymentSuccess />}></Route>
         <Route path="/payment-failure" element={<PaymentFailed />}></Route>
+        <Route path="/shoe-collect" element={<ShoeCollect />}></Route>
         {/* Protected Auth Route */}
         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
           <Route path="/change-password" element={<ChangePassword />}></Route>

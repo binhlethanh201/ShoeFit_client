@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const SearchProductCard = ({ product }) => {
   const isNew =
     product.createdDate &&
-    (new Date() - new Date(product.createdDate)) / (1000 * 3600 * 24) < 30;
+    (new Date() - new Date(product.createdDate)) / (1000 * 3600 * 24) < 5;
 
   return (
     <Link to={`/product/${product.id}`} className="p-card text-decoration-none">
@@ -30,12 +30,12 @@ const SearchProductCard = ({ product }) => {
           </span>
         </div>
 
-        <h3
+        <h4
           className="text-truncate"
           style={{ fontSize: "15px", margin: "5px 0" }}
         >
           {product.title}
-        </h3>
+        </h4>
         <div className="product-card-footer d-flex justify-content-between align-items-center mt-2">
           <div
             className="size-info"
@@ -44,7 +44,7 @@ const SearchProductCard = ({ product }) => {
             <i className="fas fa-ruler-horizontal me-1"></i> Size:{" "}
             {product.size || "N/A"}
           </div>
-          <div className="text-dark fw-bold" style={{ fontSize: "13px" }}>
+          <div className=" fw-bold" style={{ fontSize: "13px" }}>
             Xem chi tiết
           </div>
         </div>
