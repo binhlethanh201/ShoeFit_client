@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 import "../../assets/css/contact/contact.css";
 
 import emailIcon from "../../assets/images/Effects/email.png";
@@ -8,10 +10,34 @@ import locationIcon from "../../assets/images/Effects/location.png";
 
 const Contact = () => {
   const { t } = useTranslation();
+  const form = useRef();
+  const [isSending, setIsSending] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(t("contact.alert_success"));
+    setIsSending(true);
+
+    const serviceID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+    const templateID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+    emailjs
+      .sendForm(serviceID, templateID, form.current, publicKey)
+      .then(
+        () => {
+          toast.success(
+            t("contact.alert_success") || "Gửi tin nhắn thành công!",
+          );
+          form.current.reset();
+        },
+        (error) => {
+          console.error("FAILED...", error.text);
+          toast.error("Gửi thất bại. Bảnh kiểm tra lại cấu hình EmailJS nhé!");
+        },
+      )
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   const inputStyle = {
@@ -48,7 +74,8 @@ const Contact = () => {
                 <h3 className=" h2 mb-4 fw-bold mt-4" style={headingStyle}>
                   {t("contact.title")}
                 </h3>
-                <form onSubmit={handleSubmit}>
+
+                <form ref={form} onSubmit={handleSubmit}>
                   <div className="form-group mb-3">
                     <label
                       className="h7 fw-bold mb-1"
@@ -59,6 +86,7 @@ const Contact = () => {
                     </label>
                     <input
                       type="text"
+                      name="fullname"
                       className="form-control"
                       id="fullname"
                       required
@@ -78,6 +106,7 @@ const Contact = () => {
                         </label>
                         <input
                           type="email"
+                          name="email"
                           className="form-control"
                           id="email"
                           required
@@ -97,6 +126,7 @@ const Contact = () => {
                         </label>
                         <input
                           type="tel"
+                          name="phone"
                           className="form-control"
                           id="phone"
                           required
@@ -127,13 +157,15 @@ const Contact = () => {
                   <button
                     type="submit"
                     className="btn rounded-pill py-3 px-5 fw-bold"
+                    disabled={isSending}
                     style={{
                       backgroundColor: "var(--brand-blue)",
                       color: "#fff",
                       border: "none",
+                      opacity: isSending ? 0.7 : 1,
                     }}
                   >
-                    {t("contact.btn_send")}
+                    {isSending ? "Đang gửi..." : t("contact.btn_send")}
                   </button>
                 </form>
               </div>
