@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import adminService from "../../services/adminService";
 import { toast } from "sonner";
 
 const AttributeManagement = () => {
+  const { pageNumber } = useParams();
+  const navigate = useNavigate();
+
   const [activeTab, setActiveTab] = useState("attributes");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [pagination, setPagination] = useState({
-    page: 1,
+    page: parseInt(pageNumber) || 1,
     size: 10,
     totalPages: 1,
   });
@@ -34,7 +38,6 @@ const AttributeManagement = () => {
   const filteredData = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return data;
-
     return data.filter((item) => {
       if (activeTab === "attributes") {
         return (
@@ -48,7 +51,7 @@ const AttributeManagement = () => {
   }, [searchTerm, data, activeTab]);
 
   const fetchData = useCallback(
-    async (page = 1) => {
+    async (page) => {
       setLoading(true);
       try {
         let res;
@@ -77,7 +80,7 @@ const AttributeManagement = () => {
     [activeTab, pagination.size],
   );
 
-  const loadDeps = async () => {
+  const loadDependencies = async () => {
     try {
       const [s, m, st] = await Promise.all([
         adminService.getAllShoes(1, 100),
@@ -93,17 +96,23 @@ const AttributeManagement = () => {
   };
 
   useEffect(() => {
-    fetchData(pagination.page);
-  }, [pagination.page, fetchData]);
+    const page = parseInt(pageNumber) || 1;
+    fetchData(page);
+  }, [pageNumber, activeTab, fetchData]);
 
   useEffect(() => {
-    if (showModal) loadDeps();
+    if (showModal) loadDependencies();
   }, [showModal]);
 
-  useEffect(() => {
+  const handlePageChange = (newPage) => {
+    navigate(`/admin/dashboard/attributes/page/${newPage}`);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
     setSearchTerm("");
-    setPagination((p) => ({ ...p, page: 1 }));
-  }, [activeTab]);
+    navigate(`/admin/dashboard/attributes/page/1`);
+  };
 
   const handleOpenModal = (type, item = null) => {
     setModalType(type);
@@ -115,10 +124,17 @@ const AttributeManagement = () => {
         shoeId: item?.shoeId || "",
         materialId: item?.materialId || "",
         styleId: item?.styleId || "",
-        price: item?.price || 0,
+        price: item?.price || "",
+        name: "",
       });
     } else {
-      setFormData({ name: item?.name || "" });
+      setFormData({
+        name: item?.name || "",
+        shoeId: "",
+        materialId: "",
+        styleId: "",
+        price: 0,
+      });
     }
     setShowModal(true);
   };
@@ -150,41 +166,43 @@ const AttributeManagement = () => {
   };
 
   const handleDelete = async (item) => {
-    const confirmMsg = `Bạn có chắc muốn xóa "${item.name || item.shoeName}"?`;
-    if (!window.confirm(confirmMsg)) return;
-
+    const label = item.name || item.shoeName;
+    if (!window.confirm(`Bạn có chắc muốn xóa "${label}"?`)) return;
     try {
       let res;
       if (activeTab === "materials")
         res = await adminService.deleteMaterial(item.id);
-      else if (activeTab === "styles")
-        res = await adminService.deleteStyle(item.id);
-
+      else res = await adminService.deleteStyle(item.id);
       if (res) {
         toast.success("Xóa thành công!");
         fetchData(pagination.page);
       }
     } catch (error) {
-      toast.error("Không thể xóa mục này vì đang được liên kết với sản phẩm.");
+      toast.error("Mục này đang được sử dụng ở nơi khác.");
     }
   };
 
   return (
     <div className="h-100 d-flex flex-column">
       <div className="d-flex gap-2 mb-3 bg-white p-2 rounded shadow-sm">
-        {["attributes", "materials", "styles"].map((tab) => (
-          <button
-            key={tab}
-            className={`btn btn-sm ${activeTab === tab ? "btn-dark" : "btn-light"}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab === "attributes"
-              ? "Biến thể sản phẩm"
-              : tab === "materials"
-                ? "Chất liệu"
-                : "Phong cách"}
-          </button>
-        ))}
+        <button
+          className={`btn btn-sm ${activeTab === "attributes" ? "btn-dark" : "btn-light"}`}
+          onClick={() => handleTabChange("attributes")}
+        >
+          Biến thể sản phẩm
+        </button>
+        <button
+          className={`btn btn-sm ${activeTab === "materials" ? "btn-dark" : "btn-light"}`}
+          onClick={() => handleTabChange("materials")}
+        >
+          Chất liệu
+        </button>
+        <button
+          className={`btn btn-sm ${activeTab === "styles" ? "btn-dark" : "btn-light"}`}
+          onClick={() => handleTabChange("styles")}
+        >
+          Phong cách
+        </button>
       </div>
 
       <div className="card border-0 shadow-sm flex-grow-1">
@@ -199,31 +217,20 @@ const AttributeManagement = () => {
                     : "Quản lý Phong cách"}
               </h5>
             </div>
-
             <div className="col-12 col-md-5">
               <div className="input-group input-group-sm shadow-sm">
-                <span className="input-group-text bg-light border-end-0 text-muted">
+                <span className="input-group-text bg-white border-end-0 text-muted">
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </span>
                 <input
                   type="text"
-                  className="form-control bg-light border-start-0 ps-0"
+                  className="form-control border-start-0 ps-0"
                   placeholder="Tìm kiếm nhanh..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                {searchTerm && (
-                  <button
-                    className="btn btn-outline-secondary border-start-0"
-                    type="button"
-                    onClick={() => setSearchTerm("")}
-                  >
-                    <i className="fa-solid fa-xmark"></i>
-                  </button>
-                )}
               </div>
             </div>
-
             <div className="col-auto">
               <button
                 className="btn btn-dark btn-sm px-3"
@@ -268,7 +275,7 @@ const AttributeManagement = () => {
                       <tr key={item.id}>
                         <td className="ps-4">
                           {activeTab === "attributes" ? (
-                            <div className="fw-bold text-dark">
+                            <div className="fw-bold">
                               {item.shoeName || (
                                 <span className="text-muted fst-italic small">
                                   Chưa gán
@@ -341,10 +348,8 @@ const AttributeManagement = () => {
             <div className="btn-group shadow-sm">
               <button
                 className="btn btn-outline-secondary btn-sm"
-                disabled={pagination.page === 1}
-                onClick={() =>
-                  setPagination((p) => ({ ...p, page: p.page - 1 }))
-                }
+                disabled={pagination.page <= 1}
+                onClick={() => handlePageChange(pagination.page - 1)}
               >
                 Sau
               </button>
@@ -353,10 +358,8 @@ const AttributeManagement = () => {
               </button>
               <button
                 className="btn btn-outline-secondary btn-sm"
-                disabled={pagination.page === pagination.totalPages}
-                onClick={() =>
-                  setPagination((p) => ({ ...p, page: p.page + 1 }))
-                }
+                disabled={pagination.page >= pagination.totalPages}
+                onClick={() => handlePageChange(pagination.page + 1)}
               >
                 Tiếp
               </button>
@@ -373,7 +376,7 @@ const AttributeManagement = () => {
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content border-0 shadow-lg">
               <div className="modal-header border-bottom-0">
-                <h5 className="fw-bold">
+                <h5 className="fw-bold text-uppercase small">
                   {isEditMode ? "Cập nhật" : "Tạo mới"}{" "}
                   {modalType === "attribute"
                     ? "Biến thể"
@@ -393,7 +396,7 @@ const AttributeManagement = () => {
                     <>
                       <div className="mb-3">
                         <label className="form-label small fw-bold">
-                          Giày mục tiêu
+                          Chọn giày
                         </label>
                         <select
                           className="form-select"
@@ -404,7 +407,7 @@ const AttributeManagement = () => {
                           disabled={isEditMode}
                           required
                         >
-                          <option value="">-- Chọn giày --</option>
+                          <option value="">-- Chọn --</option>
                           {shoes.map((s) => (
                             <option key={s.id} value={s.id}>
                               {s.name}
@@ -418,9 +421,10 @@ const AttributeManagement = () => {
                             Chất liệu{" "}
                             <span
                               className="text-primary pointer"
+                              style={{ fontSize: "10px" }}
                               onClick={() => setModalType("material")}
                             >
-                              + Mới
+                              + THÊM NHANH
                             </span>
                           </label>
                           <select
@@ -448,9 +452,10 @@ const AttributeManagement = () => {
                             Phong cách{" "}
                             <span
                               className="text-primary pointer"
+                              style={{ fontSize: "10px" }}
                               onClick={() => setModalType("style")}
                             >
-                              + Mới
+                              + THÊM NHANH
                             </span>
                           </label>
                           <select
@@ -476,7 +481,7 @@ const AttributeManagement = () => {
                       </div>
                       <div className="mb-3">
                         <label className="form-label small fw-bold">
-                          Giá bán biến thể (VNĐ)
+                          Giá bán (VNĐ)
                         </label>
                         <input
                           type="number"
@@ -502,7 +507,7 @@ const AttributeManagement = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
-                        placeholder="Nhập tên gọi..."
+                        placeholder="VD: Da bò, Cổ cao..."
                         required
                       />
                     </div>
@@ -518,10 +523,10 @@ const AttributeManagement = () => {
                         : setModalType("attribute")
                     }
                   >
-                    {modalType === "attribute" ? "Hủy bỏ" : "Quay lại"}
+                    {modalType === "attribute" ? "Hủy" : "Quay lại"}
                   </button>
                   <button type="submit" className="btn btn-dark px-4">
-                    Lưu lại
+                    Lưu dữ liệu
                   </button>
                 </div>
               </form>

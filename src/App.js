@@ -48,6 +48,10 @@ import Settings from "./pages/Setting/Settings.jsx";
 
 // --- Admin Dashboard ---
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
+import ProductManagement from "./components/admin/ProductManagement";
+import CategoryManagement from "./components/admin/CategoryManagement";
+import AttributeManagement from "./components/admin/AttributeManagement";
+import DashboardHome from "./components/admin/DashboardHome";
 
 const AnalyticsTracker = () => {
   const location = useLocation();
@@ -124,7 +128,21 @@ const router = createBrowserRouter(
 
       {/* Admin Route */}
       <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />}>
+          <Route index element={<DashboardHome />} />
+          <Route
+            path="products/page/:pageNumber"
+            element={<ProductManagement />}
+          />
+          <Route
+            path="categories/page/:pageNumber"
+            element={<CategoryManagement />}
+          />
+          <Route
+            path="attributes/page/:pageNumber"
+            element={<AttributeManagement />}
+          />
+        </Route>
       </Route>
     </Route>,
   ),

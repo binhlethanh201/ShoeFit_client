@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import authService from "../../services/authService";
-
 import "../../assets/css/admin/admin.css";
-
-import DashboardHome from "../../components/admin/DashboardHome";
-import ProductManagement from "../../components/admin/ProductManagement";
-import CategoryManagement from "../../components/admin/CategoryManagement";
-import AttributeManagement from "../../components/admin/AttributeManagement";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const userStr = localStorage.getItem("user");
   const user = userStr ? JSON.parse(userStr) : null;
-
-  const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
     document.body.classList.add("admin-body");
@@ -28,25 +21,17 @@ const AdminDashboard = () => {
     navigate("/login");
   };
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "dashboard":
-        return <DashboardHome />;
-      case "categories":
-        return <CategoryManagement />;
-      case "attributes":
-        return <AttributeManagement />;
-      case "products":
-        return <ProductManagement />;
-      default:
-        return <DashboardHome />;
-    }
+  const getActiveTab = () => {
+    const path = location.pathname;
+    if (path.includes("products")) return "products";
+    if (path.includes("categories")) return "categories";
+    if (path.includes("attributes")) return "attributes";
+    return "dashboard";
   };
 
   const getNavLinkClass = (tabName) => {
-    return `nav-link w-100 text-start border-0 ${
-      activeTab === tabName ? "active" : ""
-    }`;
+    const isActive = getActiveTab() === tabName;
+    return `nav-link w-100 text-start border-0 ${isActive ? "active" : ""}`;
   };
 
   return (
@@ -57,7 +42,7 @@ const AdminDashboard = () => {
           style={{ zIndex: 100 }}
         >
           <div className="position-sticky px-2">
-            <div className="mb-5 px-3 d-flex align-items-center">
+            <div className="mb-5 px-3 d-flex align-items-center pt-4">
               <div
                 className="bg-dark text-white rounded-circle d-flex align-items-center justify-content-center me-2"
                 style={{ width: 32, height: 32 }}
@@ -76,7 +61,7 @@ const AdminDashboard = () => {
               <li className="nav-item">
                 <button
                   className={getNavLinkClass("dashboard")}
-                  onClick={() => setActiveTab("dashboard")}
+                  onClick={() => navigate("/admin/dashboard")}
                 >
                   <i
                     className="fa-solid fa-chart-pie me-3"
@@ -88,7 +73,7 @@ const AdminDashboard = () => {
               <li className="nav-item">
                 <button
                   className={getNavLinkClass("categories")}
-                  onClick={() => setActiveTab("categories")}
+                  onClick={() => navigate("/admin/dashboard/categories/page/1")}
                 >
                   <i
                     className="fa-solid fa-layer-group me-3"
@@ -100,7 +85,7 @@ const AdminDashboard = () => {
               <li className="nav-item">
                 <button
                   className={getNavLinkClass("attributes")}
-                  onClick={() => setActiveTab("attributes")}
+                  onClick={() => navigate("/admin/dashboard/attributes/page/1")}
                 >
                   <i
                     className="fa-solid fa-tags me-3"
@@ -112,7 +97,7 @@ const AdminDashboard = () => {
               <li className="nav-item">
                 <button
                   className={getNavLinkClass("products")}
-                  onClick={() => setActiveTab("products")}
+                  onClick={() => navigate("/admin/dashboard/products/page/1")}
                 >
                   <i
                     className="fa-solid fa-box-open me-3"
@@ -134,21 +119,16 @@ const AdminDashboard = () => {
             </div>
           </div>
         </nav>
+
         <main
           className="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4"
           style={{ marginLeft: "16.666667%" }}
         >
           <div className="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-            <h2 className="h4 fw-bold m-0 text-dark">
-              {activeTab === "dashboard"
+            <h2 className="h4 fw-bold m-0 text-dark text-uppercase">
+              {getActiveTab() === "dashboard"
                 ? "Tổng quan"
-                : activeTab === "categories"
-                  ? "Danh mục sản phẩm"
-                  : activeTab === "attributes"
-                    ? "Thuộc tính biến thể"
-                    : activeTab === "products"
-                      ? "Danh sách sản phẩm"
-                      : "Hệ thống"}
+                : `Quản lý ${getActiveTab()}`}
             </h2>
             <div className="d-flex align-items-center bg-white px-3 py-2 rounded-pill border">
               <span className="me-2 small text-secondary">Xin chào,</span>
@@ -164,7 +144,9 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="admin-content-area">{renderContent()}</div>
+          <div className="admin-content-area">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

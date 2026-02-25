@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import adminService from "../../services/adminService";
 import { toast } from "sonner";
 
 const ProductManagement = () => {
+  const { pageNumber } = useParams();
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [attributes, setAttributes] = useState([]);
@@ -11,7 +15,7 @@ const ProductManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [pagination, setPagination] = useState({
-    PageNumber: 1,
+    PageNumber: parseInt(pageNumber) || 1,
     PageSize: 10,
     totalPages: 1,
     totalElements: 0,
@@ -39,7 +43,6 @@ const ProductManagement = () => {
   const filteredProducts = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return products;
-
     return products.filter(
       (p) =>
         p.name?.toLowerCase().includes(term) ||
@@ -54,7 +57,6 @@ const ProductManagement = () => {
         adminService.getAllCategories(1, 100),
         adminService.getAllAttributes(1, 100),
       ]);
-
       if (catRes?.data) setCategories(catRes.data.items || []);
       if (attrRes?.data) setAttributes(attrRes.data.items || []);
     } catch (error) {
@@ -62,26 +64,21 @@ const ProductManagement = () => {
     }
   };
 
-  useEffect(() => {
-    fetchDependencies();
-  }, []);
-
   const fetchProducts = useCallback(
-    async (page = 1) => {
+    async (page) => {
       setLoading(true);
       try {
         const response = await adminService.getAllShoes(
           page,
           pagination.PageSize,
         );
-
         if (response && response.data) {
           setProducts(response.data.items || []);
           setPagination((prev) => ({
             ...prev,
-            PageNumber: response.data.page || page,
-            totalPages: response.data.totalPages || 1,
-            totalElements: response.data.total || 0,
+            PageNumber: response.data.page,
+            totalPages: response.data.totalPages,
+            totalElements: response.data.total,
           }));
         }
       } catch (error) {
@@ -94,22 +91,29 @@ const ProductManagement = () => {
   );
 
   useEffect(() => {
-    fetchProducts(pagination.PageNumber);
-  }, [pagination.PageNumber, fetchProducts]);
+    fetchDependencies();
+  }, []);
+
+  useEffect(() => {
+    const page = parseInt(pageNumber) || 1;
+    fetchProducts(page);
+  }, [pageNumber, fetchProducts]);
+
+  const handlePageChange = (newPage) => {
+    navigate(`/admin/dashboard/products/page/${newPage}`);
+  };
 
   const handleOpenModal = async (product = null) => {
     setTempImages([]);
     if (product) {
       setIsEditMode(true);
       setCurrentId(product.id);
-
       try {
         const detailRes = await adminService.getShoeById(product.id);
         const detail = detailRes.data;
         const currentAttrIds = detail.attributes
           ? detail.attributes.map((a) => a.id)
           : [];
-
         setFormData({
           sku: detail.sku || "",
           name: detail.name || "",
@@ -122,7 +126,6 @@ const ProductManagement = () => {
           attributeIds: currentAttrIds,
           imagesInput: "",
         });
-
         setExistingImages(detail.images || []);
       } catch (error) {
         toast.error("Không thể tải chi tiết sản phẩm");
@@ -155,7 +158,6 @@ const ProductManagement = () => {
   const handleAddImage = async () => {
     const url = formData.imagesInput.trim();
     if (!url) return;
-
     if (isEditMode) {
       try {
         await adminService.addShoeMedia(currentId, [url]);
@@ -215,15 +217,15 @@ const ProductManagement = () => {
         }
         toast.success("Cập nhật thuộc tính thành công");
       } catch (error) {
-        toast.error("Cập nhật thuộc tính thất bại");
+        toast.error("Thao tác thất bại");
       }
     } else {
-      setFormData((prev) => {
-        const exists = prev.attributeIds.includes(id);
-        return exists
-          ? { ...prev, attributeIds: prev.attributeIds.filter((a) => a !== id) }
-          : { ...prev, attributeIds: [...prev.attributeIds, id] };
-      });
+      setFormData((prev) => ({
+        ...prev,
+        attributeIds: prev.attributeIds.includes(id)
+          ? prev.attributeIds.filter((a) => a !== id)
+          : [...prev.attributeIds, id],
+      }));
     }
   };
 
@@ -235,11 +237,9 @@ const ProductManagement = () => {
       brand: formData.brand,
       description: formData.description,
       size: formData.size,
-      color: formData.color,
       imageUrl: formData.imageUrl,
       categoryIds: formData.categoryId ? [formData.categoryId] : [],
     };
-
     try {
       if (isEditMode) {
         await adminService.updateShoe(currentId, payload);
@@ -256,7 +256,7 @@ const ProductManagement = () => {
       setShowModal(false);
       fetchProducts(pagination.PageNumber);
     } catch (error) {
-      toast.error(error.response?.data?.message || "Có lỗi xảy ra!");
+      toast.error("Có lỗi xảy ra!");
     }
   };
 
@@ -269,7 +269,6 @@ const ProductManagement = () => {
               Quản lý Sản phẩm
             </h5>
           </div>
-
           <div className="col-12 col-md-5">
             <div className="input-group input-group-sm shadow-sm">
               <span className="input-group-text bg-white border-end-0 text-muted">
@@ -293,7 +292,6 @@ const ProductManagement = () => {
               )}
             </div>
           </div>
-
           <div className="col-auto">
             <button
               className="btn btn-dark btn-sm px-3"
@@ -329,7 +327,7 @@ const ProductManagement = () => {
                       <td className="ps-4">
                         <img
                           src={item.imageUrl || "https://placehold.co/50"}
-                          alt=""
+                          alt="Thumbnail"
                           className="rounded border"
                           style={{
                             width: "45px",
@@ -361,11 +359,9 @@ const ProductManagement = () => {
                   <tr>
                     <td
                       colSpan="5"
-                      className="text-center py-5 text-muted fst-italic"
+                      className="text-center py-5 text-muted italic"
                     >
-                      {searchTerm
-                        ? `Không tìm thấy sản phẩm nào khớp với "${searchTerm}"`
-                        : "Không có dữ liệu"}
+                      Không tìm thấy dữ liệu
                     </td>
                   </tr>
                 )}
@@ -379,8 +375,8 @@ const ProductManagement = () => {
         <div className="btn-group shadow-sm">
           <button
             className="btn btn-outline-secondary btn-sm"
-            disabled={pagination.PageNumber === 1 || searchTerm.trim() !== ""}
-            onClick={() => fetchProducts(pagination.PageNumber - 1)}
+            disabled={pagination.PageNumber <= 1 || searchTerm !== ""}
+            onClick={() => handlePageChange(pagination.PageNumber - 1)}
           >
             Sau
           </button>
@@ -390,10 +386,10 @@ const ProductManagement = () => {
           <button
             className="btn btn-outline-secondary btn-sm"
             disabled={
-              pagination.PageNumber === pagination.totalPages ||
-              searchTerm.trim() !== ""
+              pagination.PageNumber >= pagination.totalPages ||
+              searchTerm !== ""
             }
-            onClick={() => fetchProducts(pagination.PageNumber + 1)}
+            onClick={() => handlePageChange(pagination.PageNumber + 1)}
           >
             Tiếp
           </button>
@@ -409,9 +405,7 @@ const ProductManagement = () => {
             <div className="modal-content border-0 shadow-lg">
               <div className="modal-header border-bottom py-3">
                 <h5 className="modal-title fw-bold text-dark text-uppercase">
-                  {isEditMode
-                    ? "Thông tin chi tiết sản phẩm"
-                    : "Tạo sản phẩm mới"}
+                  {isEditMode ? "Thông tin chi tiết" : "Tạo sản phẩm mới"}
                 </h5>
                 <button
                   type="button"
@@ -419,7 +413,6 @@ const ProductManagement = () => {
                   onClick={() => setShowModal(false)}
                 ></button>
               </div>
-
               <div className="modal-body p-0 bg-light">
                 <form id="productForm" onSubmit={handleSave}>
                   <div className="row g-0">
@@ -508,95 +501,77 @@ const ProductManagement = () => {
                             onChange={handleInputChange}
                           ></textarea>
                         </div>
-
                         <div className="col-12 mt-4">
                           <label className="form-label small fw-bold text-secondary">
                             DANH SÁCH ẢNH PHỤ
                           </label>
-                          <div className="input-group mb-3 shadow-sm">
+                          <div className="input-group mb-3">
                             <input
                               type="text"
-                              className="form-control border-end-0"
-                              placeholder="Dán URL ảnh vào đây..."
+                              className="form-control"
+                              placeholder="Dán URL ảnh..."
                               name="imagesInput"
                               value={formData.imagesInput}
                               onChange={handleInputChange}
                             />
                             <button
-                              className="btn btn-dark px-3"
+                              className="btn btn-dark"
                               type="button"
                               onClick={handleAddImage}
                             >
                               Thêm ảnh
                             </button>
                           </div>
-
                           <div className="d-flex flex-wrap gap-3 p-3 border rounded bg-light min-vh-10">
-                            {isEditMode &&
-                              existingImages.map((img) => (
-                                <div
-                                  key={img.id}
-                                  className="position-relative"
-                                  style={{ width: "80px", height: "80px" }}
-                                >
-                                  <img
-                                    src={img.url}
-                                    className="w-100 h-100 object-fit-cover border rounded shadow-sm"
-                                    alt=""
-                                  />
-                                  <button
-                                    type="button"
-                                    className="btn btn-danger btn-sm position-absolute top-0 end-0 p-0 rounded-circle"
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      transform: "translate(40%, -40%)",
-                                    }}
-                                    onClick={() => handleDeleteMedia(img.id)}
+                            {isEditMode
+                              ? existingImages.map((img) => (
+                                  <div
+                                    key={img.id}
+                                    className="position-relative"
+                                    style={{ width: "80px", height: "80px" }}
                                   >
-                                    &times;
-                                  </button>
-                                </div>
-                              ))}
-
-                            {!isEditMode &&
-                              tempImages.map((url, index) => (
-                                <div
-                                  key={index}
-                                  className="position-relative"
-                                  style={{ width: "80px", height: "80px" }}
-                                >
-                                  <img
-                                    src={url}
-                                    className="w-100 h-100 object-fit-cover border rounded shadow-sm"
-                                    alt=""
-                                  />
-                                  <button
-                                    type="button"
-                                    className="btn btn-danger btn-sm position-absolute top-0 end-0 p-0 rounded-circle"
-                                    style={{
-                                      width: "20px",
-                                      height: "20px",
-                                      transform: "translate(40%, -40%)",
-                                    }}
-                                    onClick={() => handleRemoveTempImage(index)}
+                                    <img
+                                      src={img.url}
+                                      alt="Product media"
+                                      className="w-100 h-100 object-fit-cover border rounded shadow-sm"
+                                    />
+                                    <button
+                                      type="button"
+                                      className="btn btn-danger btn-sm position-absolute top-0 end-0 p-0 rounded-circle"
+                                      style={{ width: "20px", height: "20px" }}
+                                      onClick={() => handleDeleteMedia(img.id)}
+                                    >
+                                      &times;
+                                    </button>
+                                  </div>
+                                ))
+                              : tempImages.map((url, index) => (
+                                  <div
+                                    key={index}
+                                    className="position-relative"
+                                    style={{ width: "80px", height: "80px" }}
                                   >
-                                    &times;
-                                  </button>
-                                </div>
-                              ))}
-
-                            {((isEditMode && existingImages.length === 0) ||
-                              (!isEditMode && tempImages.length === 0)) && (
-                              <div className="text-muted small italic w-100 text-center py-2">
-                                Chưa có ảnh phụ nào được thêm
-                              </div>
-                            )}
+                                    <img
+                                      src={url}
+                                      alt="Temp product media"
+                                      className="w-100 h-100 object-fit-cover border rounded shadow-sm"
+                                    />
+                                    <button
+                                      type="button"
+                                      className="btn btn-danger btn-sm position-absolute top-0 end-0 p-0 rounded-circle"
+                                      style={{ width: "20px", height: "20px" }}
+                                      onClick={() =>
+                                        handleRemoveTempImage(index)
+                                      }
+                                    >
+                                      &times;
+                                    </button>
+                                  </div>
+                                ))}
                           </div>
                         </div>
                       </div>
                     </div>
-
                     <div className="col-lg-4 p-4 bg-white border-start">
                       <label className="form-label small fw-bold text-secondary mb-3">
                         ẢNH ĐẠI DIỆN CHÍNH
@@ -606,7 +581,7 @@ const ProductManagement = () => {
                           <img
                             src={formData.imageUrl}
                             className="w-100 h-100 object-fit-cover"
-                            alt=""
+                            alt="Main product"
                           />
                         ) : (
                           <i className="fa-solid fa-image text-muted fa-3x"></i>
@@ -621,10 +596,9 @@ const ProductManagement = () => {
                         placeholder="URL ảnh chính..."
                         required
                       />
-
                       <div className="border-top pt-4">
                         <label className="form-label small fw-bold text-secondary mb-3">
-                          BIẾN THỂ (MATERIALS & STYLES)
+                          BIẾN THỂ (ATTRIBUTES)
                         </label>
                         <div
                           className="border rounded bg-light overflow-auto"
@@ -633,7 +607,7 @@ const ProductManagement = () => {
                           {attributes.map((attr) => (
                             <div
                               key={attr.id}
-                              className="form-check border-bottom p-2 ps-5 m-0 small hover-bg-white transition"
+                              className="form-check border-bottom p-2 ps-5 m-0 small"
                             >
                               <input
                                 className="form-check-input mt-1"
@@ -651,9 +625,7 @@ const ProductManagement = () => {
                                 <span className="fw-bold">
                                   {attr.materialName}
                                 </span>{" "}
-                                <span className="text-muted">
-                                  • {attr.styleName}
-                                </span>
+                                • {attr.styleName}{" "}
                                 <div className="text-primary fw-bold">
                                   {attr.price?.toLocaleString()}đ
                                 </div>
@@ -666,7 +638,6 @@ const ProductManagement = () => {
                   </div>
                 </form>
               </div>
-
               <div className="modal-footer border-top bg-white px-4 py-3">
                 <button
                   type="button"
