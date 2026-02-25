@@ -29,14 +29,14 @@ const ProductInfo = ({ product }) => {
 
   return (
     <div className="product-info-box">
-      <div style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}>
-        NEW ARRIVAL
-      </div>
+      <div
+        style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}
+      ></div>
       <h1 className="p-title">{product.title}</h1>
       <div className="p-price">{formatPrice(product.price)}</div>
 
       <div className="selector-group">
-        <span className="lbl">Kích cỡ (EU)</span>
+        <span className="lbl">Kích cỡ (VN)</span>
         <div className="size-grid">
           {product.sizes?.map((size) => (
             <div
@@ -54,14 +54,14 @@ const ProductInfo = ({ product }) => {
         <button className="btn-pd btn-pd-black">MUA NGAY</button>
         <button
           onClick={handleTryOnNow}
-          className="btn-pd btn-pd-outline w-100 mt-2"
+          className="btn-pd btn-tryon-ai"
           style={{ cursor: "pointer" }}
         >
-          <i className="fas fa-camera me-2"></i> THỬ GIÀY AI (Try-On)
+          <i className="fas fa-camera me-2"></i> THỬ GIÀY NGAY VỚI AI
         </button>
       </div>
 
-      <div
+      {/* <div
         style={{
           marginTop: "20px",
           fontSize: "12px",
@@ -73,7 +73,7 @@ const ProductInfo = ({ product }) => {
         quốc
         <br />
         <i className="fas fa-undo me-1"></i> Đổi trả trong vòng 30 ngày
-      </div>
+      </div> */}
     </div>
   );
 };

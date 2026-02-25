@@ -6,170 +6,141 @@ import SearchFilter from "../../components/product/productList/ProductFilter";
 import SearchResults from "../../components/product/productList/ProductResults";
 
 const ProductList = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { pageNumber } = useParams();
   const navigate = useNavigate();
-  
-  // Lấy giá trị query từ URL
-  const initialQuery = useMemo(() => searchParams.get("q") || "", [searchParams]);
-  
-  const [searchTerm, setSearchTerm] = useState(initialQuery);
+
+  const queryParams = useMemo(
+    () => ({
+      q: searchParams.get("q") || "",
+      cat: searchParams.get("cat") || null,
+      mat: searchParams.get("mat") || null,
+      style: searchParams.get("style") || null,
+      page: parseInt(pageNumber) || 1,
+    }),
+    [searchParams, pageNumber],
+  );
+
+  const [searchTerm, setSearchTerm] = useState(queryParams.q);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  const currentPage = parseInt(pageNumber) || 1;
-  const productsPerPage = 9;
 
-  const [filters, setFilters] = useState({
-    categoryId: null,
-    materialId: null,
-    styleId: null,
-  });
-
-  // Đồng bộ searchTerm khi nhấn Back/Forward trên trình duyệt
-  useEffect(() => {
-    setSearchTerm(initialQuery);
-  }, [initialQuery]);
-
-  const fetchData = useCallback(async (currentFilters) => {
+  const fetchInitialData = useCallback(async () => {
     setLoading(true);
-    try {
-      const results = await productService.getProducts("", currentFilters);
-      setAllProducts(results);
-    } catch (error) {
-      console.error("Lỗi tải dữ liệu:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    const items = await productService.getProducts(queryParams.q);
+    setAllProducts(items);
+    setLoading(false);
+  }, [queryParams.q]);
 
   useEffect(() => {
-    fetchData(filters);
-  }, [filters, fetchData]);
+    fetchInitialData();
+  }, [fetchInitialData]);
 
   const filteredProducts = useMemo(() => {
-    return allProducts.filter((p) => {
-      const matchesSearch =
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.brand?.toLowerCase().includes(searchTerm.toLowerCase());
-
+    return allProducts.filter((product) => {
       const matchesCategory =
-        !filters.categoryId ||
-        p.categories?.some((cat) => cat.id === filters.categoryId);
+        !queryParams.cat ||
+        product.categories?.some(
+          (c) => String(c.id) === String(queryParams.cat),
+        );
       const matchesStyle =
-        !filters.styleId ||
-        p.attributes?.some((attr) => attr.styleId === filters.styleId);
+        !queryParams.style ||
+        product.attributes?.some(
+          (attr) => String(attr.styleId) === String(queryParams.style),
+        );
       const matchesMaterial =
-        !filters.materialId ||
-        p.attributes?.some((attr) => attr.materialId === filters.materialId);
+        !queryParams.mat ||
+        product.attributes?.some(
+          (attr) => String(attr.materialId) === String(queryParams.mat),
+        );
 
-      return (
-        matchesSearch && matchesCategory && matchesStyle && matchesMaterial
-      );
+      return matchesCategory && matchesStyle && matchesMaterial;
     });
-  }, [allProducts, searchTerm, filters]);
+  }, [allProducts, queryParams.cat, queryParams.style, queryParams.mat]);
 
-  // FIX WARNING: Thêm initialQuery vào dependency array
-  useEffect(() => {
-    if (searchTerm !== initialQuery) {
-        const query = searchTerm ? `?q=${searchTerm}` : "";
-        // Khi người dùng gõ, ép về trang 1 để kết quả tìm kiếm chính xác
-        navigate(`/collection/page/1${query}`, { replace: true });
-    }
-  }, [searchTerm, navigate, initialQuery]);
+  const productsPerPage = 9;
+  const currentProductsForDisplay = useMemo(() => {
+    const startIndex = (queryParams.page - 1) * productsPerPage;
+    return filteredProducts.slice(startIndex, startIndex + productsPerPage);
+  }, [filteredProducts, queryParams.page]);
 
-  // Debounce cập nhật searchParams
+  const updateURL = useCallback(
+    (newParams) => {
+      const nextParams = new URLSearchParams(searchParams);
+      Object.keys(newParams).forEach((key) => {
+        if (newParams[key]) nextParams.set(key, newParams[key]);
+        else nextParams.delete(key);
+      });
+
+      const targetPage =
+        newParams.page || (newParams.page === undefined ? 1 : queryParams.page);
+      navigate(`/collection/page/${targetPage}?${nextParams.toString()}`);
+    },
+    [navigate, searchParams, queryParams.page],
+  );
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setSearchParams(searchTerm ? { q: searchTerm } : {});
+      if (searchTerm !== queryParams.q) updateURL({ q: searchTerm });
     }, 500);
     return () => clearTimeout(timeoutId);
-  }, [searchTerm, setSearchParams]);
+  }, [searchTerm, queryParams.q, updateURL]);
+
+  useEffect(() => {
+    setSearchTerm(queryParams.q);
+  }, [queryParams.q]);
 
   const handleFilterChange = (newFilter) => {
-    setFilters((prev) => ({ ...prev, ...newFilter }));
+    const mapping = { categoryId: "cat", materialId: "mat", styleId: "style" };
+    const key = Object.keys(newFilter)[0];
+    updateURL({ [mapping[key]]: newFilter[key] });
   };
-
-  const clearAllFilters = () => {
-    setFilters({ categoryId: null, materialId: null, styleId: null });
-    setSearchTerm("");
-    navigate("/collection/page/1");
-  };
-
-  const paginate = (num) => {
-    const query = searchTerm ? `?q=${searchTerm}` : "";
-    navigate(`/collection/page/${num}${query}`);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProductsForDisplay = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct,
-  );
 
   return (
     <div
       className="container"
       style={{ minHeight: "80vh", paddingBottom: "50px" }}
     >
-      <div style={{ flex: 1, transition: "opacity 0.3s ease" }}>
-        <div className="search-layout">
-          <SearchFilter
-            onFilterChange={handleFilterChange}
-            filters={filters}
-            onClear={clearAllFilters}
-          />
-
-          <div style={{ flex: 1 }}>
-            <div className="mb-4 d-flex">
-              <input
-                type="text"
-                className="form-control me-2 rounded-pill px-4"
-                placeholder="Tìm kiếm sản phẩm ..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  backgroundColor: "var(--input-bg)",
-                  color: "var(--text-main)",
-                  borderColor: "var(--border-color)",
-                  height: "50px",
-                }}
-              />
-              <div
-                className="btn btn-primary rounded-pill px-4 d-flex align-items-center justify-content-center"
-                style={{
-                  background: "var(--brand-blue)",
-                  border: "none",
-                  height: "50px",
-                  minWidth: "60px",
-                }}
-              >
-                <i className="fas fa-search"></i>
-              </div>
-            </div>
-
-            {loading ? (
-              <div className="text-center py-5">
-                <div
-                  className="spinner-border text-secondary"
-                  role="status"
-                ></div>
-              </div>
-            ) : (
-              <div className="results-container">
-                <SearchResults
-                  products={currentProductsForDisplay}
-                  totalProducts={filteredProducts.length}
-                  productsPerPage={productsPerPage}
-                  currentPage={currentPage}
-                  paginate={paginate}
-                  searchTerm={searchTerm}
-                />
-              </div>
-            )}
+      <div className="search-layout">
+        <SearchFilter
+          onFilterChange={handleFilterChange}
+          filters={{
+            categoryId: queryParams.cat,
+            materialId: queryParams.mat,
+            styleId: queryParams.style,
+          }}
+          onClear={() => {
+            setSearchTerm("");
+            navigate("/collection/page/1");
+          }}
+        />
+        <div style={{ flex: 1 }}>
+          <div className="mb-4">
+            <input
+              type="text"
+              className="form-control rounded-pill px-4"
+              placeholder="Tìm kiếm sản phẩm..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                height: "50px",
+                border: "1px solid var(--border-color)",
+              }}
+            />
           </div>
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-secondary"></div>
+            </div>
+          ) : (
+            <SearchResults
+              products={currentProductsForDisplay}
+              totalProducts={filteredProducts.length}
+              productsPerPage={productsPerPage}
+              currentPage={queryParams.page}
+              paginate={(num) => updateURL({ page: num })}
+            />
+          )}
         </div>
       </div>
     </div>

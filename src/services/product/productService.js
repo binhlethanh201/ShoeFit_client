@@ -11,7 +11,6 @@ const mapProductApiToUi = (apiData) => {
   if (allImages.length === 0)
     allImages = ["https://placehold.co/600x600?text=No+Image"];
 
-  // Lấy giá từ thuộc tính đầu tiên nếu có
   const displayPrice =
     apiData.attributes && apiData.attributes.length > 0
       ? apiData.attributes[0].price
@@ -47,20 +46,19 @@ const mapProductApiToUi = (apiData) => {
 };
 
 const productService = {
-  getProducts: async (searchTerm = "", filters = {}) => {
+  getProducts: async (searchTerm = "") => {
     try {
       const params = {
         PageNumber: 1,
         PageSize: 100,
-        Search: searchTerm,
-        CategoryId: filters.categoryId || undefined,
-        MaterialId: filters.materialId || undefined,
-        StyleId: filters.styleId || undefined,
+        Search: searchTerm || undefined,
       };
       const response = await axiosClient.get("/api/v1/shoes", { params });
-      const data = response.data;
-      return (data.items || []).map(mapProductApiToUi);
+
+      const items = response.data?.data?.items || response.data?.items || [];
+      return items.map(mapProductApiToUi);
     } catch (error) {
+      console.error("Lỗi API getProducts:", error);
       return [];
     }
   },
@@ -106,7 +104,6 @@ const productService = {
     }
   },
 
-  // API lấy danh sách Chất liệu
   getMaterials: async () => {
     try {
       const res = await axiosClient.get("/api/v1/materials?page=1&size=100");
@@ -116,7 +113,6 @@ const productService = {
     }
   },
 
-  // API lấy danh sách Kiểu dáng
   getStyles: async () => {
     try {
       const res = await axiosClient.get("/api/v1/styles?page=1&size=100");

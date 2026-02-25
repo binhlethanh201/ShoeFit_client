@@ -21,8 +21,10 @@ const Header = () => {
 
   const isLoggedIn = !!localStorage.getItem("token");
 
-  const isActive = (path) => {
-    return location.pathname === path ? "nav-item active" : "nav-item";
+  
+const isActive = (path) => {
+    if (path === "/") return location.pathname === "/" ? "nav-item active" : "nav-item";
+    return location.pathname.startsWith(path) ? "nav-item active" : "nav-item";
   };
 
   const isFeaturesActive = [
@@ -97,21 +99,28 @@ const Header = () => {
             <li
               className={`nav-item dropdown ${isFeaturesActive ? "active" : ""}`}
             >
-              <a
+              <Link
                 className="nav-link dropdown-toggle"
-                href="/services"
+                to="/services"
                 id="featuresDropdown"
                 role="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 {t("header.features") || "Tính năng"}
-              </a>
+              </Link>
               <ul
                 className="dropdown-menu shadow-sm border-0"
                 aria-labelledby="featuresDropdown"
                 onClick={closeMobileMenu}
               >
+                <li>
+                  <Link className={isChildActive("/tryon2d")} to="/tryon2d">
+                    <i className="fas fa-camera me-2"></i>
+                    {t("header.tryon2d")}
+                  </Link>
+                </li>
+
                 <li>
                   <Link
                     className={isChildActive("/tryonvideo")}
@@ -119,12 +128,6 @@ const Header = () => {
                   >
                     <i className="fas fa-video me-2"></i>{" "}
                     {t("header.tryonvideo")}
-                  </Link>
-                </li>
-                <li>
-                  <Link className={isChildActive("/tryon2d")} to="/tryon2d">
-                    <i className="fas fa-camera me-2"></i>
-                    {t("header.tryon2d")}
                   </Link>
                 </li>
                 <li>

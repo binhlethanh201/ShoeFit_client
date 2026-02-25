@@ -1,5 +1,6 @@
 import React from "react";
 import SearchProductCard from "./ProductCard";
+import ProductSkeleton from "./ProductSkeleton";
 
 const SearchResults = ({
   products,
@@ -7,7 +8,7 @@ const SearchResults = ({
   productsPerPage,
   currentPage,
   paginate,
-  searchTerm,
+  loading,
 }) => {
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 
@@ -24,12 +25,16 @@ const SearchResults = ({
         )}
       </div>
 
-      <div className="product-grid" key={`${currentPage}-${searchTerm}`}>
-        {products.map((product) => (
-          <div className="p-card-animate" key={product.id}>
-            <SearchProductCard product={product} />
-          </div>
-        ))}
+      <div className="product-grid">
+        {loading
+          ? Array(productsPerPage)
+              .fill(0)
+              .map((_, index) => <ProductSkeleton key={index} />)
+          : products.map((product) => (
+              <div className="p-card-animate" key={product.id}>
+                <SearchProductCard product={product} />
+              </div>
+            ))}
       </div>
 
       {totalPages > 1 && (

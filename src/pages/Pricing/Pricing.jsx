@@ -63,9 +63,7 @@ const Pricing = () => {
           <div className="price">
             19.000 <span>đ / tháng</span>
           </div>
-          <p className="description">
-            Gói cơ bản để bắt đầu trải nghiệm dịch vụ.
-          </p>
+          <p className="description">Phù hợp cho cá nhân mới bắt đầu.</p>
           <button className="btn-upgrade">Nâng cấp ngay</button>
           <ul className="features-list">
             <li>3 ảnh + 1 video</li>

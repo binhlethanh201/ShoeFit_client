@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 
 const ProductGallery = ({ images, onAddToWishlist }) => {
-  const [activeImg, setActiveImg] = useState(images[0]);
+  const [activeImg, setActiveImg] = useState(
+    images && images.length > 0 ? images[0] : "",
+  );
+
+  if (!images || images.length === 0) return null;
 
   return (
     <div className="gallery-wrapper">
@@ -12,7 +16,7 @@ const ProductGallery = ({ images, onAddToWishlist }) => {
             className={`thumb ${activeImg === img ? "active" : ""}`}
             onClick={() => setActiveImg(img)}
           >
-            <img src={img} alt={`Thumb ${index}`} />
+            <img src={img} alt={`Thumb ${index}`} loading="lazy" />
           </div>
         ))}
       </div>

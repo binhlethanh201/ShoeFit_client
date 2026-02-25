@@ -2,13 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductRelated = ({ styleHints, relatedProducts }) => {
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(price);
-  };
-
   return (
     <>
       <div className="bottom-section">
@@ -27,17 +20,8 @@ const ProductRelated = ({ styleHints, relatedProducts }) => {
                   to={detailLink}
                   key={index}
                   className="outfit-card text-decoration-none"
-                  style={{ cursor: "pointer", display: "block" }}
                 >
-                  <img
-                    src={style.src}
-                    alt={`Outfit ${index}`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
+                  <img src={style.src} alt={`Outfit ${index}`} loading="lazy" />
                   <div className="user-tag">@shoefit.style</div>
                 </Link>
               );
@@ -50,10 +34,7 @@ const ProductRelated = ({ styleHints, relatedProducts }) => {
         </div>
       </div>
 
-      <div
-        className="bottom-section"
-        style={{ border: "none", paddingTop: "20px" }}
-      >
+      <div className="bottom-section related-container">
         <span className="block-title">Sản phẩm tương tự</span>
         <div className="h-scroll-view">
           {relatedProducts &&
@@ -61,55 +42,13 @@ const ProductRelated = ({ styleHints, relatedProducts }) => {
               <Link
                 to={`/product/${p.id}`}
                 key={p.id}
-                className="outfit-card text-decoration-none text-dark"
-                style={{
-                  background: "#fff",
-                  border: "1px solid #eee",
-                  height: "auto",
-                  cursor: "pointer",
-                }}
+                className="related-card text-decoration-none"
               >
-                <div
-                  style={{
-                    height: "150px",
-                    background: "#f9f9f9",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    style={{
-                      objectFit: "contain",
-                      width: "80%",
-                      height: "80%",
-                    }}
-                  />
+                <div className="related-img-box">
+                  <img src={p.image} alt={p.title} loading="lazy" />
                 </div>
-                <div style={{ padding: "10px" }}>
-                  <div
-                    style={{
-                      fontWeight: "700",
-                      fontSize: "14px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {p.title}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "14px",
-                      color: "#e74c3c",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {formatPrice(p.price)}
-                  </div>
+                <div className="related-info">
+                  <h4 className="related-name">{p.title}</h4>
                 </div>
               </Link>
             ))}
