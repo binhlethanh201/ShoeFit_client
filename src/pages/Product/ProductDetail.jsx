@@ -21,8 +21,10 @@ const ProductDetail = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const productData = await productService.getById(productId);
-        const relatedData = await productService.getRelated(productId);
+        const [productData, relatedData] = await Promise.all([
+          productService.getById(productId),
+          productService.getRelated(productId),
+        ]);
         setProduct(productData);
         setRelatedProducts(relatedData);
       } catch (error) {
@@ -34,7 +36,7 @@ const ProductDetail = () => {
     };
 
     fetchData();
-    window.scrollTo(0, 0);
+   window.scrollTo({ top: 0, behavior: "smooth" });
   }, [productId]);
 
   if (loading) {

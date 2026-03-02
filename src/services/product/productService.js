@@ -40,57 +40,55 @@ const mapProductApiToUi = (apiData) => {
     ],
     rating: 4.5,
     reviews_count: 120,
-    ai_description:
-      "Sản phẩm được đánh giá cao về độ bền và tính thẩm mỹ đường phố.",
+    ai_description: "Sản phẩm được đánh giá cao về độ bền và tính thẩm mỹ.",
   };
 };
 
 const productService = {
-  getProducts: async (searchTerm = "") => {
+  getProducts: async (searchTerm = "", filters = {}, page = 1, size = 9) => {
     try {
       const params = {
-        PageNumber: 1,
-        PageSize: 100,
+        PageNumber: page,
+        PageSize: size,
         Search: searchTerm || undefined,
+        MetirialId: filters.materialId || undefined,
+        CategoryId: filters.categoryId || undefined,
+        StyleId: filters.styleId || undefined,
       };
       const response = await axiosClient.get("/api/v1/shoes", { params });
-
-      const items = response.data?.data?.items || response.data?.items || [];
-      return items.map(mapProductApiToUi);
+      const data = response.data?.data || response.data;
+      return {
+        items: (data.items || []).map(mapProductApiToUi),
+        total: data.total || 0,
+        totalPages: data.totalPages || 1
+      };
     } catch (error) {
-      console.error("Lỗi API getProducts:", error);
-      return [];
+      return { items: [], total: 0, totalPages: 1 };
     }
   },
 
   getById: async (id) => {
     try {
       const response = await axiosClient.get(`/api/v1/shoes/${id}`);
-
-      const rawData = response.data || response;
-
+      const rawData = response.data?.data || response.data;
       return mapProductApiToUi(rawData);
-    } catch (error) {
-      console.error("Lỗi API getById:", error);
-
-      return null;
-    }
+    } catch (error) { return null; }
   },
 
   getRelated: async (id) => {
     try {
-      const response = await axiosClient.get(
-        "/api/v1/shoes?PageNumber=1&PageSize=6",
-      );
-
-      const data = response.data || response;
-
-      return (data.items || [])
-
+      const response = await axiosClient.get("/api/v1/shoes", {
+        params: { PageNumber: 1, PageSize: 7 } 
+      });
+      
+      const data = response.data?.data || response.data;
+      const items = data.items || [];
+      return items
         .filter((p) => p.id !== id)
-
+        .slice(0, 6)
         .map(mapProductApiToUi);
     } catch (error) {
+      console.error("Lỗi lấy sản phẩm liên quan:", error);
       return [];
     }
   },
@@ -98,28 +96,25 @@ const productService = {
   getCategories: async () => {
     try {
       const res = await axiosClient.get("/api/v1/categories?page=1&size=100");
-      return res.data.items || [];
-    } catch (error) {
-      return [];
-    }
+      const data = res.data?.data || res.data;
+      return data.items || [];
+    } catch (error) { return []; }
   },
 
   getMaterials: async () => {
     try {
       const res = await axiosClient.get("/api/v1/materials?page=1&size=100");
-      return res.data.items || [];
-    } catch (error) {
-      return [];
-    }
+      const data = res.data?.data || res.data;
+      return data.items || [];
+    } catch (error) { return []; }
   },
 
   getStyles: async () => {
     try {
       const res = await axiosClient.get("/api/v1/styles?page=1&size=100");
-      return res.data.items || [];
-    } catch (error) {
-      return [];
-    }
+      const data = res.data?.data || res.data;
+      return data.items || [];
+    } catch (error) { return []; }
   },
 };
 

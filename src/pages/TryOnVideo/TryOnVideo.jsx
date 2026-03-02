@@ -110,23 +110,30 @@ const TryOnVideo = () => {
         selectedShoe.name || DEFAULT_NAME,
         DEFAULT_DESC,
       );
-      console.log("Full Response từ Bước 1:", aiRes.data);
-      const resBody = aiRes.data;
-      const collectId = resBody.data?.id || resBody.id;
+
+      // --- CHỈNH SỬA TẠI ĐÂY ---
+      // 1. Bóc tách object data từ response mới của bảnh
+      const aiData = aiRes.data.data;
+      const collectId = aiData.id;
+      const staticImage = aiData.resultImage;
 
       if (!collectId) {
-        if (typeof resBody.data === "string") {
-          setResult(resBody.data);
-        }
-        console.error("Dữ liệu nhận được không có ID:", resBody);
+        throw new Error("Không lấy được ID để tạo video bảnh ơi!");
       }
 
+      // 2. Hiển thị ảnh tĩnh AI lên trước cho người dùng đỡ đợi "vô vọng"
+      setResult(staticImage);
+
       toast.info("Ảnh đã xong! Đang dựng Video (Bước 2/2)...");
+
+      // 3. Gọi tiếp API Video với collectId chuẩn UUID
       const videoRes = await tryOnVideoService.generateTryOnVideo(collectId);
 
-      const finalResult = videoRes.data?.data || videoRes.data;
-      setResult(finalResult);
-      toast.success("Xong rồi! Video AI đã sẵn sàng.");
+      // 4. Lấy link video cuối cùng (Giả sử BE trả về link video trong field data)
+      const finalVideoUrl = videoRes.data?.data || videoRes.data;
+      setResult(finalVideoUrl);
+
+      toast.success("Xong rồi nè bảnh! Video cực chất luôn.");
     } catch (error) {
       console.error("AI Error:", error);
       const msg =

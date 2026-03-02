@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import tryOn2DService from "../../services/tryon/2dService";
+import { downloadImageFromServer } from "../../utils/downloadHandler";
 import "../../assets/css/tryon2d/tryon2d.css";
-
 import scanIcon from "../../assets/images/Effects/scan.svg";
 
 const DEFAULT_NAME = "My Custom Try-on Image";
@@ -140,7 +140,8 @@ const TryOn2D = () => {
       );
 
       if (response.status === 200 || response.status === 201) {
-        setResult(response.data);
+        const resultImageUrl = response.data.resultImage;
+        setResult(resultImageUrl);
         toast.success("AI đã tạo ảnh thành công!");
       }
     } catch (error) {
@@ -316,17 +317,26 @@ const TryOn2D = () => {
                       GIỮ ĐỂ XEM ẢNH GỐC
                     </button>
 
-                    <a
-                      href={result}
-                      download="ShoeFit_TryOn2D.png"
+                    <button
+                      type="button"
                       className="btn-download"
-                      style={{ marginTop: "10px" }}
-                      target="_blank"
-                      rel="noreferrer"
+                      style={{
+                        marginTop: "10px",
+                        border: "none",
+                        cursor: "pointer",
+                        width: "100%",
+                        justifyContent: "center",
+                      }}
+                      onClick={() => {
+                        const fileName = selectedShoe
+                          ? `ShoeFit_${selectedShoe.name}.png`
+                          : "ShoeFit_TryOn.png";
+                        downloadImageFromServer(result, fileName);
+                      }}
                     >
                       <i className="fa fa-download me-2"></i>{" "}
                       {t("tryon2d.btn_download")}
-                    </a>
+                    </button>
                   </>
                 ) : (
                   <p>{t("tryon2d.result_placeholder")}</p>

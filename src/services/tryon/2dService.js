@@ -6,9 +6,11 @@ const tryOn2DService = {
       `/api/v1/shoes?PageNumber=${pageNumber}&PageSize=${pageSize}`,
     );
   },
+
   getShoeDetail: (id) => {
     return axiosClient.get(`/api/v1/shoes/${id}`);
   },
+
   generateTryOn: (shoeId, shoeImageId, userImage, name, description) => {
     const formData = new FormData();
     formData.append("ShoeId", shoeId);

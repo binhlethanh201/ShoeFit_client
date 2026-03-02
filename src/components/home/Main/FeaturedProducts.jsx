@@ -13,8 +13,14 @@ const FeaturedProducts = () => {
     const fetchFeaturedProducts = async () => {
       setLoading(true);
       try {
-        const data = await productService.getProducts();
-        const newestProducts = data
+        // Gọi API với size lớn một chút để mình tự sort lấy hàng mới nhất ở FE
+        const result = await productService.getProducts("", {}, 1, 20);
+        
+        // FIX: Truy cập vào result.items thay vì result
+        const rawItems = result.items || [];
+
+        // Logic của bảnh: Sắp xếp theo ngày mới nhất và lấy 4 cái đầu
+        const newestProducts = [...rawItems]
           .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate))
           .slice(0, 4);
 
@@ -32,10 +38,7 @@ const FeaturedProducts = () => {
   if (loading && products.length === 0) {
     return (
       <div className="text-center py-5">
-        <div
-          className="spinner-border spinner-border-sm text-secondary"
-          role="status"
-        ></div>
+        <div className="spinner-border spinner-border-sm text-secondary" role="status"></div>
       </div>
     );
   }
@@ -43,7 +46,7 @@ const FeaturedProducts = () => {
   return (
     <div className="untree_co-section product-section before-footer-section">
       <div className="container">
-        <div className="row mb-2 align-items-center">
+        <div className="row mb-5 align-items-center"> {/* Giữ nguyên class của bảnh */}
           <div className="col-md-6">
             <h2 className="section-title">{t("home.trending")}</h2>
           </div>
