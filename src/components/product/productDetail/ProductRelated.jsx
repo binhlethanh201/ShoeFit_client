@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const ProductRelated = ({ styleHints, relatedProducts }) => {
   return (
     <>
-      <div className="bottom-section">
+      {/* <div className="bottom-section">
         <span className="block-title">Phối đồ cực chất</span>
         <div className="h-scroll-view">
           {styleHints && styleHints.length > 0 ? (
@@ -32,7 +32,7 @@ const ProductRelated = ({ styleHints, relatedProducts }) => {
             </p>
           )}
         </div>
-      </div>
+      </div> */}
 
       <div className="bottom-section related-container">
         <span className="block-title">Sản phẩm tương tự</span>

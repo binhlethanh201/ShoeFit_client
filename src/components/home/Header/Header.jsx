@@ -124,7 +124,7 @@ const isActive = (path) => {
                 <li>
                   <Link
                     className={isChildActive("/tryonvideo")}
-                    to="/tryonvideo"
+                    to="/comming-soon"
                   >
                     <i className="fas fa-video me-2"></i>{" "}
                     {t("header.tryonvideo")}

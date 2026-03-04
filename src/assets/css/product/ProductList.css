@@ -494,3 +494,21 @@
     height: auto;
   }
 }
+
+.pagination .page-link {
+  padding: 0;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.pagination .page-item.disabled .page-link {
+  opacity: 0.4;
+  background-color: transparent !important;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    align-items: center;
+  }
+}

@@ -51,7 +51,7 @@ const ProductInfo = ({ product }) => {
       </div>
 
       <div className="action-btns">
-        <button className="btn-pd btn-pd-black">MUA NGAY</button>
+        {/* <button className="btn-pd btn-pd-black">MUA NGAY</button> */}
         <button
           onClick={handleTryOnNow}
           className="btn-pd btn-tryon-ai"

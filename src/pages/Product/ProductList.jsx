@@ -58,7 +58,6 @@ const ProductList = () => {
       if (newParams[key]) nextParams.set(key, newParams[key]);
       else nextParams.delete(key);
     });
-    // Nếu đổi filter/search thì về trang 1
     const targetPage = newParams.page || (newParams.page === undefined && (newParams.q !== undefined || newParams.cat !== undefined || newParams.mat !== undefined || newParams.style !== undefined) ? 1 : queryParams.page);
     navigate(`/collection/page/${targetPage}?${nextParams.toString()}`);
   }, [navigate, searchParams, queryParams.page]);
@@ -79,7 +78,7 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container" style={{ minHeight: "80vh", paddingBottom: "50px" }}>
+    <div className="container" style={{ minHeight: "80vh", paddingBottom: "70px" }}>
       <div className="search-layout">
         <SearchFilter
           onFilterChange={handleFilterChange}

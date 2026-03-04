@@ -39,6 +39,7 @@ import PaymentSuccess from "./components/pricing/PaymentSuccess.jsx";
 import PaymentFailed from "./components/pricing/PaymentFailed.jsx";
 import PaymentProcessing from "./components/pricing/PaymentProcessing.jsx";
 import ShoeCollect from "./pages/Profile/ShoeCollect.jsx";
+import ComingSoon from "./pages/Coming/ComingSoon.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 
 // --- Auth ----
@@ -121,6 +122,7 @@ const router = createBrowserRouter(
         <Route path="/payment-success" element={<PaymentSuccess />}></Route>
         <Route path="/payment-failure" element={<PaymentFailed />}></Route>
         <Route path="/shoe-collect" element={<ShoeCollect />}></Route>
+        <Route path="/comming-soon" element={<ComingSoon />}></Route>
         {/* Protected Auth Route */}
         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
           <Route path="/change-password" element={<ChangePassword />}></Route>

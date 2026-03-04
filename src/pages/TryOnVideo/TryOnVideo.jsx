@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import tryOnVideoService from "../../services/tryon/videoService";
+import { downloadImageFromServer } from "../../utils/downloadHandler";
 import "../../assets/css/tryonvideo/tryonvideo.css";
 
 import scanIcon from "../../assets/images/Effects/scan.svg";
@@ -30,12 +31,11 @@ const TryOnVideo = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [zoomScale, setZoomScale] = useState(1);
-  // const [selectedMotion, setSelectedMotion] = useState("walk");
 
   const checkAuth = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("Bạn cần đăng nhập để dùng tính năng này!");
+      toast.error("Bảnh cần đăng nhập để dùng tính năng này nhé!");
       navigate("/login", { state: { from: location.pathname } });
       return false;
     }
@@ -48,11 +48,9 @@ const TryOnVideo = () => {
       try {
         const response = await tryOnVideoService.getShoes(1, 100);
         const items = response.data?.items || response.data;
-        if (Array.isArray(items)) {
-          setShoesList(items);
-        }
+        if (Array.isArray(items)) setShoesList(items);
       } catch (error) {
-        toast.error("Không tải được danh sách giày!");
+        toast.error("Không tải được danh sách giày rồi bảnh ơi!");
       } finally {
         setIsLoadingShoes(false);
       }
@@ -75,7 +73,7 @@ const TryOnVideo = () => {
       const firstImageId = detailData.images?.[0]?.id || null;
 
       if (!firstImageId) {
-        toast.error("Sản phẩm này thiếu ảnh mẫu AI, Hãy chọn đôi khác nhé!");
+        toast.error("Sản phẩm này thiếu ảnh mẫu AI bảnh ơi!");
         return;
       }
 
@@ -111,34 +109,37 @@ const TryOnVideo = () => {
         DEFAULT_DESC,
       );
 
-      // --- CHỈNH SỬA TẠI ĐÂY ---
-      // 1. Bóc tách object data từ response mới của bảnh
-      const aiData = aiRes.data.data;
+      const aiResponseContent = aiRes.data;
+      const aiData = aiResponseContent.data;
+
+      if (!aiData || !aiData.id) {
+        throw new Error("Không lấy được dữ liệu từ Bước 1 bảnh ơi!");
+      }
+
       const collectId = aiData.id;
       const staticImage = aiData.resultImage;
 
-      if (!collectId) {
-        throw new Error("Không lấy được ID để tạo video bảnh ơi!");
-      }
-
-      // 2. Hiển thị ảnh tĩnh AI lên trước cho người dùng đỡ đợi "vô vọng"
       setResult(staticImage);
 
       toast.info("Ảnh đã xong! Đang dựng Video (Bước 2/2)...");
 
-      // 3. Gọi tiếp API Video với collectId chuẩn UUID
       const videoRes = await tryOnVideoService.generateTryOnVideo(collectId);
 
-      // 4. Lấy link video cuối cùng (Giả sử BE trả về link video trong field data)
-      const finalVideoUrl = videoRes.data?.data || videoRes.data;
-      setResult(finalVideoUrl);
+      const videoData = videoRes.data.data;
+      const finalVideoUrl =
+        videoData?.videoUrl || videoRes.data?.data || videoRes.data;
 
-      toast.success("Xong rồi nè bảnh! Video cực chất luôn.");
+      if (finalVideoUrl) {
+        setResult(finalVideoUrl);
+        toast.success("Xong rồi nè bảnh! Video cực chất luôn.");
+      } else {
+        toast.warning("Ảnh AI đã xong nhưng Video đang được xử lý thêm.");
+      }
     } catch (error) {
       console.error("AI Error:", error);
       const msg =
         error.response?.data?.message || error.message || "Có lỗi xảy ra";
-      toast.error(msg);
+      toast.error(`Lỗi: ${msg}`);
     } finally {
       setIsProcessing(false);
     }
@@ -224,26 +225,6 @@ const TryOnVideo = () => {
                   </div>
                 </div>
 
-                {/* <div className="mb-3">
-                  <label className="fw-bold mb-2 d-block" style={{ color: "var(--text-heading)" }}>
-                    {t("tryonvideo.label_motion")}
-                  </label>
-                  <div className="d-flex gap-2 flex-wrap">
-                    <button
-                      className={`video-motion-base-btn video-motion-walk-btn ${selectedMotion === "walk" ? "active" : ""}`}
-                      onClick={() => setSelectedMotion("walk")}
-                    >
-                      {t("tryonvideo.motion_walk")}
-                    </button>
-                    <button
-                      className={`video-motion-base-btn video-motion-rotate-btn ${selectedMotion === "rotate" ? "active" : ""}`}
-                      onClick={() => setSelectedMotion("rotate")}
-                    >
-                      {t("tryonvideo.motion_rotate")}
-                    </button>
-                  </div>
-                </div> */}
-
                 <button
                   className="video-generate-btn btn"
                   id="video-generate-btn"
@@ -270,7 +251,7 @@ const TryOnVideo = () => {
             <section className="video-tryon-section">
               <h2>{t("tryonvideo.step3_title")}</h2>
               <div className="video-result-display" id="video-result-mock">
-                {isProcessing ? (
+                {isProcessing && !result ? (
                   <p style={{ color: "blue", fontWeight: "bold" }}>
                     {t("tryonvideo.result_processing")}
                   </p>
@@ -285,11 +266,6 @@ const TryOnVideo = () => {
                           controls
                           autoPlay
                           loop
-                          style={{
-                            width: "100%",
-                            borderRadius: "8px",
-                            display: "block",
-                          }}
                         />
                       ) : (
                         <img
@@ -309,17 +285,28 @@ const TryOnVideo = () => {
                         <img src={scanIcon} alt="Zoom" />
                       </button>
                     </div>
-                    <a
-                      href={result}
-                      download="ShoeFit_TryOnVideo.mp4"
+                    <button
+                      type="button"
                       className="video-btn-download"
-                      style={{ marginTop: "10px" }}
-                      target="_blank"
-                      rel="noreferrer"
+                      style={{
+                        marginTop: "10px",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        const fileName = selectedShoe
+                          ? `ShoeFit_${selectedShoe.name}`
+                          : "ShoeFit_TryOn";
+                        const ext =
+                          result.includes(".mp4") || result.includes("video")
+                            ? ".mp4"
+                            : ".png";
+                        downloadImageFromServer(result, fileName + ext);
+                      }}
                     >
                       <i className="fa fa-download me-2"></i>{" "}
                       {t("tryonvideo.btn_download")}
-                    </a>
+                    </button>
                   </>
                 ) : (
                   <p>{t("tryonvideo.result_placeholder")}</p>
@@ -348,13 +335,12 @@ const TryOnVideo = () => {
               </div>
               <div className="video-shoe-grid">
                 {isLoadingShoes ? (
-                  <p>Đang tải danh sách giày...</p>
-                ) : filteredShoes.length > 0 ? (
+                  <p>Đang tải...</p>
+                ) : (
                   filteredShoes.map((shoe) => (
                     <div
                       key={shoe.id}
                       className="video-shoe-item"
-                      title={shoe.name}
                       onClick={() => handleSelectShoe(shoe)}
                     >
                       <img src={shoe.imageUrl} alt={shoe.name} />
@@ -369,8 +355,6 @@ const TryOnVideo = () => {
                       </p>
                     </div>
                   ))
-                ) : (
-                  <p>Không tìm thấy giày phù hợp.</p>
                 )}
               </div>
             </div>
@@ -389,7 +373,7 @@ const TryOnVideo = () => {
           &times;
         </span>
         <div className="modal-content">
-          {result && (result.includes(".mp4") || typeof result === "string") ? (
+          {result && (result.includes(".mp4") || result.includes("video")) ? (
             <video
               src={modalImageSrc}
               controls

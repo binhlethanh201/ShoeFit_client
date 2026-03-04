@@ -119,7 +119,7 @@ import w_sport6 from "../assets/images/Styles/Active-Sporty/WOMEN/sport6.jpg";
 // --- EXPORT: Services ---
 export const servicesData = [
   { id: 1, image: tryon2d, title: "Ảnh Thử Giày AI", link: "/tryon2d" },
-  { id: 2, image: tryonvideo, title: "Video Thử Giày AI", link: "/tryonvideo" },
+  { id: 2, image: tryonvideo, title: "Video Thử Giày AI", link: "/comming-soon" },
   { id: 3, image: styleadvisor, title: "Tư Vấn Phong Cách", link: "/styleadvisor" }
 ];
 

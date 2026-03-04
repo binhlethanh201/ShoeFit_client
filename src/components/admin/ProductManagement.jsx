@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import adminService from "../../services/adminService";
 import { toast } from "sonner";
@@ -40,17 +40,6 @@ const ProductManagement = () => {
 
   const [existingImages, setExistingImages] = useState([]);
 
-  const filteredProducts = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (!term) return products;
-    return products.filter(
-      (p) =>
-        p.name?.toLowerCase().includes(term) ||
-        p.sku?.toLowerCase().includes(term) ||
-        p.brand?.toLowerCase().includes(term),
-    );
-  }, [searchTerm, products]);
-
   const fetchDependencies = async () => {
     try {
       const [catRes, attrRes] = await Promise.all([
@@ -65,13 +54,15 @@ const ProductManagement = () => {
   };
 
   const fetchProducts = useCallback(
-    async (page) => {
+    async (page, search = "") => {
       setLoading(true);
       try {
         const response = await adminService.getAllShoes(
           page,
           pagination.PageSize,
+          search,
         );
+
         if (response && response.data) {
           setProducts(response.data.items || []);
           setPagination((prev) => ({
@@ -95,9 +86,20 @@ const ProductManagement = () => {
   }, []);
 
   useEffect(() => {
-    const page = parseInt(pageNumber) || 1;
-    fetchProducts(page);
-  }, [pageNumber, fetchProducts]);
+    const delayDebounceFn = setTimeout(() => {
+      const page = parseInt(pageNumber) || 1;
+      fetchProducts(page, searchTerm);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, pageNumber, fetchProducts]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    if (pageNumber !== "1") {
+      navigate(`/admin/dashboard/products/page/1`);
+    }
+  };
 
   const handlePageChange = (newPage) => {
     navigate(`/admin/dashboard/products/page/${newPage}`);
@@ -254,7 +256,7 @@ const ProductManagement = () => {
         toast.success("Tạo sản phẩm thành công!");
       }
       setShowModal(false);
-      fetchProducts(pagination.PageNumber);
+      fetchProducts(pagination.PageNumber, searchTerm);
     } catch (error) {
       toast.error("Có lỗi xảy ra!");
     }
@@ -277,9 +279,9 @@ const ProductManagement = () => {
               <input
                 type="text"
                 className="form-control border-start-0 ps-0"
-                placeholder="Tìm theo tên, SKU, hiệu..."
+                placeholder="Tìm theo tên, SKU, hiệu... (SSR)"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
               />
               {searchTerm && (
                 <button
@@ -321,8 +323,8 @@ const ProductManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((item) => (
+                {products.length > 0 ? (
+                  products.map((item) => (
                     <tr key={item.id}>
                       <td className="ps-4">
                         <img
@@ -359,9 +361,11 @@ const ProductManagement = () => {
                   <tr>
                     <td
                       colSpan="5"
-                      className="text-center py-5 text-muted italic"
+                      className="text-center py-5 text-muted fst-italic"
                     >
-                      Không tìm thấy dữ liệu
+                      {searchTerm
+                        ? `Không tìm thấy sản phẩm khớp với "${searchTerm}"`
+                        : "Không có dữ liệu"}
                     </td>
                   </tr>
                 )}
@@ -375,7 +379,7 @@ const ProductManagement = () => {
         <div className="btn-group shadow-sm">
           <button
             className="btn btn-outline-secondary btn-sm"
-            disabled={pagination.PageNumber <= 1 || searchTerm !== ""}
+            disabled={pagination.PageNumber <= 1}
             onClick={() => handlePageChange(pagination.PageNumber - 1)}
           >
             Sau
@@ -385,10 +389,7 @@ const ProductManagement = () => {
           </button>
           <button
             className="btn btn-outline-secondary btn-sm"
-            disabled={
-              pagination.PageNumber >= pagination.totalPages ||
-              searchTerm !== ""
-            }
+            disabled={pagination.PageNumber >= pagination.totalPages}
             onClick={() => handlePageChange(pagination.PageNumber + 1)}
           >
             Tiếp

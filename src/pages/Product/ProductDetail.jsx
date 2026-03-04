@@ -7,7 +7,7 @@ import "../../assets/css/product/ProductDetail.css";
 
 import ProductGallery from "../../components/product/productDetail/ProductGallery";
 import ProductDescription from "../../components/product/productDetail/ProductDescription";
-import ProductReviews from "../../components/product/productDetail/ProductReviews";
+// import ProductReviews from "../../components/product/productDetail/ProductReviews";
 import ProductInfo from "../../components/product/productDetail/ProductInfo";
 import ProductRelated from "../../components/product/productDetail/ProductRelated";
 
@@ -88,10 +88,10 @@ const ProductDetail = () => {
             specs={product.specs}
             aiDescription={product.ai_description}
           />
-          <ProductReviews
+          {/* <ProductReviews
             rating={product.rating}
             count={product.reviews_count}
-          />
+          /> */}
         </div>
         <div className="sticky-col">
           <ProductInfo product={product} />
