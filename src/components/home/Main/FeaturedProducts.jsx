@@ -4,6 +4,25 @@ import { useTranslation } from "react-i18next";
 import productService from "../../../services/product/productService";
 import crossIcon from "../../../assets/images/Effects/cross.svg";
 
+const seededRandom = (seed) => {
+  const x = Math.sin(seed++) * 10000;
+  return x - Math.floor(x);
+};
+
+const shuffleWithSeed = (array, seed) => {
+  let m = array.length,
+    t,
+    i;
+  let currentSeed = seed;
+  while (m) {
+    i = Math.floor(seededRandom(currentSeed++) * m--);
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+  return array;
+};
+
 const FeaturedProducts = () => {
   const { t } = useTranslation();
   const [products, setProducts] = useState([]);
@@ -13,18 +32,22 @@ const FeaturedProducts = () => {
     const fetchFeaturedProducts = async () => {
       setLoading(true);
       try {
-        // Gọi API với size lớn một chút để mình tự sort lấy hàng mới nhất ở FE
-        const result = await productService.getProducts("", {}, 1, 20);
-        
-        // FIX: Truy cập vào result.items thay vì result
+        const result = await productService.getProducts("", {}, 1, 50);
         const rawItems = result.items || [];
 
-        // Logic của bảnh: Sắp xếp theo ngày mới nhất và lấy 4 cái đầu
-        const newestProducts = [...rawItems]
-          .sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate))
-          .slice(0, 4);
+        if (rawItems.length > 0) {
+          const today = new Date();
+          const dateSeed =
+            today.getFullYear() * 10000 +
+            (today.getMonth() + 1) * 100 +
+            today.getDate();
 
-        setProducts(newestProducts);
+          const randomDaily = shuffleWithSeed([...rawItems], dateSeed).slice(
+            0,
+            4,
+          );
+          setProducts(randomDaily);
+        }
       } catch (error) {
         console.error("Lỗi khi tải sản phẩm nổi bật:", error);
       } finally {
@@ -38,7 +61,10 @@ const FeaturedProducts = () => {
   if (loading && products.length === 0) {
     return (
       <div className="text-center py-5">
-        <div className="spinner-border spinner-border-sm text-secondary" role="status"></div>
+        <div
+          className="spinner-border spinner-border-sm text-secondary"
+          role="status"
+        ></div>
       </div>
     );
   }
@@ -46,7 +72,7 @@ const FeaturedProducts = () => {
   return (
     <div className="untree_co-section product-section before-footer-section">
       <div className="container">
-        <div className="row mb-5 align-items-center"> {/* Giữ nguyên class của bảnh */}
+        <div className="row mb-5 align-items-center">
           <div className="col-md-6">
             <h2 className="section-title">{t("home.trending")}</h2>
           </div>

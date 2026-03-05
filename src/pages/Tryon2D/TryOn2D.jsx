@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import tryOn2DService from "../../services/tryon/2dService";
 import { downloadImageFromServer } from "../../utils/downloadHandler";
+import FeedbackModal from "../../components/tryon/FeedbackModal";
 import "../../assets/css/tryon2d/tryon2d.css";
 import scanIcon from "../../assets/images/Effects/scan.svg";
 
 const DEFAULT_NAME = "My Custom Try-on Image";
 const DEFAULT_DESC = "Created with ShoeFit AI";
+const GOOGLE_FORM_LINK = "https://forms.gle/2V6Be3oAPe3cQXDy8";
 
 const TryOn2D = () => {
   const navigate = useNavigate();
@@ -32,6 +34,18 @@ const TryOn2D = () => {
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [zoomScale, setZoomScale] = useState(1);
 
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  
+  const [hasHandledFeedback, setHasHandledFeedback] = useState(() => {
+    return localStorage.getItem("shoeFit_feedback_done") === "true";
+  });
+
+  const handleCloseFeedback = () => {
+    setIsFeedbackModalOpen(false);
+    setHasHandledFeedback(true);
+    localStorage.setItem("shoeFit_feedback_done", "true");
+  };
+
   const checkAuth = () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -43,6 +57,16 @@ const TryOn2D = () => {
     }
     return true;
   };
+
+  useEffect(() => {
+    let timer;
+    if (result && !isProcessing && !hasHandledFeedback) {
+      timer = setTimeout(() => {
+        setIsFeedbackModalOpen(true);
+      }, 60000); 
+    }
+    return () => clearTimeout(timer);
+  }, [result, isProcessing, hasHandledFeedback]);
 
   useEffect(() => {
     const shoeFromState = location.state?.selectedShoeFromDetail;
@@ -313,6 +337,12 @@ const TryOn2D = () => {
                       onMouseLeave={() => setShowBefore(false)}
                       onTouchStart={() => setShowBefore(true)}
                       onTouchEnd={() => setShowBefore(false)}
+                      
+                      onClick={() => {
+                        if (!hasHandledFeedback) {
+                          setIsFeedbackModalOpen(true);
+                        }
+                      }} 
                     >
                       GIỮ ĐỂ XEM ẢNH GỐC
                     </button>
@@ -406,6 +436,13 @@ const TryOn2D = () => {
           />
         </div>
       </div>
+
+      <FeedbackModal 
+        isOpen={isFeedbackModalOpen} 
+        onClose={handleCloseFeedback} 
+        formLink={GOOGLE_FORM_LINK}
+      />
+
     </>
   );
 };

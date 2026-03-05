@@ -78,7 +78,7 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container" style={{ minHeight: "80vh", paddingBottom: "70px" }}>
+    <div className="container" style={{ minHeight: "80vh", paddingBottom: "120px" }}>
       <div className="search-layout">
         <SearchFilter
           onFilterChange={handleFilterChange}

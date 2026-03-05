@@ -16,7 +16,7 @@ import ReactGA from "react-ga4";
 import Footer from "./components/home/Footer/Footer";
 import Header from "./components/home/Header/Header";
 import ScrollToTopBtn from "./components/common/ScrollToTopBtn.jsx";
-// import AIChatBox from "./components/common/AIChatBox.jsx";
+import AIChatBox from "./components/common/AIChatBox.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 
 // --- Pages ---
@@ -88,7 +88,7 @@ const PublicLayout = () => {
       </div>
       <Footer />
       <ScrollToTopBtn />
-      {/* <AIChatBox /> */}
+      <AIChatBox />
     </div>
   );
 };

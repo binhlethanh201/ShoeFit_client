@@ -8,20 +8,12 @@ import "swiper/css/effect-fade";
 import "../../../assets/css/home/partial/hero.css";
 
 import heroImg from "../../../assets/images/Effects/des_hero.png";
+import tamThangBaImg from "../../../assets/images/Effects/sukien8thang31.png";
 
 const HeroSection = () => {
   const slides = [
-    { id: 1, image: heroImg },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop",
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop",
-    },
+    { id: 1, image: tamThangBaImg },
+    { id: 2, image: heroImg },
   ];
 
   return (

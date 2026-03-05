@@ -1,15 +1,18 @@
 import axios from "axios";
 
 const chatbotAxios = axios.create({
-  baseURL: "",
+  baseURL: process.env.REACT_APP_API_CHATBOT_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 chatbotAxios.interceptors.response.use(
-  (response) => (response.data ? response.data : response),
+  (response) => {
+    return response.data ? response.data : response;
+  },
   (error) => {
+    console.error("Chatbot API Error:", error.response || error.message);
     throw error;
   },
 );
