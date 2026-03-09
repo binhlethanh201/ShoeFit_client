@@ -28,7 +28,7 @@ import ProductDetail from "./pages/Product/ProductDetail.jsx";
 import Contact from "./pages/Contact/Contact.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Service from "./pages/Service/Service.jsx";
-import Wishlist from "./pages/Wishlist/Wishlist.jsx";
+// import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 import TryOnVideo from "./pages/TryOnVideo/TryOnVideo.jsx";
 import TryOn2D from "./pages/Tryon2D/TryOn2D.jsx";
 import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
@@ -109,7 +109,7 @@ const router = createBrowserRouter(
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/services" element={<Service />}></Route>
-        <Route path="/wishlist" element={<Wishlist />}></Route>
+        {/* <Route path="/wishlist" element={<Wishlist />}></Route> */}
         <Route path="/tryonvideo" element={<TryOnVideo />}></Route>
         <Route path="/tryon2d" element={<TryOn2D />}></Route>
         <Route path="/styleadvisor" element={<StyleAdvisor />}></Route>

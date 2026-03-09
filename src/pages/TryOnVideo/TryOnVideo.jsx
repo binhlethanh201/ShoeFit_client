@@ -32,10 +32,12 @@ const TryOnVideo = () => {
   const [modalImageSrc, setModalImageSrc] = useState("");
   const [zoomScale, setZoomScale] = useState(1);
 
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const checkAuth = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("Bảnh cần đăng nhập để dùng tính năng này nhé!");
+      toast.error("Bạn cần đăng nhập để dùng tính năng này!");
       navigate("/login", { state: { from: location.pathname } });
       return false;
     }
@@ -47,10 +49,11 @@ const TryOnVideo = () => {
       setIsLoadingShoes(true);
       try {
         const response = await tryOnVideoService.getShoes(1, 100);
-        const items = response.data?.items || response.data;
+        const items =
+          response.data?.data?.items || response.data?.items || response.data;
         if (Array.isArray(items)) setShoesList(items);
       } catch (error) {
-        toast.error("Không tải được danh sách giày rồi bảnh ơi!");
+        toast.error("Không tải được danh sách giày!");
       } finally {
         setIsLoadingShoes(false);
       }
@@ -73,7 +76,7 @@ const TryOnVideo = () => {
       const firstImageId = detailData.images?.[0]?.id || null;
 
       if (!firstImageId) {
-        toast.error("Sản phẩm này thiếu ảnh mẫu AI bảnh ơi!");
+        toast.error("Sản phẩm này thiếu ảnh mẫu AI!");
         return;
       }
 
@@ -109,31 +112,25 @@ const TryOnVideo = () => {
         DEFAULT_DESC,
       );
 
-      const aiResponseContent = aiRes.data;
-      const aiData = aiResponseContent.data;
+      const aiDataRaw = aiRes.data?.data || aiRes.data || aiRes;
+      const collectId = aiDataRaw?.id;
+      const staticImage = aiDataRaw?.resultImage;
 
-      if (!aiData || !aiData.id) {
-        throw new Error("Không lấy được dữ liệu từ Bước 1 bảnh ơi!");
-      }
-
-      const collectId = aiData.id;
-      const staticImage = aiData.resultImage;
+      if (!collectId) throw new Error("Không lấy được dữ liệu từ Bước 1!");
 
       setResult(staticImage);
 
       toast.info("Ảnh đã xong! Đang dựng Video (Bước 2/2)...");
 
+      await sleep(2000);
       const videoRes = await tryOnVideoService.generateTryOnVideo(collectId);
 
-      const videoData = videoRes.data.data;
-      const finalVideoUrl =
-        videoData?.videoUrl || videoRes.data?.data || videoRes.data;
+      const videoData = videoRes.data?.data || videoRes.data;
+      const finalVideoUrl = videoData?.videoUrl || videoData;
 
       if (finalVideoUrl) {
         setResult(finalVideoUrl);
-        toast.success("Xong rồi nè bảnh! Video cực chất luôn.");
-      } else {
-        toast.warning("Ảnh AI đã xong nhưng Video đang được xử lý thêm.");
+        toast.success("Xong rồi! Video đã sẵn sàng.");
       }
     } catch (error) {
       console.error("AI Error:", error);
@@ -154,6 +151,15 @@ const TryOnVideo = () => {
   const filteredShoes = shoesList.filter((shoe) =>
     shoe.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  const isVideoResult = (url) => {
+    if (!url) return false;
+    return (
+      url.includes(".mp4") ||
+      url.includes("video") ||
+      url.includes("cloudfront")
+    );
+  };
 
   return (
     <>
@@ -258,14 +264,16 @@ const TryOnVideo = () => {
                 ) : result ? (
                   <>
                     <div className="video-image-container">
-                      {typeof result === "string" &&
-                      (result.includes(".mp4") || result.includes("video")) ? (
+                      {isVideoResult(result) ? (
                         <video
+                          key={result}
                           src={result}
                           className="video-generated-image fade-in"
                           controls
                           autoPlay
                           loop
+                          muted
+                          playsInline
                         />
                       ) : (
                         <img
@@ -274,6 +282,25 @@ const TryOnVideo = () => {
                           alt="AI Result"
                         />
                       )}
+
+                      {isProcessing && isVideoResult(result) === false && (
+                        <div
+                          className="video-processing-badge"
+                          style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            background: "rgba(0,0,0,0.6)",
+                            color: "white",
+                            padding: "5px 10px",
+                            borderRadius: "5px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Đang tạo video...
+                        </div>
+                      )}
+
                       <button
                         className="video-zoom-btn"
                         onClick={() => {
@@ -297,10 +324,7 @@ const TryOnVideo = () => {
                         const fileName = selectedShoe
                           ? `ShoeFit_${selectedShoe.name}`
                           : "ShoeFit_TryOn";
-                        const ext =
-                          result.includes(".mp4") || result.includes("video")
-                            ? ".mp4"
-                            : ".png";
+                        const ext = isVideoResult(result) ? ".mp4" : ".png";
                         downloadImageFromServer(result, fileName + ext);
                       }}
                     >
@@ -373,12 +397,14 @@ const TryOnVideo = () => {
           &times;
         </span>
         <div className="modal-content">
-          {result && (result.includes(".mp4") || result.includes("video")) ? (
+          {isVideoResult(modalImageSrc) ? (
             <video
               src={modalImageSrc}
               controls
               autoPlay
               loop
+              muted
+              playsInline
               className="modal-image"
               style={{ transform: `scale(${zoomScale})` }}
               onWheel={handleWheelZoom}

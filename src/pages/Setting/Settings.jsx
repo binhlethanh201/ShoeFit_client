@@ -75,9 +75,9 @@ const Settings = () => {
     }
   };
 
-  const handleNotificationChange = (e) => {
-    setNotifications({ ...notifications, [e.target.name]: e.target.checked });
-  };
+  // const handleNotificationChange = (e) => {
+  //   setNotifications({ ...notifications, [e.target.name]: e.target.checked });
+  // };
 
   const SettingItem = ({ icon, title, description, children, danger }) => (
     <div
@@ -171,7 +171,7 @@ const Settings = () => {
         </SettingItem>
       </div>
 
-      <div
+      {/* <div
         className="p-4 rounded-4 mb-4 shadow-sm"
         style={{ backgroundColor: "var(--bg-card)" }}
       >
@@ -232,7 +232,7 @@ const Settings = () => {
             />
           </div>
         </SettingItem>
-      </div>
+      </div> */}
 
       <div
         className="p-4 rounded-4 mb-4 shadow-sm"
@@ -254,11 +254,11 @@ const Settings = () => {
           </SettingItem>
         </Link>
 
-        <Link to="/change-password" class="text-decoration-none">
+        {/* <Link to="/change-password" class="text-decoration-none">
           <SettingItem icon="fa-solid fa-key" title={t("settings.change_pass")}>
             <i className="fa-solid fa-chevron-right text-muted"></i>
           </SettingItem>
-        </Link>
+        </Link> */}
       </div>
 
       <div className="d-grid mt-5">

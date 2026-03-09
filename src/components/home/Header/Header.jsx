@@ -124,7 +124,7 @@ const isActive = (path) => {
                 <li>
                   <Link
                     className={isChildActive("/tryonvideo")}
-                    to="/comming-soon"
+                    to="/tryonvideo"
                   >
                     <i className="fas fa-video me-2"></i>{" "}
                     {t("header.tryonvideo")}
@@ -164,7 +164,7 @@ const isActive = (path) => {
           <div className="d-flex align-items-center gap-3">
             <Link
               className="nav-link p-0"
-              to="/wishlist"
+              to="/comming-soon"
               onClick={closeMobileMenu}
             >
               <img

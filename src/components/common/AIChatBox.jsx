@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import "../../assets/css/common/chatbox.css";
 import chatBotService from "../../services/chatBotService";
 import ReactMarkdown from "react-markdown";
@@ -8,6 +10,8 @@ const AIChatBox = () => {
   const [isFull, setIsFull] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const suggestedQuestions = [
     "Bạn là ai?Hãy giới thiệu chatbot ShoeFit và những gì bạn có thể làm",
@@ -42,17 +46,43 @@ const AIChatBox = () => {
     }
   }, [messages, isLoading, isOpen, isFull]);
 
+  const checkAuth = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Bạn cần đăng nhập để chat với ShoeFit AI!");
+      setIsOpen(false);
+
+      setTimeout(() => {
+        navigate("/login", { state: { from: window.location.pathname } });
+      }, 3000);
+
+      return false;
+    }
+    return true;
+  };
+
+  const handleOpenChat = () => {
+    if (checkAuth()) {
+      setIsOpen(true);
+    }
+  };
+
   const handleSend = async (suggestedText = null) => {
-    const userMsg = typeof suggestedText === "string" ? suggestedText.trim() : inputValue.trim();
-    
+    if (!checkAuth()) return;
+
+    const userMsg =
+      typeof suggestedText === "string"
+        ? suggestedText.trim()
+        : inputValue.trim();
+
     if (!userMsg || isLoading) return;
 
     setMessages((prev) => [...prev, { text: userMsg, isBot: false }]);
-    
+
     if (typeof suggestedText !== "string") {
       setInputValue("");
     }
-    
+
     setIsLoading(true);
 
     try {
@@ -205,7 +235,6 @@ const AIChatBox = () => {
                         <div key={idx} className="article-card-mini">
                           <div className="article-info-mini">
                             <h6 title={item.Title}>{item.Title}</h6>
-                            <p title={item.Description}>{item.Description}</p>
                             <a
                               className="view-btn article-btn"
                               href={item.Url}
@@ -314,7 +343,7 @@ const AIChatBox = () => {
 
       <button
         className={`chat-trigger ${isOpen ? "hidden" : "show"}`}
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpenChat}
         title="Trò chuyện với AI"
       >
         <span className="pulse-ring"></span>

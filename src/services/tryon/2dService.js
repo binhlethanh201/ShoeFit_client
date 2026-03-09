@@ -18,6 +18,7 @@ const tryOn2DService = {
     formData.append("UserImage", userImage);
     formData.append("Name", name);
     formData.append("Description", description);
+    formData.append("GenerateImageType", "Image");
 
     return axiosClient.post("/api/v1/ai", formData, {
       headers: {
