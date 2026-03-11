@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { styleData } from "../../data/mockData";
 import "../../assets/css/styleAdvisor/styleAdvisor.css";
 
 const StyleAdvisor = () => {
   const { t } = useTranslation();
-  const [currentGender, setCurrentGender] = useState("MEN");
-  const [currentOccasion, setCurrentOccasion] = useState("everyday");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentGender = searchParams.get("gender") || "MEN";
+  const currentOccasion = searchParams.get("occasion") || "everyday";
+
   const [styles, setStyles] = useState([]);
 
   useEffect(() => {
     const filteredStyles = styleData[currentGender]?.[currentOccasion] || [];
     setStyles(filteredStyles);
   }, [currentGender, currentOccasion]);
+
+  const handleGenderChange = (gender) => {
+    setSearchParams({ gender: gender, occasion: currentOccasion });
+  };
+
+  const handleOccasionChange = (occasion) => {
+    setSearchParams({ gender: currentGender, occasion: occasion });
+  };
 
   const occasions = [
     { key: "everyday", label: t("style_advisor.occasion_everyday") },
@@ -40,7 +50,7 @@ const StyleAdvisor = () => {
                 className={`nav-link ${
                   currentGender === "MEN" ? "active" : ""
                 }`}
-                onClick={() => setCurrentGender("MEN")}
+                onClick={() => handleGenderChange("MEN")}
               >
                 {t("style_advisor.gender_men")}
               </button>
@@ -50,7 +60,7 @@ const StyleAdvisor = () => {
                 className={`nav-link ${
                   currentGender === "WOMEN" ? "active" : ""
                 }`}
-                onClick={() => setCurrentGender("WOMEN")}
+                onClick={() => handleGenderChange("WOMEN")}
               >
                 {t("style_advisor.gender_women")}
               </button>
@@ -66,7 +76,7 @@ const StyleAdvisor = () => {
                   className={`nav-link ${
                     currentOccasion === occ.key ? "active" : ""
                   }`}
-                  onClick={() => setCurrentOccasion(occ.key)}
+                  onClick={() => handleOccasionChange(occ.key)}
                 >
                   {occ.label}
                 </button>

@@ -38,6 +38,7 @@
 [data-theme="coffee"] .custom-navbar .navbar-toggler-icon {
   filter: invert(1) brightness(2);
 }
+
 @media (max-width: 767.98px) {
   .custom-navbar .navbar-collapse {
     background: var(--nav-bg);
@@ -46,6 +47,38 @@
     border-radius: 12px;
     box-shadow: 0 10px 30px var(--shadow-color);
     border: 1px solid var(--border-color);
+  }
+
+  .custom-dropdown .dropdown-menu {
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    min-width: 180px;
+    margin-top: 10px !important;
+    z-index: 1050;
+  }
+
+  @keyframes fadeInMobile {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .custom-dropdown .dropdown-menu.show {
+    display: block;
+    animation: fadeInMobile 0.25s ease-out forwards;
+  }
+
+  .custom-dropdown {
+    position: relative;
+    display: flex;
+    justify-content: center;
   }
 }
 

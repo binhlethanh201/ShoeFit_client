@@ -6,6 +6,18 @@
   font-family: "Inter", sans-serif;
 }
 
+.trigger-container {
+  position: relative;
+  transition: all 0.4s ease;
+}
+
+.trigger-container.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0) rotate(-45deg);
+  pointer-events: none;
+}
+
 .chat-trigger {
   width: 60px;
   height: 60px;
@@ -50,11 +62,61 @@
   }
 }
 
-.chat-trigger.hidden {
-  opacity: 0;
-  visibility: hidden;
-  transform: scale(0) rotate(-45deg);
-  pointer-events: none;
+.chat-tooltip {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  right: 0;
+  background-color: var(--bg-card);
+  color: var(--text-heading);
+  padding: 12px 25px 12px 15px;
+  border-radius: 15px 15px 0 15px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  width: max-content;
+  max-width: 220px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+  animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, floating 3s ease-in-out infinite;
+  z-index: 1000;
+}
+
+.chat-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 15px;
+  border-width: 8px 8px 0 0;
+  border-style: solid;
+  border-color: var(--bg-card) transparent transparent transparent;
+}
+
+.close-tooltip {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  font-size: 16px;
+  color: var(--text-main);
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.5;
+  transition: 0.2s;
+}
+
+.close-tooltip:hover {
+  opacity: 1;
+  color: red;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0) translateY(20px); opacity: 0; transform-origin: bottom right; }
+  100% { transform: scale(1) translateY(0); opacity: 1; transform-origin: bottom right; }
+}
+
+@keyframes floating {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
 }
 
 .chat-window {
@@ -173,7 +235,6 @@
 .bot-align {
   align-items: flex-start;
 }
-
 .user-align {
   align-items: flex-end;
 }
@@ -222,40 +283,6 @@
   border-radius: 20px 20px 5px 20px;
   font-size: 14px;
   align-self: flex-end;
-}
-
-.ai-msg.typing {
-  display: flex;
-  gap: 4px;
-  padding: 12px 16px;
-  min-width: 60px;
-}
-
-.ai-msg.typing span {
-  width: 6px;
-  height: 6px;
-  background: var(--text-main);
-  border-radius: 50%;
-  opacity: 0.4;
-  animation: typing 1s infinite alternate;
-}
-
-.ai-msg.typing span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.ai-msg.typing span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing {
-  from {
-    transform: translateY(0);
-    opacity: 0.4;
-  }
-  to {
-    transform: translateY(-5px);
-    opacity: 1;
-  }
 }
 
 .chat-footer {
@@ -309,6 +336,40 @@
 .send-btn:hover {
   transform: scale(1.1);
   background: var(--primary);
+}
+
+.ai-msg.typing {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  min-width: 60px;
+}
+
+.ai-msg.typing span {
+  width: 6px;
+  height: 6px;
+  background: var(--text-main);
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: typing 1s infinite alternate;
+}
+
+.ai-msg.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.ai-msg.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  from {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
 }
 
 .spinner-border-sm {
@@ -472,12 +533,10 @@
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
-
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   animation: fadeIn 0.5s ease-in-out;
-
   flex-shrink: 0;
   width: calc(100% + 40px);
 }
@@ -580,12 +639,10 @@
     height: 40px;
     border-radius: 12px;
   }
-
   .chat-trigger svg {
     width: 20px;
     height: 20px;
   }
-
   .chat-window {
     width: calc(100vw - 30px);
     height: calc(100vh - 160px);
@@ -593,13 +650,16 @@
     right: 0;
     border-radius: 20px;
   }
-
+  .chat-tooltip {
+    font-size: 12px;
+    max-width: 180px;
+    padding: 10px 20px 10px 12px;
+  }
   .ai-chat-wrapper.fullscreen {
     padding: 0;
     bottom: 0;
     right: 0;
   }
-
   .ai-chat-wrapper.fullscreen .chat-window {
     width: 100vw;
     height: 100vh;

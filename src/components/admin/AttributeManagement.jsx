@@ -22,6 +22,9 @@ const AttributeManagement = () => {
   const [materials, setMaterials] = useState([]);
   const [styles, setStyles] = useState([]);
 
+  const [shoeSearchQuery, setShoeSearchQuery] = useState("");
+  const [selectedShoe, setSelectedShoe] = useState(null);
+
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
@@ -34,6 +37,18 @@ const AttributeManagement = () => {
     price: 0,
     name: "",
   });
+
+  const filteredShoesForSelect = useMemo(() => {
+    if (!shoeSearchQuery.trim()) return [];
+    const term = shoeSearchQuery.toLowerCase();
+    return shoes
+      .filter(
+        (s) =>
+          s.name.toLowerCase().includes(term) ||
+          s.sku.toLowerCase().includes(term),
+      )
+      .slice(0, 8);
+  }, [shoeSearchQuery, shoes]);
 
   const filteredData = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
@@ -83,7 +98,7 @@ const AttributeManagement = () => {
   const loadDependencies = async () => {
     try {
       const [s, m, st] = await Promise.all([
-        adminService.getAllShoes(1, 100),
+        adminService.getAllShoes(1, 1000, ""),
         adminService.getAllMaterials(1, 100),
         adminService.getAllStyles(1, 100),
       ]);
@@ -118,8 +133,19 @@ const AttributeManagement = () => {
     setModalType(type);
     setIsEditMode(!!item);
     setCurrentId(item?.id || null);
+    setShoeSearchQuery("");
 
     if (type === "attribute") {
+      if (item) {
+        setSelectedShoe({
+          name: item.shoeName,
+          sku: "Đang chỉnh sửa",
+          imageUrl: "",
+        });
+      } else {
+        setSelectedShoe(null);
+      }
+
       setFormData({
         shoeId: item?.shoeId || "",
         materialId: item?.materialId || "",
@@ -137,6 +163,12 @@ const AttributeManagement = () => {
       });
     }
     setShowModal(true);
+  };
+
+  const handleSelectShoe = (shoe) => {
+    setFormData({ ...formData, shoeId: shoe.id });
+    setSelectedShoe(shoe);
+    setShoeSearchQuery("");
   };
 
   const handleSave = async (e) => {
@@ -394,98 +426,176 @@ const AttributeManagement = () => {
                 <div className="modal-body p-4 pt-0">
                   {modalType === "attribute" ? (
                     <>
-                      <div className="mb-3">
+                      <div className="mb-3 position-relative">
                         <label className="form-label small fw-bold">
-                          Chọn giày
+                          Chọn sản phẩm Giày
                         </label>
-                        <select
-                          className="form-select"
-                          value={formData.shoeId}
-                          onChange={(e) =>
-                            setFormData({ ...formData, shoeId: e.target.value })
-                          }
-                          disabled={isEditMode}
-                          required
-                        >
-                          <option value="">-- Chọn --</option>
-                          {shoes.map((s) => (
-                            <option key={s.id} value={s.id}>
-                              {s.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="row g-2">
-                        <div className="col-6 mb-3">
-                          <label className="form-label small fw-bold d-flex justify-content-between">
-                            Chất liệu{" "}
-                            <span
-                              className="text-primary pointer"
-                              style={{ fontSize: "10px" }}
-                              onClick={() => setModalType("material")}
-                            >
-                              + THÊM NHANH
-                            </span>
-                          </label>
-                          <select
-                            className="form-select"
-                            value={formData.materialId}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                materialId: e.target.value,
-                              })
+                        <div className="input-group input-group-sm">
+                          <span className="input-group-text bg-white">
+                            <i className="fa-solid fa-search small"></i>
+                          </span>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder={
+                              selectedShoe
+                                ? selectedShoe.name
+                                : "Gõ tên giày hoặc SKU..."
                             }
+                            value={shoeSearchQuery}
+                            onChange={(e) => setShoeSearchQuery(e.target.value)}
                             disabled={isEditMode}
-                            required
-                          >
-                            <option value="">-- Chọn --</option>
-                            {materials.map((m) => (
-                              <option key={m.id} value={m.id}>
-                                {m.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="col-6 mb-3">
-                          <label className="form-label small fw-bold d-flex justify-content-between">
-                            Phong cách{" "}
-                            <span
-                              className="text-primary pointer"
-                              style={{ fontSize: "10px" }}
-                              onClick={() => setModalType("style")}
+                          />
+                          {selectedShoe && !isEditMode && (
+                            <button
+                              className="btn btn-outline-secondary"
+                              type="button"
+                              onClick={() => {
+                                setSelectedShoe(null);
+                                setFormData({ ...formData, shoeId: "" });
+                              }}
                             >
-                              + THÊM NHANH
-                            </span>
-                          </label>
-                          <select
-                            className="form-select"
-                            value={formData.styleId}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                styleId: e.target.value,
-                              })
-                            }
-                            disabled={isEditMode}
-                            required
+                              &times;
+                            </button>
+                          )}
+                        </div>
+
+                        {shoeSearchQuery && (
+                          <div
+                            className="position-absolute w-100 shadow-lg border rounded bg-white mt-1"
+                            style={{
+                              zIndex: 1050,
+                              maxHeight: "250px",
+                              overflowY: "auto",
+                            }}
                           >
-                            <option value="">-- Chọn --</option>
-                            {styles.map((st) => (
-                              <option key={st.id} value={st.id}>
-                                {st.name}
-                              </option>
-                            ))}
-                          </select>
+                            {filteredShoesForSelect.length > 0 ? (
+                              filteredShoesForSelect.map((s) => (
+                                <div
+                                  key={s.id}
+                                  className="d-flex align-items-center p-2 border-bottom list-group-item-action"
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => handleSelectShoe(s)}
+                                >
+                                  <img
+                                    src={
+                                      s.imageUrl || "https://placehold.co/40"
+                                    }
+                                    alt="thumb"
+                                    className="rounded border me-2"
+                                    style={{
+                                      width: "40px",
+                                      height: "40px",
+                                      objectFit: "cover",
+                                    }}
+                                    onError={(e) =>
+                                      (e.target.src = "https://placehold.co/40")
+                                    }
+                                  />
+                                  <div className="overflow-hidden">
+                                    <div className="small fw-bold text-truncate">
+                                      {s.name}
+                                    </div>
+                                    <div
+                                      className="text-muted"
+                                      style={{ fontSize: "10px" }}
+                                    >
+                                      SKU: {s.sku}
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="p-2 text-muted small text-center">
+                                Không tìm thấy giày
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        {selectedShoe && (
+                          <div className="mt-1 d-flex align-items-center small text-success fw-bold">
+                            <i className="fa-solid fa-circle-check me-1"></i> Đã
+                            chọn: {selectedShoe.name}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="row g-2 align-items-start">
+                        <div className="col-6">
+                          <div className="d-flex flex-column">
+                            <label className="form-label small fw-bold d-flex justify-content-between mb-2">
+                              Chất liệu
+                              <span
+                                className="text-primary pointer"
+                                style={{ fontSize: "10px" }}
+                                onClick={() => setModalType("material")}
+                              >
+                                + MỚI
+                              </span>
+                            </label>
+                            <select
+                              className="form-select form-select-sm"
+                              value={formData.materialId}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  materialId: e.target.value,
+                                })
+                              }
+                              disabled={isEditMode}
+                              required
+                            >
+                              <option value="">-- Chọn --</option>
+                              {materials.map((m) => (
+                                <option key={m.id} value={m.id}>
+                                  {m.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="d-flex flex-column">
+                            <label className="form-label small fw-bold d-flex justify-content-between mb-2">
+                              Phong cách
+                              <span
+                                className="text-primary pointer"
+                                style={{ fontSize: "10px" }}
+                                onClick={() => setModalType("style")}
+                              >
+                                + MỚI
+                              </span>
+                            </label>
+                            <select
+                              className="form-select form-select-sm"
+                              value={formData.styleId}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  styleId: e.target.value,
+                                })
+                              }
+                              disabled={isEditMode}
+                              required
+                            >
+                              <option value="">-- Chọn --</option>
+                              {styles.map((st) => (
+                                <option key={st.id} value={st.id}>
+                                  {st.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
                       </div>
-                      <div className="mb-3">
+
+                      <div className="mt-3">
                         <label className="form-label small fw-bold">
                           Giá bán (VNĐ)
                         </label>
                         <input
                           type="number"
-                          className="form-control"
+                          className="form-control form-control-sm"
                           value={formData.price}
                           onChange={(e) =>
                             setFormData({ ...formData, price: e.target.value })
@@ -516,7 +626,7 @@ const AttributeManagement = () => {
                 <div className="modal-footer border-top-0 px-4 pb-4">
                   <button
                     type="button"
-                    className="btn btn-light"
+                    className="btn btn-light btn-sm"
                     onClick={() =>
                       modalType === "attribute"
                         ? setShowModal(false)
@@ -525,7 +635,11 @@ const AttributeManagement = () => {
                   >
                     {modalType === "attribute" ? "Hủy" : "Quay lại"}
                   </button>
-                  <button type="submit" className="btn btn-dark px-4">
+                  <button
+                    type="submit"
+                    className="btn btn-dark btn-sm px-4"
+                    disabled={modalType === "attribute" && !formData.shoeId}
+                  >
                     Lưu dữ liệu
                   </button>
                 </div>

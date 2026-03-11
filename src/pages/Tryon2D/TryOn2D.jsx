@@ -35,7 +35,7 @@ const TryOn2D = () => {
   const [zoomScale, setZoomScale] = useState(1);
 
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  
+
   const [hasHandledFeedback, setHasHandledFeedback] = useState(() => {
     return localStorage.getItem("shoeFit_feedback_done") === "true";
   });
@@ -63,7 +63,7 @@ const TryOn2D = () => {
     if (result && !isProcessing && !hasHandledFeedback) {
       timer = setTimeout(() => {
         setIsFeedbackModalOpen(true);
-      }, 60000); 
+      }, 60000);
     }
     return () => clearTimeout(timer);
   }, [result, isProcessing, hasHandledFeedback]);
@@ -337,12 +337,6 @@ const TryOn2D = () => {
                       onMouseLeave={() => setShowBefore(false)}
                       onTouchStart={() => setShowBefore(true)}
                       onTouchEnd={() => setShowBefore(false)}
-                      
-                      onClick={() => {
-                        if (!hasHandledFeedback) {
-                          setIsFeedbackModalOpen(true);
-                        }
-                      }} 
                     >
                       GIỮ ĐỂ XEM ẢNH GỐC
                     </button>
@@ -362,6 +356,9 @@ const TryOn2D = () => {
                           ? `ShoeFit_${selectedShoe.name}.png`
                           : "ShoeFit_TryOn.png";
                         downloadImageFromServer(result, fileName);
+                        if (!hasHandledFeedback) {
+                          setIsFeedbackModalOpen(true);
+                        }
                       }}
                     >
                       <i className="fa fa-download me-2"></i>{" "}
@@ -437,12 +434,11 @@ const TryOn2D = () => {
         </div>
       </div>
 
-      <FeedbackModal 
-        isOpen={isFeedbackModalOpen} 
-        onClose={handleCloseFeedback} 
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={handleCloseFeedback}
         formLink={GOOGLE_FORM_LINK}
       />
-
     </>
   );
 };

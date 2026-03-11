@@ -5,21 +5,36 @@ import "../../assets/css/common/chatbox.css";
 import chatBotService from "../../services/chatBotService";
 import ReactMarkdown from "react-markdown";
 
+const suggestedQuestions = [
+  "Bạn là ai? Hãy giới thiệu chatbot ShoeFit và những gì bạn có thể làm",
+  "Gợi ý tôi tính năng thử giày của web shoefit",
+  "Gợi ý những đôi giày hot nhất tuần này",
+  "Gợi ý tôi vài đôi giày đi chơi/đi sự kiện",
+  "Hướng dẫn tôi cách đo size chân chính xác & xem bảng quy đổi size giày quốc tế-Việt Nam đầy đủ",
+];
+
+const tooltipMessages = [
+  "Bí outfit đi cháy phố? Nháy nhẹ AI lo từ A-Z! 🔥",
+  "Kiếp nạn chọn sai size giày? Bấm vô đây AI giải cứu liền! 🛟",
+  "Muốn flex outfit 10 điểm không có nhưng? Để ShoeFit gợi ý nha! ✨",
+  "Top top đang chuộng giày gì? Hỏi AI là bắt trend out trình luôn! 🚀",
+  "Đi tập gym hay đi đu idol? Pick ngay một đôi chuẩn slay cùng AI! 💅",
+  "Ngại gì khum thử giày ảo liền tay? Trải nghiệm nghệ cả củ! 🌪️",
+  "Phân vân giữa 2 đôi? Ném vào đây AI review cho nét căng! ⚖️",
+  "Outfit hôm nay đang thiếu điểm nhấn? Thử ngay mấy mẫu over hợp này! 💯",
+  "Giao diện hôm nay hơi hiền? Đổi gió bằng một đôi sneaker cực cháy thui! 🤘",
+  "Êy zô! Tìm giày đi dạo hay đi quẩy, AI của ShoeFit cân tất nha! 🎧",
+];
+
 const AIChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFull, setIsFull] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
+  const [currentTooltipMsg, setCurrentTooltipMsg] = useState("");
   const navigate = useNavigate();
-
-  const suggestedQuestions = [
-    "Bạn là ai?Hãy giới thiệu chatbot ShoeFit và những gì bạn có thể làm",
-    "Gợi ý tôi tính năng thử giày của web shoefit",
-    "Gợi ý những đôi giày hot nhất tuần này",
-    "Gợi ý tôi vài đôi giày đi chơi/đi sự kiện",
-    "Hướng dẫn tôi cách đo size chân chính xác & xem bảng quy đổi size giày quốc tế-Việt Nam đầy đủ",
-  ];
 
   const [messages, setMessages] = useState(() => {
     const savedChat = sessionStorage.getItem("shoefit_chat_history");
@@ -61,9 +76,29 @@ const AIChatBox = () => {
     return true;
   };
 
+  useEffect(() => {
+    let tooltipTimer;
+    if (!hasOpened && !isOpen) {
+      tooltipTimer = setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * tooltipMessages.length);
+        setCurrentTooltipMsg(tooltipMessages[randomIndex]);
+        setShowTooltip(true);
+        setTimeout(() => setShowTooltip(false), 10000);
+      }, 3000);
+    }
+    if (isOpen) {
+      setShowTooltip(false);
+      setHasOpened(true);
+    }
+
+    return () => clearTimeout(tooltipTimer);
+  }, [isOpen, hasOpened]);
+
   const handleOpenChat = () => {
     if (checkAuth()) {
       setIsOpen(true);
+      setHasOpened(true);
+      setShowTooltip(false);
     }
   };
 
@@ -235,6 +270,7 @@ const AIChatBox = () => {
                         <div key={idx} className="article-card-mini">
                           <div className="article-info-mini">
                             <h6 title={item.Title}>{item.Title}</h6>
+                            <p title={item.Description}>{item.Description}</p>
                             <a
                               className="view-btn article-btn"
                               href={item.Url}
@@ -341,27 +377,43 @@ const AIChatBox = () => {
         </div>
       </div>
 
-      <button
-        className={`chat-trigger ${isOpen ? "hidden" : "show"}`}
-        onClick={handleOpenChat}
-        title="Trò chuyện với AI"
-      >
-        <span className="pulse-ring"></span>
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+      <div className={`trigger-container ${isOpen ? "hidden" : "show"}`}>
+        {showTooltip && (
+          <div className="chat-tooltip">
+            <span
+              className="close-tooltip"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowTooltip(false);
+              }}
+            >
+              ×
+            </span>
+            {currentTooltipMsg}
+          </div>
+        )}
+        <button
+          className="chat-trigger"
+          onClick={handleOpenChat}
+          title="Trò chuyện với AI"
         >
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          <path d="M8 9h8"></path>
-          <path d="M8 13h6"></path>
-        </svg>
-      </button>
+          <span className="pulse-ring"></span>
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <path d="M8 9h8"></path>
+            <path d="M8 13h6"></path>
+          </svg>
+        </button>
+      </div>
     </div>
   );
 };

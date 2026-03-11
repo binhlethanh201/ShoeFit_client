@@ -21,9 +21,9 @@ const Header = () => {
 
   const isLoggedIn = !!localStorage.getItem("token");
 
-  
-const isActive = (path) => {
-    if (path === "/") return location.pathname === "/" ? "nav-item active" : "nav-item";
+  const isActive = (path) => {
+    if (path === "/")
+      return location.pathname === "/" ? "nav-item active" : "nav-item";
     return location.pathname.startsWith(path) ? "nav-item active" : "nav-item";
   };
 
@@ -124,7 +124,7 @@ const isActive = (path) => {
                 <li>
                   <Link
                     className={isChildActive("/tryonvideo")}
-                    to="/tryonvideo"
+                    to="/comming-soon"
                   >
                     <i className="fas fa-video me-2"></i>{" "}
                     {t("header.tryonvideo")}

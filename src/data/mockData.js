@@ -1,3 +1,7 @@
+import DVn9TqSj8FD from "../assets/images/IG/DVn9TqSj8FD.jpg";
+import DVf7FcBjxYw from "../assets/images/IG/DVf7FcBjxYw.jpg";
+import DVbTbmnD7UL from "../assets/images/IG/DVbTbmnD7UL.jpg";
+
 // --- Imports: Service Images ---
 import tryon2d from "../assets/images/TryOnGrids/tryon2d.png";
 import tryonvideo from "../assets/images/TryOnGrids/tryonvideo.png";
@@ -125,9 +129,9 @@ export const servicesData = [
 
 // --- EXPORT: Blogs ---
 export const blogsData = [
-  { id: 1, title: "Hot Picks for Holiday", author: "Kristin Watson", date: "09/11/2025", image: blog1, link: "/blog/1" },
-  { id: 2, title: "Sneaker Drops of 2025", author: "Kyle Delaney", date: "12/02/2025", image: blog2, link: "/blog/2" },
-  { id: 3, title: "Jordan 1 Guide", author: "Thomas Banner", date: "08/04/2024", image: blog3, link: "/blog/3" }
+  { id: 1, title: "STEP IN STYLE", author: "Kristin Watson", date: "09/11/2025", image: blog1, link: "/blog/1" },
+  { id: 2, title: "7 KIỂU GIÀY CƠ BẢN", author: "Kyle Delaney", date: "12/02/2025", image: blog2, link: "/blog/2" },
+  { id: 3, title: "TOP 5 ĐÔI GIÀY DỊP TẾT 2026", author: "Thomas Banner", date: "08/12/2025", image: blog3, link: "/blog/3" }
 ];
 
 // --- EXPORT: Products ---
@@ -491,65 +495,65 @@ export const styleData = {
   MEN: {
     everyday: [
       { src: m_casual1, shoeId: "loafer" },
-      { src: m_casual2, shoeId: "drmartens1461smoothleather" },
-      { src: m_casual3, shoeId: "chucktaylorallstarclean" },
-      { src: m_casual4, shoeId: "sambaog" },
-      { src: m_casual5, shoeId: "newbalanceaimeleondore" },
-      { src: m_casual6, shoeId: "jordan3retropuremoney" },
-      { src: m_casual7, shoeId: "sambaog" },
-      { src: m_casual8, shoeId: "sambaog" },
-      { src: m_casual9, shoeId: "timberland3eyelughandsewnboat" },
-      { src: m_casual10, shoeId: "vansclassicauthentic" },
-      { src: m_casual11, shoeId: "vanssk8hihightop" },
-      { src: m_casual12, shoeId: "dunkhighretrocargokhaki" }
+      { src: m_casual2, shoeId: "c24da1eb-4cd8-4a0a-d285-08de7ec08cf4" },
+      { src: m_casual3, shoeId: "6bce323b-0c0b-4aac-d286-08de7ec08cf4" },
+      { src: m_casual4, shoeId: "b296d115-f4ac-431b-d287-08de7ec08cf4" },
+      { src: m_casual5, shoeId: "223f0e42-5333-45ca-d288-08de7ec08cf4" },
+      { src: m_casual6, shoeId: "dc40a0ed-919e-4d30-d289-08de7ec08cf4" },
+      { src: m_casual7, shoeId: "b296d115-f4ac-431b-d287-08de7ec08cf4" },
+      { src: m_casual8, shoeId: "b296d115-f4ac-431b-d287-08de7ec08cf4" },
+      { src: m_casual9, shoeId: "6cf4bab6-ef30-4614-907c-08de7f071aab" },
+      { src: m_casual10, shoeId: "53226568-6e05-486f-907d-08de7f071aab" },
+      { src: m_casual11, shoeId: "d1cd878f-a8bf-4c76-907e-08de7f071aab" },
+      { src: m_casual12, shoeId: "ef61fb7a-17d6-4358-907f-08de7f071aab" }
     ],
     sport: [
-      { src: m_sport1, shoeId: "adizerosl2" },
-      { src: m_sport2, shoeId: "poloralphlaurencourt" },
+      { src: m_sport1, shoeId: "0ddfef38-17c7-41e8-b0b6-08de7f4fb8ab" },
+      { src: m_sport2, shoeId: "ec29bc57-bcd1-4e51-bb3b-08de7f1d6f39" },
       { src: m_sport3, shoeId: "adizeroevosl" },
       { src: m_sport4, shoeId: "hokabondi8" }, 
-      { src: m_sport5, shoeId: "adidassupernovarise" },
-      { src: m_sport6, shoeId: "oncloudnova2" },
-      { src: m_sport7, shoeId: "rigorerarskate" }
+      { src: m_sport5, shoeId: "d7c5c2db-27b6-4016-b0b7-08de7f4fb8ab" },
+      { src: m_sport6, shoeId: "7f7747f5-8226-47c3-b0b8-08de7f4fb8ab" },
+      { src: m_sport7, shoeId: "12d9b399-fc80-4567-b0b9-08de7f4fb8ab" }
     ],
     formal: [
       { src: m_formal1, shoeId: "carrybarrettecowhide" },
-      { src: m_formal2, shoeId: "poloralphlaurencourt" },
+      { src: m_formal2, shoeId: "ec29bc57-bcd1-4e51-bb3b-08de7f1d6f39" },
       { src: m_formal3, shoeId: "loafer" },
-      { src: m_formal4, shoeId: "horsebitloafersdarkbrowncalf" },
+      { src: m_formal4, shoeId: "1c99a7d9-865c-4f6b-bb3c-08de7f1d6f39" },
       { src: m_formal5, shoeId: "loafer" },
       { src: m_formal6, shoeId: "leisurehandsewn" }
     ],
     party: [
-      { src: m_party1, shoeId: "seanladywolfpenny" },
+      { src: m_party1, shoeId: "9124a8a8-9b74-4f67-9080-08de7f071aab" },
       { src: m_party2, shoeId: "loafer" },
-      { src: m_party3, shoeId: "sambawalesbonnersilver" },
-      { src: m_party4, shoeId: "guccibrixtoncollapsibleheel" },
-      { src: m_party5, shoeId: "saintlaurentwyattchelseaboots" },
+      { src: m_party3, shoeId: "3ba7beba-cbf5-42e9-9081-08de7f071aab" },
+      { src: m_party4, shoeId: "9de721ab-c7aa-4afa-9082-08de7f071aab" },
+      { src: m_party5, shoeId: "09a6dc8a-56dd-4c0d-9083-08de7f071aab" },
       { src: m_party6, shoeId: "loafer" },
       { src: m_party7, shoeId: "loafer" }
     ],
     travel: [
-      { src: m_travel1, shoeId: "wrangleryuma" },
-      { src: m_travel2, shoeId: "eccoulttrn" },
-      { src: m_travel3, shoeId: "newbalance993madeinusa" },
+      { src: m_travel1, shoeId: "4349df60-6c88-440d-9084-08de7f071aab" },
+      { src: m_travel2, shoeId: "be50d64b-a730-4611-bb35-08de7f1d6f39" },
+      { src: m_travel3, shoeId: "bed336db-6f39-46b5-bb36-08de7f1d6f39" },
       { src: m_travel4, shoeId: "acgairmowabbrattanbirch" },
-      { src: m_travel5, shoeId: "andwanderxsalomonodyssey1" },
-      { src: m_travel6, shoeId: "asicsgelkayano14" },
+      { src: m_travel5, shoeId: "bcd42b05-0d63-410d-bb38-08de7f1d6f39" },
+      { src: m_travel6, shoeId: "aff95fa2-941b-4a6d-bb39-08de7f1d6f39" },
       { src: m_travel7, shoeId: "salomonxt6goretex" },
-      { src: m_travel8, shoeId: "salomonxendxt6" }
+      { src: m_travel8, shoeId: "1713079a-423e-44e9-bb3a-08de7f1d6f39" }
     ]
   },
   WOMEN: {
     everyday: [
-      { src: w_casual1, shoeId: "adidashandballspezial" },
-      { src: w_casual2, shoeId: "sambaog" },
-      { src: w_casual3, shoeId: "adidasforumlow" }
+      { src: w_casual1, shoeId: "45172aed-4a17-4249-b0ba-08de7f4fb8ab" },
+      { src: w_casual2, shoeId: "b296d115-f4ac-431b-d287-08de7ec08cf4" },
+      { src: w_casual3, shoeId: "8b8c4e5f-a306-44ba-b0bb-08de7f4fb8ab" }
     ],
     sport: [
       { src: w_sport1, shoeId: "hokabondi8" },
-      { src: w_sport2, shoeId: "nb530" },
-      { src: w_sport3, shoeId: "nb530" },
+      { src: w_sport2, shoeId: "494f47b3-78d0-484b-bfdb-08de79045ef6" },
+      { src: w_sport3, shoeId: "494f47b3-78d0-484b-bfdb-08de79045ef6" },
       { src: w_sport4, shoeId: "bitishunterx" },
       { src: w_sport5, shoeId: "aj4retro" },
       { src: w_sport6, shoeId: "asicsgel" }
@@ -564,3 +568,24 @@ export const shoeData = {
     name: "Classic Brown Loafer"
   }
 };
+
+export const instagramPosts = [
+  {
+    id: 1,
+    imageUrl: DVn9TqSj8FD, 
+    igLink: "https://www.instagram.com/p/DVn9TqSj8FD", 
+    caption: "AI CHATBOT SHOEFIT – TRỢ LÝ TÌM GIÀY THÔNG MINH" 
+  },
+  {
+    id: 2,
+    imageUrl: DVf7FcBjxYw,
+    igLink: "https://www.instagram.com/p/DVf7FcBjxYw",
+    caption: "TIPS NHANH TRƯỚC KHI WEBSITE MỞ PHIÊN BẢN TRẢI NGHIỆM ĐẦU TIÊN"
+  },
+  {
+    id: 3,
+    imageUrl: DVbTbmnD7UL,
+    igLink: "https://www.instagram.com/p/DVbTbmnD7UL",
+    caption: "VÌ SAO GIÀY CÀNG 'ĐẸP LẠ' CÀNG KHÓ MUA ONLINE"
+  },
+];

@@ -3,6 +3,7 @@ import { useSearchParams, useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { styleData, productsData } from "../../data/mockData";
 import defaultShoe from "../../assets/images/Shoes/default.png";
+import productService from "../../services/product/productService";
 import "../../assets/css/styleAdvisor/styleAdvisor.css";
 
 const StyleDetail = () => {
@@ -16,6 +17,7 @@ const StyleDetail = () => {
   const [currentStyle, setCurrentStyle] = useState(null);
   const [recommendedShoe, setRecommendedShoe] = useState(null);
   const [relatedStyles, setRelatedStyles] = useState([]);
+  const [isShoeLoading, setIsShoeLoading] = useState(false);
 
   useEffect(() => {
     if (
@@ -35,14 +37,37 @@ const StyleDetail = () => {
       if (index >= 0 && index < styles.length) {
         setCurrentStyle(styles[index]);
         setRelatedStyles(styles.filter((_, i) => i !== index));
+      } else {
+        setRelatedStyles([]);
       }
     }
+  }, [gender, occasion, styleId]);
 
-    if (shoeId) {
-      const shoe = productsData.find((p) => p.id === shoeId);
-      setRecommendedShoe(shoe);
-    }
-  }, [gender, occasion, shoeId, styleId]);
+  useEffect(() => {
+    const fetchShoe = async () => {
+      if (!shoeId) return;
+
+      setIsShoeLoading(true);
+      try {
+        const apiShoe = await productService.getById(shoeId);
+
+        if (apiShoe) {
+          setRecommendedShoe(apiShoe);
+        } else {
+          const localShoe = productsData.find((p) => p.id === shoeId);
+          setRecommendedShoe(localShoe || null);
+        }
+      } catch (error) {
+        console.warn("API lỗi, sử dụng mockData dự phòng.");
+        const localShoe = productsData.find((p) => p.id === shoeId);
+        setRecommendedShoe(localShoe || null);
+      } finally {
+        setIsShoeLoading(false);
+      }
+    };
+
+    fetchShoe();
+  }, [shoeId]);
 
   if (!currentStyle) {
     return (
@@ -86,25 +111,42 @@ const StyleDetail = () => {
                 style={{
                   backgroundColor: "var(--bg-card)",
                   borderColor: "var(--border-color)",
+                  minHeight: "280px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
-                <Link
-                  to={recommendedShoe ? `/product/${recommendedShoe.id}` : "#"}
-                  className="text-decoration-none"
-                  style={{ color: "var(--text-heading)" }}
-                >
-                  <img
-                    src={recommendedShoe ? recommendedShoe.image : defaultShoe}
-                    alt="Recommended Shoe"
-                    className="img-fluid mb-3"
-                    style={{ maxHeight: "250px", objectFit: "contain" }}
-                  />
-                  <p className="mt-3 fw-bold fs-5">
-                    {recommendedShoe
-                      ? recommendedShoe.title
-                      : t("style_advisor.updating")}
-                  </p>
-                </Link>
+                {isShoeLoading ? (
+                  <div
+                    className="spinner-border text-secondary m-auto"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                ) : (
+                  <Link
+                    to={
+                      recommendedShoe ? `/product/${recommendedShoe.id}` : "#"
+                    }
+                    className="text-decoration-none"
+                    style={{ color: "var(--text-heading)" }}
+                  >
+                    <img
+                      src={
+                        recommendedShoe ? recommendedShoe.image : defaultShoe
+                      }
+                      alt="Recommended Shoe"
+                      className="img-fluid mb-3"
+                      style={{ maxHeight: "250px", objectFit: "contain" }}
+                    />
+                    <p className="mt-3 fw-bold fs-5">
+                      {recommendedShoe
+                        ? recommendedShoe.title
+                        : t("style_advisor.updating")}
+                    </p>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -113,7 +155,7 @@ const StyleDetail = () => {
               {t("style_advisor.more_styles")}
             </h4>
             <div className="row g-4 justify-content-center">
-              {relatedStyles.map((style, i) => {
+              {relatedStyles?.map((style, i) => {
                 const originalStyles = styleData[gender][occasion];
                 const originalIndex = originalStyles.indexOf(style);
                 const nextStyleId = `${gender}_${occasion}_${
