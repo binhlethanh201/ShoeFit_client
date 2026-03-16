@@ -164,7 +164,7 @@ const Header = () => {
           <div className="d-flex align-items-center gap-3">
             <Link
               className="nav-link p-0"
-              to="/comming-soon"
+              to="/wishlist"
               onClick={closeMobileMenu}
             >
               <img

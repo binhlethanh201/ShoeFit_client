@@ -26,6 +26,7 @@ const AdminDashboard = () => {
     if (path.includes("products")) return "products";
     if (path.includes("categories")) return "categories";
     if (path.includes("attributes")) return "attributes";
+    if (path.includes("users")) return "users";
     return "dashboard";
   };
 
@@ -68,6 +69,18 @@ const AdminDashboard = () => {
                     style={{ width: 20 }}
                   ></i>{" "}
                   Tổng quan
+                </button>
+              </li>
+              <li className="nav-item">
+                <button
+                  className={getNavLinkClass("users")}
+                  onClick={() => navigate("/admin/dashboard/users/page/1")}
+                >
+                  <i
+                    className="fa-solid fa-users me-3"
+                    style={{ width: 20 }}
+                  ></i>{" "}
+                  Người dùng
                 </button>
               </li>
               <li className="nav-item">
@@ -128,7 +141,9 @@ const AdminDashboard = () => {
             <h2 className="h4 fw-bold m-0 text-dark text-uppercase">
               {getActiveTab() === "dashboard"
                 ? "Tổng quan"
-                : `Quản lý ${getActiveTab()}`}
+                : getActiveTab() === "users"
+                  ? "Quản lý Người dùng"
+                  : `Quản lý ${getActiveTab()}`}
             </h2>
             <div className="d-flex align-items-center bg-white px-3 py-2 rounded-pill border">
               <span className="me-2 small text-secondary">Xin chào,</span>

@@ -24,7 +24,7 @@ const WishlistEmpty = () => {
           borderRadius: "0",
         }}
       >
-        TIẾP TỤC MUA SẮM
+        TIẾP TỤC
       </Link>
     </div>
   );

@@ -279,7 +279,7 @@ const ProductManagement = () => {
               <input
                 type="text"
                 className="form-control border-start-0 ps-0"
-                placeholder="Tìm theo tên, SKU, hiệu... (SSR)"
+                placeholder="Tìm theo tên, mã sản phẩm, thương hiệu..."
                 value={searchTerm}
                 onChange={handleSearchChange}
               />

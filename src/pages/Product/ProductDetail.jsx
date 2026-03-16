@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "sonner";
 import productService from "../../services/product/productService";
-import wishlistService from "../../services/wishlist/wishlistService";
+import wishlistService from "../../services/wishlistService";
 import "../../assets/css/product/ProductDetail.css";
 
 import ProductGallery from "../../components/product/productDetail/ProductGallery";
 import ProductDescription from "../../components/product/productDetail/ProductDescription";
-// import ProductReviews from "../../components/product/productDetail/ProductReviews";
 import ProductInfo from "../../components/product/productDetail/ProductInfo";
 import ProductRelated from "../../components/product/productDetail/ProductRelated";
 
@@ -16,17 +15,24 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [productData, relatedData] = await Promise.all([
+        const [productData, relatedData, wishlistData] = await Promise.all([
           productService.getById(productId),
           productService.getRelated(productId),
+          wishlistService.getAll(1, 100),
         ]);
+
         setProduct(productData);
         setRelatedProducts(relatedData);
+        const isFavorite = wishlistData.some(
+          (item) => item.shoeId === productId,
+        );
+        setIsInWishlist(isFavorite);
       } catch (error) {
         console.error("Error fetching product:", error);
         toast.error("Không thể tải thông tin sản phẩm");
@@ -36,7 +42,7 @@ const ProductDetail = () => {
     };
 
     fetchData();
-   window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [productId]);
 
   if (loading) {
@@ -64,14 +70,18 @@ const ProductDetail = () => {
     );
   }
 
-  const handleAddToWishlist = async () => {
+  const handleToggleWishlist = async () => {
     try {
-      await wishlistService.addToWishlist(productId);
-      toast.success("Đã thêm vào danh sách yêu thích!");
+      await wishlistService.addToWishlist(product.id);
+      if (isInWishlist) {
+        setIsInWishlist(false);
+        toast.success("Đã xóa khỏi danh sách yêu thích!");
+      } else {
+        setIsInWishlist(true);
+        toast.success("Đã thêm vào danh sách yêu thích!");
+      }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Không thể thêm vào danh sách.",
-      );
+      toast.error("Lỗi cập nhật danh sách yêu thích.");
     }
   };
 
@@ -81,17 +91,14 @@ const ProductDetail = () => {
         <div className="main-content">
           <ProductGallery
             images={product.images}
-            onAddToWishlist={handleAddToWishlist}
+            onToggleWishlist={handleToggleWishlist}
+            isInWishlist={isInWishlist}
           />
           <ProductDescription
             description={product.description}
             specs={product.specs}
             aiDescription={product.ai_description}
           />
-          {/* <ProductReviews
-            rating={product.rating}
-            count={product.reviews_count}
-          /> */}
         </div>
         <div className="sticky-col">
           <ProductInfo product={product} />

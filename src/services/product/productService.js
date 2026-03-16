@@ -45,6 +45,7 @@ const mapProductApiToUi = (apiData) => {
 };
 
 const productService = {
+  mapProductApiToUi,
   getProducts: async (searchTerm = "", filters = {}, page = 1, size = 9) => {
     try {
       const params = {
@@ -60,7 +61,7 @@ const productService = {
       return {
         items: (data.items || []).map(mapProductApiToUi),
         total: data.total || 0,
-        totalPages: data.totalPages || 1
+        totalPages: data.totalPages || 1,
       };
     } catch (error) {
       return { items: [], total: 0, totalPages: 1 };
@@ -72,15 +73,17 @@ const productService = {
       const response = await axiosClient.get(`/api/v1/shoes/${id}`);
       const rawData = response.data?.data || response.data;
       return mapProductApiToUi(rawData);
-    } catch (error) { return null; }
+    } catch (error) {
+      return null;
+    }
   },
 
   getRelated: async (id) => {
     try {
       const response = await axiosClient.get("/api/v1/shoes", {
-        params: { PageNumber: 1, PageSize: 7 } 
+        params: { PageNumber: 1, PageSize: 7 },
       });
-      
+
       const data = response.data?.data || response.data;
       const items = data.items || [];
       return items
@@ -98,7 +101,9 @@ const productService = {
       const res = await axiosClient.get("/api/v1/categories?page=1&size=100");
       const data = res.data?.data || res.data;
       return data.items || [];
-    } catch (error) { return []; }
+    } catch (error) {
+      return [];
+    }
   },
 
   getMaterials: async () => {
@@ -106,7 +111,9 @@ const productService = {
       const res = await axiosClient.get("/api/v1/materials?page=1&size=100");
       const data = res.data?.data || res.data;
       return data.items || [];
-    } catch (error) { return []; }
+    } catch (error) {
+      return [];
+    }
   },
 
   getStyles: async () => {
@@ -114,7 +121,9 @@ const productService = {
       const res = await axiosClient.get("/api/v1/styles?page=1&size=100");
       const data = res.data?.data || res.data;
       return data.items || [];
-    } catch (error) { return []; }
+    } catch (error) {
+      return [];
+    }
   },
 };
 

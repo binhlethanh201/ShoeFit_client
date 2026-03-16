@@ -108,12 +108,50 @@ const adminService = {
     return axiosClient.patch(`/api/v1/attributes/${id}`, data);
   },
 
+  // --- USERS ---
+  getAllUsers: (page = 1, size = 10) => {
+    return axiosClient.get(`/api/v1/users`, { params: { page, size } });
+  },
+
+  getUserById: (id) => {
+    return axiosClient.get(`/api/v1/users/${id}`);
+  },
+
   // --- STATISTICS ---
   getDashboardStats: async () => {
-    return Promise.resolve({
-      success: true,
-      data: { totalUsers: 1204, revenue: 500000000, newOrders: 45 },
-    });
+    try {
+      const [usersRes, shoesRes, catRes, attrRes] = await Promise.all([
+        axiosClient.get(`/api/v1/users`, { params: { page: 1, size: 1 } }),
+        axiosClient.get(`/api/v1/shoes`, {
+          params: { PageNumber: 1, PageSize: 1 },
+        }),
+        axiosClient.get(`/api/v1/categories`, { params: { page: 1, size: 1 } }),
+        axiosClient.get(`/api/v1/attributes`, { params: { page: 1, size: 1 } }),
+      ]);
+
+      return {
+        success: true,
+        data: {
+          totalUsers: usersRes.data?.data?.total || usersRes.data?.total || 0,
+          totalProducts:
+            shoesRes.data?.data?.total || shoesRes.data?.total || 0,
+          totalCategories: catRes.data?.data?.total || catRes.data?.total || 0,
+          totalAttributes:
+            attrRes.data?.data?.total || attrRes.data?.total || 0,
+        },
+      };
+    } catch (error) {
+      console.error("Lỗi khi tải thống kê:", error);
+      return {
+        success: false,
+        data: {
+          totalUsers: 0,
+          totalProducts: 0,
+          totalCategories: 0,
+          totalAttributes: 0,
+        },
+      };
+    }
   },
 };
 

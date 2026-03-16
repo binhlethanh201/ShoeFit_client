@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProductGallery = ({ images, onAddToWishlist }) => {
+const ProductGallery = ({ images, onToggleWishlist, isInWishlist }) => {
   const [activeImg, setActiveImg] = useState(
     images && images.length > 0 ? images[0] : "",
   );
@@ -22,8 +22,14 @@ const ProductGallery = ({ images, onAddToWishlist }) => {
       </div>
       <div className="main-img">
         <img src={activeImg} alt="Main Product" />
-        <div className="wishlist-btn" onClick={onAddToWishlist}>
-          <i className="far fa-heart"></i>
+        <div
+          className="wishlist-btn"
+          onClick={onToggleWishlist}
+          style={{
+            color: isInWishlist ? "#ff4757" : "var(--text-heading)",
+          }}
+        >
+          <i className={isInWishlist ? "fas fa-heart" : "far fa-heart"}></i>
         </div>
       </div>
     </div>

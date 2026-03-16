@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import tryOn2DService from "../../services/tryon/2dService";
+import productService from "../../services/product/productService";
 import { downloadImageFromServer } from "../../utils/downloadHandler";
 import FeedbackModal from "../../components/tryon/FeedbackModal";
 import "../../assets/css/tryon2d/tryon2d.css";
@@ -20,6 +21,10 @@ const TryOn2D = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [shoesList, setShoesList] = useState([]);
   const [isLoadingShoes, setIsLoadingShoes] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
+  const PAGE_SIZE = 20;
 
   const [userImage, setUserImage] = useState(null);
   const [userImageFile, setUserImageFile] = useState(null);
@@ -35,7 +40,6 @@ const TryOn2D = () => {
   const [zoomScale, setZoomScale] = useState(1);
 
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-
   const [hasHandledFeedback, setHasHandledFeedback] = useState(() => {
     return localStorage.getItem("shoeFit_feedback_done") === "true";
   });
@@ -95,21 +99,63 @@ const TryOn2D = () => {
   }, [location.state]);
 
   useEffect(() => {
-    const fetchShoes = async () => {
+    const delayDebounceFn = setTimeout(async () => {
+      setPage(1);
       setIsLoadingShoes(true);
       try {
-        const response = await tryOn2DService.getShoes(1, 100);
-        if (response.status === 200) {
-          setShoesList(response.data.items);
-        }
+        const response = await productService.getProducts(
+          searchQuery,
+          {},
+          1,
+          PAGE_SIZE,
+        );
+        setShoesList(response.items || []);
+        setHasMore(1 < response.totalPages);
       } catch (error) {
         toast.error("Không thể tải danh sách giày từ máy chủ");
       } finally {
         setIsLoadingShoes(false);
       }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (page === 1) return;
+
+    const fetchMoreShoes = async () => {
+      setIsFetchingNextPage(true);
+      try {
+        const response = await productService.getProducts(
+          searchQuery,
+          {},
+          page,
+          PAGE_SIZE,
+        );
+        setShoesList((prevShoes) => [...prevShoes, ...(response.items || [])]);
+        setHasMore(page < response.totalPages);
+      } catch (error) {
+        toast.error("Lỗi khi tải thêm danh sách giày");
+      } finally {
+        setIsFetchingNextPage(false);
+      }
     };
-    fetchShoes();
-  }, []);
+
+    fetchMoreShoes();
+  }, [page, searchQuery]);
+
+  const handleScroll = (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.target;
+    if (
+      scrollHeight - scrollTop <= clientHeight + 20 &&
+      !isFetchingNextPage &&
+      hasMore &&
+      !isLoadingShoes
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   const handleImageUploadTrigger = (e) => {
     if (!checkAuth()) {
@@ -183,10 +229,6 @@ const TryOn2D = () => {
     if (e.deltaY < 0) setZoomScale((prev) => Math.min(prev + 0.1, 3));
     else setZoomScale((prev) => Math.max(prev - 0.1, 0.5));
   };
-
-  const filteredShoes = shoesList.filter((shoe) =>
-    shoe.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
 
   return (
     <>
@@ -373,7 +415,7 @@ const TryOn2D = () => {
           </div>
 
           <div id="shoe-drawer" className={isDrawerOpen ? "active" : ""}>
-            <div className="drawer-content">
+            <div className="drawer-header">
               <h4>{t("tryon2d.drawer_title")}</h4>
               <span id="close-drawer" onClick={() => setIsDrawerOpen(false)}>
                 &times;
@@ -386,19 +428,30 @@ const TryOn2D = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                {searchQuery && (
+                  <span
+                    className="clear-search"
+                    onClick={() => setSearchQuery("")}
+                  >
+                    &times;
+                  </span>
+                )}
               </div>
+            </div>
+
+            <div className="drawer-body" onScroll={handleScroll}>
               <div className="shoe-grid">
                 {isLoadingShoes ? (
                   <p>Đang tải...</p>
-                ) : filteredShoes.length > 0 ? (
-                  filteredShoes.map((shoe) => (
+                ) : shoesList.length > 0 ? (
+                  shoesList.map((shoe) => (
                     <div
                       key={shoe.id}
                       className="shoe-item"
                       title={shoe.name}
                       onClick={() => handleSelectShoe(shoe)}
                     >
-                      <img src={shoe.imageUrl} alt={shoe.name} />
+                      <img src={shoe.image || shoe.imageUrl} alt={shoe.name} />
                       <p>{shoe.name}</p>
                     </div>
                   ))
@@ -408,6 +461,17 @@ const TryOn2D = () => {
                   </p>
                 )}
               </div>
+
+              {isFetchingNextPage && (
+                <div className="text-center mt-3 mb-3">
+                  <div
+                    className="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Đang tải thêm...</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
