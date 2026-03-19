@@ -117,6 +117,10 @@ const adminService = {
     return axiosClient.get(`/api/v1/users/${id}`);
   },
 
+  deleteUser: (id) => {
+    return axiosClient.delete(`/api/v1/users/${id}`);
+  },
+
   // --- STATISTICS ---
   getDashboardStats: async () => {
     try {

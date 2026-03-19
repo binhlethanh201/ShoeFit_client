@@ -79,18 +79,25 @@ const UserManagement = () => {
     }
   };
 
-  const handleToggleBan = (userId, username) => {
+  const handleToggleBan = async (userId, username) => {
     const isBanned = bannedIds.includes(userId);
-    const confirmMsg = isBanned
-      ? `Bạn muốn MỞ KHÓA tài khoản của "${username}"?`
-      : `Bạn có chắc chắn muốn KHÓA tài khoản "${username}"? Người này sẽ không thể đăng nhập.`;
 
+    // Xử lý Mở khóa (Vì Backend chưa có API Unban nên chỉ làm giả UI)
+    if (isBanned) {
+      toast.info(
+        "Tính năng Mở khóa cần Backend hỗ trợ thêm API. Tạm thời khôi phục trên giao diện.",
+      );
+      setBannedIds((prev) => prev.filter((id) => id !== userId));
+      return;
+    }
+
+    // Xử lý Khóa/Xóa thật sự
+    const confirmMsg = `Bạn có chắc chắn muốn KHÓA/XÓA tài khoản "${username}"? Hành động này sẽ tác động trực tiếp lên cơ sở dữ liệu.`;
     if (!window.confirm(confirmMsg)) return;
 
-    if (isBanned) {
-      setBannedIds((prev) => prev.filter((id) => id !== userId));
-      toast.success(`Đã khôi phục hoạt động cho ${username}`);
-    } else {
+    try {
+      await adminService.deleteUser(userId);
+
       setBannedIds((prev) => [...prev, userId]);
       toast.success(`Tài khoản ${username} đã bị vô hiệu hóa!`, {
         style: {
@@ -99,6 +106,11 @@ const UserManagement = () => {
           borderColor: "#dc3545",
         },
       });
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Có lỗi xảy ra khi khóa tài khoản này!",
+      );
     }
   };
 

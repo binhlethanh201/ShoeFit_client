@@ -31,6 +31,7 @@ import Service from "./pages/Service/Service.jsx";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 import TryOnVideo from "./pages/TryOnVideo/TryOnVideo.jsx";
 import TryOn2D from "./pages/Tryon2D/TryOn2D.jsx";
+import TryOnVeo from "./pages/TryOnVeo/TryOnVeo.jsx";
 import StyleAdvisor from "./pages/StyleAdvisor/StyleAdvisor.jsx";
 import StyleDetail from "./pages/StyleAdvisor/StyleDetail.jsx";
 import Pricing from "./pages/Pricing/Pricing.jsx";
@@ -112,6 +113,7 @@ const router = createBrowserRouter(
         <Route path="/services" element={<Service />}></Route>
         <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/tryonvideo" element={<TryOnVideo />}></Route>
+         <Route path="/tryonveo" element={<TryOnVeo />}></Route>
         <Route path="/tryon2d" element={<TryOn2D />}></Route>
         <Route path="/styleadvisor" element={<StyleAdvisor />}></Route>
         <Route path="/styledetail/:styleId" element={<StyleDetail />}></Route>
